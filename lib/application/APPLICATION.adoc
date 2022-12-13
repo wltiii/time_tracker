@@ -1,0 +1,12 @@
+= Driven Design Principles Application Layer
+
+== Explanation
+
+This layer contains the business logic of the application, such as application services and use cases. It is responsible for orchestrating the flow of data between the _presentation_ layer and the _domain_ layer.
+
+The business logic of is implemented via:
+
+. Services for creating, completing, and viewing tasks.
+
+. Use Cases that describe a specific way in which a user might interact with an application or system. This can include things like providing input, accessing a specific feature, or achieving a particular result. In code, a use case might be represented as a function or method that can be called to perform the actions described in the use case.
+

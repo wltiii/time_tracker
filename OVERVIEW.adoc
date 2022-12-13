@@ -1,0 +1,15 @@
+= Driven Design Principles In Flutter
+
+== Overview
+A Flutter project using Domain-Driven Design (DDD) should be organized into distinct layers that correspond to different parts of the application domain. For example:
+
+. Presentation
+. Application
+. Domain
+. Infrastructure
+
+Each layer should be highly cohesive and loosely coupled to the other layers. This allows for better maintainability, testability, and extensibility of the application. Additionally, the domain layer should be the central focus of the design, with the other layers serving to support and implement the core domain logic.
+
+In this organization, the presentation layer depends on the application layer, the application layer depends on the domain layer, and the domain layer depends on the infrastructure layer. This allows for clear separation of concerns and better maintainability of the application.
+
+The domain layer should be independent of the user interface and the technical implementation of the application. This allows the domain logic to be tested, maintained, and reused in other contexts. Additionally, the domain layer should be the central focus of the design, with the other layers serving to support and implement the core domain logic.

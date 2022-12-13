@@ -1,0 +1,20 @@
+= Driven Design Principles Domain Layer
+
+== Explanation
+
+This layer contains the core domain entities and logic, such as value objects, entities, and domain services.
+
+The domain layer is the central part of a Flutter project using Domain-Driven Design (DDD). It contains the core entities and logic of the application, independent of the technical details of the implementation.
+
+In the domain layer, entities are the core objects that represent the state and behavior of the domain. For example, in a to-do list application, the Task entity might represent a single task that a user can create, complete, and view.
+
+Value objects are objects that represent a value in the domain, without having a distinct identity. For example, in a to-do list application, the DueDate value object might represent the date and time when a task is due.
+
+Domain services are classes that implement business logic that is not specific to a particular entity in the domain. For example, in a to-do list application, a domain service might be responsible for calculating the total number of tasks that are overdue.
+
+*The domain layer should be independent of the user interface and the technical implementation of the application.* This allows the domain logic to be tested, maintained, and reused in other contexts.
+
+Additionally, the domain layer should be the central focus of the design, with the other layers serving to support and implement the core domain logic.
+
+
+

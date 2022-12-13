@@ -1,0 +1,7 @@
+= Driven Design Principles Infrastructure Layer
+
+== Explanation
+
+This layer contains code that is specific to the technical implementation of the application. This may include code for accessing external services, such as databases or APIs, as well as any other technical details of the implementation. In a to-do application, this might mean the implementation of the TaskRepository interface using a database.
+
+*The infrastructure layer should depend on the domain layer, but not the other way around.* This allows the domain layer to remain independent of the specific technology used to implement the application. Additionally, the infrastructure layer should be isolated from the other layers of the application to allow for flexibility in the technical implementation without affecting the business logic of the application.
