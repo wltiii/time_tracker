@@ -30,11 +30,10 @@ These are the broader categories or groups that time entries can be associated w
 For example, a project might represent a specific client or project that an individual is working on.
 All the time entries for that project would be grouped together.
 
-
 . *Client*
 Represents a person or organization for which the user is doing work.
 
-. *Users*
+. *User*
 Represents a person who is using the application to track their time.
 A user might have their own profile, including information such as their name and contact details, as well as their own collection of time entries and projects.
 
