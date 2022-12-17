@@ -39,3 +39,63 @@ To create a time tracking app in Flutter using Domain Driven Design principles, 
 
 Overall, the key to creating a successful time tracking app using domain driven design principles is to clearly identify and understand the core domain, entities, and activities, and to design and implement the app in a way that aligns with these concepts.
 This will help to ensure that the app is both functional and user-friendly.
+
+== Domain Layer, Usecases And Domain Services
+
+
+In domain-driven design (DDD), a use case represents a specific and complete interaction between a user and the system, such as placing an order or transferring money between accounts. It represents a high-level business goal that the user wants to achieve and is typically implemented as a standalone class or module.
+A domain service, on the other hand, is a component of the system that performs a specific task or operation within a domain. It is a layer of the application that encapsulates the business logic and operations related to a particular domain. Domain services are typically stateless and are used to perform tasks that are not specific to any particular entity or value object in the domain, such as calculating shipping costs or generating reports.
+In general, use cases represent the interactions between the system and its users, while domain services represent the operations and business logic within the domain.
+
+
+The organization of directories and files in an application can vary depending on the specific framework and conventions being used. In a domain-driven design (DDD) application, it is common to place use cases and domain services in separate directories within the application's domain layer.
+For example, you might have a directory structure that looks something like this:
+src/
+|- domain/
+|   |- usecases/
+|   |- services/
+|- application/
+|- infrastructure/
+|- presentation/
+In this structure, the usecases directory would contain the use case classes, and the services directory would contain the domain service classes.
+It is also common to further organize the use cases and services directories by subdomain or feature. For example, you might have a payment subdirectory within the usecases and services directories for use cases and services related to payment processing.
+src/
+|- domain/
+|   |- usecases/
+|   |   |- payment/
+|   |- services/
+|   |   |- payment/
+|- application/
+|- infrastructure/
+|- presentation/
+Ultimately, the specific organization of directories and files in an application will depend on the needs and conventions of your specific project.
+
+
+The man stands, heart full of woe
+As his wife and daughter go
+Leaving him all alone, he sighs
+Feeling empty inside
+
+He remembers the love they shared
+Now torn apart, beyond repair
+He wants to run and bring them back
+But he knows he must stay on track
+
+So he stands, a statue of grief
+Watching as they leave, oh brief
+The love they had, it still remains
+But now, it only causes pains
+
+The man knows he must carry on
+Though his love for them remains strong
+He'll wait for their return one day
+And their love will again sway.
+
+== Application Layer, Services, Events, Adapters And Policies
+
+In a domain-driven design (DDD) application, the application layer is typically responsible for coordinating the flow of control between the various components of the system. Some examples of the types of components that might reside in the application layer include:
+• Application Services: These are classes that expose a high-level interface to the rest of the application, allowing it to perform business actions or operations. They might invoke use cases from the domain layer or delegate tasks to domain entities or value objects.
+• Application Events: These are classes or components that represent events that occur within the application, such as the creation of a new entity or the completion of a business action. They can be used to trigger actions or notifications within the application or to update other components of the system.
+• Application Adapters: These are components that adapt the application to external systems or interfaces, such as APIs or third-party libraries. They might convert data formats or handle authentication and authorization.
+• Application Policies: These are classes that implement business rules or constraints that apply across the application. They might enforce access controls or validate data before it is persisted to the database.
+The specific components that you include in the application layer will depend on the needs and requirements of your specific application. The goal of the application layer is to provide a high-level interface for interacting with the domain layer and other components of the system, and to coordinate the flow of control between these components.
