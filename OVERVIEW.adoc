@@ -96,3 +96,9 @@ They might enforce access controls or validate data before it is persisted to th
 
 The specific components that you include in the application layer will depend on the needs and requirements of your specific application.
 The goal of the application layer is to provide a high-level interface for interacting with the domain layer and other components of the system, and to coordinate the flow of control between these components.
+
+== Disclaimer
+The documentation contained herein is meant only as a general guideline regarding the structure of an application organized along Domain Driven Design (DDD) principles.
+It describes potential examples.
+Artifacts contained within the project bearing the same name as used in the documentation should be considered coincidental.
+
