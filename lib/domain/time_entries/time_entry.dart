@@ -10,4 +10,5 @@ class TimeEntry {
   final TimeEntryModel model;
 
   get start => model.start;
+  get end => model.end;
 }

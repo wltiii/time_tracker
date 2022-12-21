@@ -13,6 +13,7 @@ void main() {
 
       expect(entity, isA<TimeEntry>());
       expect(entity.start, equals(model.start));
+      expect(entity.end, equals(model.end));
     });
   });
 }
