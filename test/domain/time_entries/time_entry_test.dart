@@ -13,7 +13,6 @@ void main() {
 
       expect(result, isA<TimeEntry>());
 
-      expect(result.model, equals(givenModel));
       expect(result.start, equals(givenModel.start));
       expect(result.end, equals(givenModel.end));
     });

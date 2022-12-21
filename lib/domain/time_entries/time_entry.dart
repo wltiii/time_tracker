@@ -3,12 +3,12 @@ import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 class TimeEntry {
   TimeEntry({
     required this.id,
-    required this.model,
-  });
+    required model,
+  }) : _model = model;
 
   final int id;
-  final TimeEntryModel model;
+  final TimeEntryModel _model;
 
-  get start => model.start;
-  get end => model.end;
+  get start => _model.start;
+  get end => _model.end;
 }
