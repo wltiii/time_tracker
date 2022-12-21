@@ -5,7 +5,7 @@ void main() {
   group('construction', () {
     test('from default', () {
       var startTime = DateTime.now();
-      expect(TimeEntry(start: startTime), isA<TimeEntry>());
+      expect(TimeEntry(id: 1), isA<TimeEntry>());
     });
   });
 }

@@ -1,7 +1,7 @@
 class TimeEntry {
   TimeEntry({
-    required this.start,
+    required this.id,
   });
 
-  final DateTime start;
+  final int id;
 }
