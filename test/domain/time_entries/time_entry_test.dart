@@ -7,13 +7,15 @@ void main() {
     test('from default', () {
       var startTime = DateTime.now().subtract(const Duration(hours: 1));
       var endTime = DateTime.now();
-      var model = TimeEntryModel(start: startTime, end: endTime);
+      var givenModel = TimeEntryModel(start: startTime, end: endTime);
 
-      var entity = TimeEntry(id: 1, model: model);
+      var result = TimeEntry(id: 1, model: givenModel);
 
-      expect(entity, isA<TimeEntry>());
-      expect(entity.start, equals(model.start));
-      expect(entity.end, equals(model.end));
+      expect(result, isA<TimeEntry>());
+
+      expect(result.model, equals(givenModel));
+      expect(result.start, equals(givenModel.start));
+      expect(result.end, equals(givenModel.end));
     });
   });
 }
