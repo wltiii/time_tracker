@@ -8,4 +8,6 @@ class TimeEntry {
 
   final int id;
   final TimeEntryModel model;
+
+  get start => model.start;
 }

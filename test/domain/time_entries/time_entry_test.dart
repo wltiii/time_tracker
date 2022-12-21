@@ -12,6 +12,7 @@ void main() {
       var entity = TimeEntry(id: 1, model: model);
 
       expect(entity, isA<TimeEntry>());
+      expect(entity.start, equals(startTime));
     });
   });
 }
