@@ -7,7 +7,7 @@ void main() {
       var startTime = DateTime.now();
       var model = TimeEntryModel(start: startTime, end: startTime);
       expect(TimeEntryModel(start: startTime, end: startTime), isA<TimeEntryModel>());
-      expect(model.end.isBefore(model.start), isTrue);
+      expect(model.end.isBefore(model.start), isFalse);
     });
   });
 }
