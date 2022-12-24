@@ -98,3 +98,14 @@ This domain service would be responsible for sending notifications to users when
 . Time entry reconciliation +
 In some cases, time entries may need to be reconciled with external data sources, such as payroll systems or billing systems.
 This domain service would handle the process of reconciling time entries with these external systems.
+
+== Entities vs Domains
+In domain-driven design (DDD), an entity is a domain object that has a unique identity and is characterized by its attributes, behavior, and relationships with other objects.
+It is a concept that is central to DDD, and it represents a thing or concept that is meaningful to the business domain.
+
+A model, on the other hand, is a representation of a real-world system or concept.
+It can be a physical model, such as a scale model of a building, or a mathematical model, such as a computer simulation of a process.
+In DDD, a model can be used to represent the domain concepts and relationships within the business domain.
+
+So, in DDD, an entity represents a real-world concept or thing that is meaningful to the business domain, while a model is a representation of that concept or thing.
+_The key difference between the two is that an entity has a unique identity and exists within the domain_, while a model is a representation of a concept or system.
