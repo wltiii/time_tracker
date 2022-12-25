@@ -12,9 +12,12 @@ void main() {
       var result = TimeEntry(id: 1, model: givenModel);
 
       expect(result, isA<TimeEntry>());
+      var resultModel = TimeEntryModel(
+        start: result.start,
+        end: result.end,
+      );
 
-      expect(result.start, equals(givenModel.start));
-      expect(result.end, equals(givenModel.end));
+      expect(resultModel, equals(givenModel));
     });
   });
 }
