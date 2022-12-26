@@ -20,4 +20,21 @@ void main() {
       expect(resultModel, equals(givenModel));
     });
   });
+
+  group('json', () {
+    test('from/to', () {
+      fail('Not yet implemented.');
+      // var givenTimeEntry = TimeEntryModel(
+      //   start: DateTime.now().subtract(
+      //     const Duration(hours: 1),
+      //   ),
+      //   end: DateTime.now(),
+      // );
+      //
+      // expect(
+      //   TimeEntryModel.fromJson(givenTimeEntry.toJson()),
+      //   equals(givenTimeEntry),
+      // );
+    });
+  });
 }
