@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
+import '../type_defs.dart';
+
 part 'time_entry_model.g.dart';
 
 /// Freezed is a great package. However, you cannot
@@ -22,10 +24,10 @@ class TimeEntryModel extends Equatable {
   final DateTime start;
   final DateTime end;
 
-  // @override
-  List<Object?> get props => [start, end];
+  @override
+  List<Object> get props => [start, end];
 
-  factory TimeEntryModel.fromJson(Map<String, dynamic> json) => _$TimeEntryModelFromJson(json);
+  factory TimeEntryModel.fromJson(Json json) => _$TimeEntryModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TimeEntryModelToJson(this);
+  Json toJson() => _$TimeEntryModelToJson(this);
 }
