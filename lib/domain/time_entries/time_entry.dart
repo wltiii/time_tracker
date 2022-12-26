@@ -6,6 +6,7 @@ class TimeEntry {
     required model,
   }) : _model = model;
 
+  //TODO(wltiii): create and use TimeEntryId from Id in package unrepresentable_state/unrepresentable_state.dart
   final int id;
   final TimeEntryModel _model;
 
