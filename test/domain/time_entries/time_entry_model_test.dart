@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
@@ -13,7 +14,7 @@ void main() {
           ),
         ),
       );
-      final endTime = DateTime.now();
+      final endTime = EndTime(dateTime: DateTime.now());
 
       var result = TimeEntryModel(start: startTime, end: endTime);
 
@@ -22,7 +23,11 @@ void main() {
 
     test('does not construct when end is not greater than start', () {
       final startTime = StartTime(dateTime: DateTime.now());
-      var endTime = DateTime.now().subtract(const Duration(hours: 1));
+      final endTime = EndTime(
+        dateTime: DateTime.now().subtract(
+          const Duration(hours: 1),
+        ),
+      );
 
       expect(
         () => TimeEntryModel(start: startTime, end: endTime),
@@ -53,7 +58,7 @@ void main() {
           ),
         ),
       );
-      final endTime = DateTime.now();
+      final endTime = EndTime(dateTime: DateTime.now());
 
       final expected = TimeEntryModel(start: startTime, end: endTime);
       final result = TimeEntryModel(start: startTime, end: endTime);
@@ -69,7 +74,8 @@ void main() {
           ),
         ),
       );
-      final endTime = DateTime.now();
+      final endTime = EndTime(dateTime: DateTime.now());
+
       final anotherStartTime = StartTime(
         dateTime: DateTime.now().subtract(
           const Duration(
@@ -77,7 +83,13 @@ void main() {
           ),
         ),
       );
-      final anotherEndTime = DateTime.now().add(const Duration(hours: 1));
+      final anotherEndTime = EndTime(
+        dateTime: DateTime.now().subtract(
+          const Duration(
+            minutes: 1,
+          ),
+        ),
+      );
 
       expect(
         TimeEntryModel(start: startTime, end: endTime),
@@ -111,20 +123,12 @@ void main() {
         ),
       );
 
-      final endTime = DateTime.now();
+      final endTime = EndTime(dateTime: DateTime.now());
 
       final givenTimeEntry = TimeEntryModel(
         start: startTime,
         end: endTime,
       );
-
-      // final jsonModel = {
-      //   'start': startTime.iso8601String,
-      //   'end': '2022-12-25T08:37:14.040648',
-      // };
-
-      // expect: {start: 2023-01-03T15:33:46.466240, end: 2023-01-03T16:33:46.467658}
-      print('givenTimeEntry.toJson() = ${givenTimeEntry.toJson()}');
 
       expect(
         TimeEntryModel.fromJson(givenTimeEntry.toJson()),

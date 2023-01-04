@@ -1,19 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 
 void main() {
   group('construction', () {
     test('from default', () {
-      var startTime = StartTime(dateTime: DateTime.now().subtract(const Duration(hours: 1)));
-      var endTime = DateTime.now();
-      var givenModel = TimeEntryModel(start: startTime, end: endTime);
+      final startTime = StartTime(dateTime: DateTime.now().subtract(const Duration(hours: 1)));
+      final endTime = EndTime(dateTime: DateTime.now());
+      final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
-      var result = TimeEntry(id: 1, model: givenModel);
+      final result = TimeEntry(id: 1, model: givenModel);
 
       expect(result, isA<TimeEntry>());
-      var resultModel = TimeEntryModel(
+      final resultModel = TimeEntryModel(
         start: result.start,
         end: result.end,
       );
@@ -25,7 +26,7 @@ void main() {
   group('json', () {
     test('from/to', () {
       fail('Not yet implemented.');
-      // var givenTimeEntry = TimeEntryModel(
+      // final givenTimeEntry = TimeEntryModel(
       //   start: DateTime.now().subtract(
       //     const Duration(hours: 1),
       //   ),

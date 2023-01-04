@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
@@ -18,7 +19,8 @@ class TimeEntryModel extends Equatable {
     required this.end,
   }) {
     // TODO(wltiii): implement isAfter method allowing it to take a StartTime
-    if (!end.isAfter(start.dateTime)) {
+    // if (!end.isAfter(start.dateTime)) {
+    if (!end.dateTime.isAfter(start.dateTime)) {
       throw ValueException(ExceptionMessage('End time must be after start time.'));
     }
   }
@@ -29,7 +31,8 @@ class TimeEntryModel extends Equatable {
 
   @StartTimeSerializer()
   final StartTime start;
-  final DateTime end;
+  @EndTimeSerializer()
+  final EndTime end;
 
   @override
   List<Object> get props => [start, end];
