@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 /// Throws: ValueException when the result would mean StartTime would be in an
@@ -26,16 +27,6 @@ class StartTime extends Equatable {
   /// Throws: FormatException if string is invalid.
   StartTime.fromIso8601String(String iso8601String) : this(dateTime: DateTime.parse(iso8601String));
 
-  // factory StartTime.fromJson() {}
-  //
-  // factory StartTime.fromJson(Json json) {
-  //   return User.fromJson(json) as Dependent;
-  // }
-
-  // Json toJson() {
-  //   return {'runtimeType': this.runtimeType.toString(), 'id': id, 'userName': name};
-  // }
-
   late final DateTime _start;
 
   DateTime get dateTime => _start;
@@ -49,39 +40,12 @@ class StartTime extends Equatable {
   List<Object> get props => [_start];
 }
 
-/*
-  group('json', () {
-    var jsonModel = {
-      'start': '2022-12-25T07:37:14.040636',
-      'end': '2022-12-25T08:37:14.040648',
-    };
+class StartTimeSerializer implements JsonConverter<StartTime, String> {
+  const StartTimeSerializer();
 
-    test('from json', () {});
+  @override
+  StartTime fromJson(String json) => StartTime.fromIso8601String(json);
 
-    test('to json', () {
-      var startTime = DateTime.now().subtract(
-        const Duration(hours: 1),
-      );
-      var endTime = DateTime.now();
-      var givenTimeEntry = TimeEntryModel(
-        start: startTime,
-        end: endTime,
-      );
-
-      var expectedResult = {
-        'start': '${startTime.toIso8601String()}',
-        'end': '$endTime',
-      };
-
-      var result = givenTimeEntry.toJson();
-      expect(result, equals(expectedResult));
-    });
-  });
-
- */
-// @JsonSerializable()
-// class NumberOfCompartments extends NaturalNumber {
-//   NumberOfCompartments(int value) : super(value);
-//
-//   factory NumberOfCompartments.fromJson(Json json) => _$NumberOfCompartmentsFromJson(json);
-// }
+  @override
+  String toJson(StartTime dateTime) => dateTime.iso8601String;
+}

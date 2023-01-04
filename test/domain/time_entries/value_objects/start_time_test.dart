@@ -80,22 +80,23 @@ void main() {
     );
   });
 
-  group('json', () {
-    var jsonModel = {
-      'start': '2022-12-25T07:37:14.040636',
-      'end': '2022-12-25T08:37:14.040648',
-    };
-
-    test('from json', () {});
-
-    test('to json', () {
-      final givenTime = DateTime.now();
-      final givenStartTime = StartTime(dateTime: givenTime);
-
-      var expectedResult = {'dateTime': '${givenTime.toIso8601String()}'};
-
-      // final result = givenStartTime.toJson();
-      // expect(result, equals(expectedResult));
-    });
-  });
+  // TODO(wltiii): validate StartTimeSerializer???
+  // group('json', () {
+  //   var jsonModel = {
+  //     'start': '2022-12-25T07:37:14.040636',
+  //     'end': '2022-12-25T08:37:14.040648',
+  //   };
+  //
+  //   test('from json', () {});
+  //
+  //   test('to json', () {
+  //     final givenTime = DateTime.now();
+  //     final givenStartTime = StartTime(dateTime: givenTime);
+  //
+  //     var expectedResult = {'dateTime': '${givenTime.toIso8601String()}'};
+  //
+  //     final result = givenStartTime.toJson();
+  //     expect(result, equals(expectedResult));
+  //   });
+  // });
 }
