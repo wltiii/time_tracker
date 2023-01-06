@@ -39,7 +39,7 @@ Some common use cases for time tracking applications include:
 
 == Example Application Layer Artifacts
 
-// Example command object for creating a time entry
+.Example command object for creating a time entry
 [source, java]
 ----
 class CreateTimeEntryCommand {
@@ -51,7 +51,7 @@ String description;
 CreateTimeEntryCommand(this.projectId, this.taskId, this.startTime, this.endTime, this.description);
 }
 ----
-// Example command handler for processing the CreateTimeEntryCommand
+.Example command handler for processing the CreateTimeEntryCommand
 [source, java]
 ----
 class CreateTimeEntryCommandHandler {
@@ -63,7 +63,7 @@ repository.save(timeEntry);
 }
 }
 ----
-// Example query object for reading a time entry
+.Example query object for reading a time entry
 [source, java]
 ----
 class GetTimeEntryQuery {
@@ -71,7 +71,7 @@ int id;
 GetTimeEntryQuery(this.id);
 }
 ----
-// Example query handler for processing the GetTimeEntryQuery
+.Example query handler for processing the GetTimeEntryQuery
 [source, java]
 ----
 class GetTimeEntryQueryHandler {
@@ -82,7 +82,7 @@ return repository.findById(query.id);
 }
 }
 ----
-// Example command object for updating a time entry
+.Example command object for updating a time entry
 [source, java]
 ----
 class UpdateTimeEntryCommand {
@@ -96,7 +96,7 @@ UpdateTimeEntryCommand(this.id, this.projectId, this.taskId, this.startTime, thi
 }
 ----
 
-// Example command handler for processing the UpdateTimeEntryCommand
+.Example command handler for processing the UpdateTimeEntryCommand
 [source, java]
 ----
 class UpdateTimeEntryCommandHandler {
@@ -114,7 +114,7 @@ repository.save(timeEntry);
 }
 ----
 
-// Example command object for deleting a time entry
+.Example command object for deleting a time entry
 [source, java]
 ----
 class DeleteTimeEntryCommand {
@@ -123,7 +123,7 @@ DeleteTimeEntryCommand(this.id);
 }
 ----
 
-// Example command handler for processing the DeleteTimeEntryCommand
+.Example command handler for processing the DeleteTimeEntryCommand
 [source, java]
 ----
 class DeleteTimeEntryCommandHandler {
@@ -135,7 +135,7 @@ repository.delete(timeEntry);
 }
 }
 ----
-// Example repository interface for interacting with the infrastructure layer
+.Example repository interface for interacting with the infrastructure layer
 [source, java]
 ----
 abstract class TimeEntryRepository {
