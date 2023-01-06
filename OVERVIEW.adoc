@@ -102,3 +102,19 @@ They might enforce access controls or validate data before it is persisted to th
 The specific components that you include in the application layer will depend on the needs and requirements of your specific application.
 The goal of the application layer is to provide a high-level interface for interacting with the domain layer and other components of the system, and to coordinate the flow of control between these components.
 
+=== Example Of Layer Interactions
+Here's an example of how the layers of a DDD architecture might interact when performing CRUD operations on a todo item in a todo application:
+
+. The presentation layer (e.g., a web server or mobile client) receives a request to create, read, update, or delete a todo item.
+
+. The presentation layer passes the request to the application layer, which is responsible for coordinating tasks across multiple domain objects and coordinating with the infrastructure layer.
+
+. The application layer creates a command object or query object that represents the request, and passes it to the domain layer.
+
+. The domain layer contains the business logic for the application, including the todo item aggregate root. The aggregate root processes the command or query and updates the state of the todo item domain object as necessary.
+
+. When the domain layer needs to persist the updated state of the todo item, it passes a request to the infrastructure layer.
+
+. The infrastructure layer contains the code that interacts with external systems such as databases, file systems, and APIs. It receives the request from the domain layer and performs the necessary CRUD operation on the todo item.
+
+. Once the operation is complete, the infrastructure layer returns a response to the domain layer, which is then passed back up through the application and presentation layers to the client that made the original request.
