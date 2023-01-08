@@ -2,9 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
+import 'package:time_tracker/domain/time_entries/value_serializers/end_time_serializer.dart';
+import 'package:time_tracker/domain/time_entries/value_serializers/start_time_serializer.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
-import '../type_defs.dart';
+import '../core/type_defs.dart';
 
 part 'time_entry_model.g.dart';
 
