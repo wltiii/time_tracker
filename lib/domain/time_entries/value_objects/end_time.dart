@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 /// Throws: ValueException when the result would mean EndTime would be in an
@@ -38,14 +37,4 @@ class EndTime extends Equatable {
   //TODO(wltiii): it was necessary to extend Equatable when implementing TimeEntry serialization by hand. Will likely be needed when serialization is done by serializable. Validate.
   @override
   List<Object> get props => [_value];
-}
-
-class EndTimeSerializer implements JsonConverter<EndTime, String> {
-  const EndTimeSerializer();
-
-  @override
-  EndTime fromJson(String json) => EndTime.fromIso8601String(json);
-
-  @override
-  String toJson(EndTime dateTime) => dateTime.iso8601String;
 }
