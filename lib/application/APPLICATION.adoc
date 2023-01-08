@@ -43,56 +43,82 @@ Some common use cases for time tracking applications include:
 [source, java]
 ----
 class CreateTimeEntryCommand {
-int projectId;
-int taskId;
-DateTime startTime;
-DateTime endTime;
-String description;
-CreateTimeEntryCommand(this.projectId, this.taskId, this.startTime, this.endTime, this.description);
+    int projectId;
+    int taskId;
+    DateTime startTime;
+    DateTime endTime;
+    String description;
+
+    CreateTimeEntryCommand(
+        this.projectId,
+        this.taskId,
+        this.startTime,
+        this.endTime,
+        this.description
+    );
 }
 ----
 .Example command handler for processing the CreateTimeEntryCommand
 [source, java]
 ----
 class CreateTimeEntryCommandHandler {
-TimeEntryRepository repository;
-CreateTimeEntryCommandHandler(this.repository);
-void handle(CreateTimeEntryCommand command) {
-TimeEntry timeEntry = TimeEntry(command.projectId, command.taskId, command.startTime, command.endTime, command.description);
-repository.save(timeEntry);
-}
+    TimeEntryRepository repository;
+
+    CreateTimeEntryCommandHandler(this.repository);
+
+    void handle(CreateTimeEntryCommand command) {
+        TimeEntry timeEntry = TimeEntry(
+            command.projectId,
+            command.taskId,
+            command.startTime,
+            command.endTime,
+            command.description
+        );
+
+        repository.save(timeEntry);
+    }
 }
 ----
 .Example query object for reading a time entry
 [source, java]
 ----
 class GetTimeEntryQuery {
-int id;
-GetTimeEntryQuery(this.id);
+    int id;
+
+    GetTimeEntryQuery(this.id);
 }
 ----
 .Example query handler for processing the GetTimeEntryQuery
 [source, java]
 ----
 class GetTimeEntryQueryHandler {
-TimeEntryRepository repository;
-GetTimeEntryQueryHandler(this.repository);
-TimeEntry handle(GetTimeEntryQuery query) {
-return repository.findById(query.id);
-}
+    TimeEntryRepository repository;
+
+    GetTimeEntryQueryHandler(this.repository);
+
+    TimeEntry handle(GetTimeEntryQuery query) {
+        return repository.findById(query.id);
+    }
 }
 ----
 .Example command object for updating a time entry
 [source, java]
 ----
 class UpdateTimeEntryCommand {
-int id;
-int projectId;
-int taskId;
-DateTime startTime;
-DateTime endTime;
-String description;
-UpdateTimeEntryCommand(this.id, this.projectId, this.taskId, this.startTime, this.endTime, this.description);
+    int id;
+    int projectId;
+    int taskId;
+    DateTime startTime;
+    DateTime endTime;
+    String description;
+    UpdateTimeEntryCommand(
+        this.id,
+        this.projectId,
+        this.taskId,
+        this.startTime,
+        this.endTime,
+        this.description,
+    );
 }
 ----
 
@@ -100,17 +126,20 @@ UpdateTimeEntryCommand(this.id, this.projectId, this.taskId, this.startTime, thi
 [source, java]
 ----
 class UpdateTimeEntryCommandHandler {
-TimeEntryRepository repository;
-UpdateTimeEntryCommandHandler(this.repository);
-void handle(UpdateTimeEntryCommand command) {
-TimeEntry timeEntry = repository.findById(command.id);
-timeEntry.projectId = command.projectId;
-timeEntry.taskId = command.taskId;
-timeEntry.startTime = command.startTime;
-timeEntry.endTime = command.endTime;
-timeEntry.description = command.description;
-repository.save(timeEntry);
-}
+    TimeEntryRepository repository;
+
+    UpdateTimeEntryCommandHandler(this.repository);
+
+    void handle(UpdateTimeEntryCommand command) {
+        TimeEntry timeEntry = repository.findById(command.id);
+        timeEntry.projectId = command.projectId;
+        timeEntry.taskId = command.taskId;
+        timeEntry.startTime = command.startTime;
+        timeEntry.endTime = command.endTime;
+        timeEntry.description = command.description;
+
+        repository.save(timeEntry);
+    }
 }
 ----
 
@@ -118,8 +147,9 @@ repository.save(timeEntry);
 [source, java]
 ----
 class DeleteTimeEntryCommand {
-int id;
-DeleteTimeEntryCommand(this.id);
+    int id;
+
+    DeleteTimeEntryCommand(this.id);
 }
 ----
 
@@ -127,21 +157,23 @@ DeleteTimeEntryCommand(this.id);
 [source, java]
 ----
 class DeleteTimeEntryCommandHandler {
-TimeEntryRepository repository;
-DeleteTimeEntryCommandHandler(this.repository);
-void handle(DeleteTimeEntryCommand command) {
-TimeEntry timeEntry = repository.findById(command.id);
-repository.delete(timeEntry);
-}
+    TimeEntryRepository repository;
+
+    DeleteTimeEntryCommandHandler(this.repository);
+
+    void handle(DeleteTimeEntryCommand command) {
+        TimeEntry timeEntry = repository.findById(command.id);
+        repository.delete(timeEntry);
+    }
 }
 ----
 .Example repository interface for interacting with the infrastructure layer
 [source, java]
 ----
 abstract class TimeEntryRepository {
-Future<TimeEntry> findById(int id);
-Future<void> save(TimeEntry timeEntry);
-Future<void> delete(TimeEntry timeEntry);
+    Future<TimeEntry> findById(int id);
+    Future<void> save(TimeEntry timeEntry);
+    Future<void> delete(TimeEntry timeEntry);
 }
 ----
 
