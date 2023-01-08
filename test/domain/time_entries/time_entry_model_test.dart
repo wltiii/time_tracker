@@ -130,6 +130,8 @@ void main() {
         end: endTime,
       );
 
+      print('Model json = ${givenTimeEntry.toJson()}');
+
       expect(
         TimeEntryModel.fromJson(givenTimeEntry.toJson()),
         equals(givenTimeEntry),
