@@ -14,6 +14,7 @@ class EnterTimeRetroactivelyHandler
   @override
   Future<Either<Failure, TimeEntry>> handle(EnterTimeRetroactivelyCommand command) async {
     //TODO(wltiii): two options for creating TimeEntry (as I have developed at present). All parameters to create a model, or both? Not sure I like either option
+    //TODO(wltiii): another option would be to eliminate the Command object altogether and take the model. What are the consequences of this?
     final timeEntry = TimeEntry(
       id: command.id,
       start: command.timeEntryModel.start.dateTime,
@@ -29,27 +30,6 @@ class EnterTimeRetroactivelyHandler
     //   // command.timeEntryModel.description,
     // );
 
-    final result = await _repository.update(timeEntry);
-
-    // return timeEntry != null
-    //     ? Future.value(Right(timeEntry))
-    //     : Future.value(Left(result.));
-
-    return result.fold(
-            (l) => result.,
-            (r) => Future.value(Right(timeEntry))
-    );
-    // return result.fold(
-    //         (l) => result.getLeft().,
-    //         (r) => timeEntry
-    // );
-    // final match = right.match(
-    //       (l) => print('Left($l)'),
-    //       (r) => print('Right($r)'),
-    // );
-
-    // if (result.isLeft()) return result.getLeft();
-
-    // return await _repository.update(timeEntry);
+    return await _repository.update(timeEntry);
   }
 }

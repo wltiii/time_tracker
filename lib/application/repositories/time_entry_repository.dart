@@ -8,13 +8,11 @@ abstract class TimeEntryRepository {
 
   Future<Either<Failure, TimeEntry>> get(TimeEntry entity);
 
-  // TODO(wltiii): shouldn't this return Future<Either<Failure, TimeEntry>?
-  // TODO(wltiii): or Future<Either<Failure, bool>? Does the usecase require knowing it was deleted if not found?
-  // Future<void> delete(TimeEntry entity);
+  // TODO(wltiii): should this return Future<Either<Failure, TimeEntry>?
+  // TODO(wltiii): or Future<Either<Failure, bool>?
+  // TODO(wltiii): Does the usecase require knowing it was deleted if not found?
   // Future<Either<Failure, bool>> delete(TimeEntry entity);
   Future<Either<Failure, void>> delete(TimeEntry entity);
 
-  // TODO(wltiii): shouldn't this return Future<Either<Failure, TimeEntry>?
-  // Future<void> update(TimeEntry entity);
-  Future<Either<Failure, void>> update(TimeEntry entity);
+  Future<Either<Failure, TimeEntry>> update(TimeEntry entity);
 }
