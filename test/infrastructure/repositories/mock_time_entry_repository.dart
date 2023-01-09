@@ -45,13 +45,12 @@ class MockTimeEntryRepository implements TimeEntryRepository {
   }
 
   @override
-  // Future<void> update(TimeEntry entity) async {
-  Future<Either<Failure, void>> update(TimeEntry entity) async {
+  Future<Either<Failure, TimeEntry>> update(TimeEntry entity) async {
     final entry = await get(entity);
     if (entry.isLeft()) return entry;
 
     _timeEntries[entity.id] = entity;
 
-    return Future.value(const Right(null));
+    return Future.value(Right(entity));
   }
 }
