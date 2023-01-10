@@ -1,12 +1,15 @@
 = Driven Design Principles In Flutter
 
 == Disclaimer
+
 The documentation contained within this project is meant only as a general guideline regarding the structure of an application organized along Domain Driven Design (DDD) principles.
 It describes potential examples.
 Artifacts contained within the project bearing the same name as used in the documentation should be considered coincidental.
 
 == Overview
-A Flutter project using Domain-Driven Design (DDD) should be organized into distinct layers that correspond to different parts of the application domain. For example:
+
+A Flutter project using Domain-Driven Design (DDD) should be organized into distinct layers that correspond to different parts of the application domain.
+For example:
 
 . Presentation
 . Application
@@ -32,7 +35,8 @@ To create a time tracking app in Flutter using Domain Driven Design principles, 
 
 . Identify the key entities in the domain, such as tasks, projects, and time entries.
 
-. Define the relationships between these entities and how they interact with each other. For example, a task can be part of a project and a time entry can be associated with a specific task.
+. Define the relationships between these entities and how they interact with each other.
+For example, a task can be part of a project and a time entry can be associated with a specific task.
 
 . Identify the key activities in the domain, such as creating tasks, recording time, and generating reports.
 
@@ -47,8 +51,11 @@ This will help to ensure that the app is both functional and user-friendly.
 
 == Domain Layer, Usecases And Domain Services
 
-In domain-driven design (DDD), a use case represents a specific and complete interaction between a user and the system, such as placing an order or transferring money between accounts. It represents a high-level business goal that the user wants to achieve and is typically implemented as a standalone class or module.
-A domain service, on the other hand, is a component of the system that performs a specific task or operation within a domain. It is a layer of the application that encapsulates the business logic and operations related to a particular domain. Domain services are typically stateless and are used to perform tasks that are not specific to any particular entity or value object in the domain, such as calculating shipping costs or generating reports.
+In domain-driven design (DDD), a use case represents a specific and complete interaction between a user and the system, such as placing an order or transferring money between accounts.
+It represents a high-level business goal that the user wants to achieve and is typically implemented as a standalone class or module.
+A domain service, on the other hand, is a component of the system that performs a specific task or operation within a domain.
+It is a layer of the application that encapsulates the business logic and operations related to a particular domain.
+Domain services are typically stateless and are used to perform tasks that are not specific to any particular entity or value object in the domain, such as calculating shipping costs or generating reports.
 In general, use cases represent the interactions between the system and its users, while domain services represent the operations and business logic within the domain.
 
 It is common to place use cases and domain services in separate directories within the application's domain layer.
@@ -56,8 +63,8 @@ For example, you might have a directory structure that looks something like this
 
 src/ +
 |- domain/ +
-|   |- usecases/ +
-|   |- services/ +
+| |- usecases/ +
+| |- services/ +
 |- application/ +
 |- infrastructure/ +
 |- presentation/
@@ -68,10 +75,10 @@ For example, you might have a payment subdirectory within the usecases and servi
 
 src/ +
 |- domain/ +
-|   |- usecases/ +
-|   |   |- payment/ +
-|   |- services/ +
-|   |   |- payment/ +
+| |- usecases/ +
+| | |- payment/ +
+| |- services/ +
+| | |- payment/ +
 |- application/ +
 |- infrastructure/ +
 |- presentation/
@@ -103,6 +110,7 @@ The specific components that you include in the application layer will depend on
 The goal of the application layer is to provide a high-level interface for interacting with the domain layer and other components of the system, and to coordinate the flow of control between these components.
 
 === Example Of Layer Interactions
+
 Here's an example of how the layers of a DDD architecture might interact when performing CRUD operations on a todo item in a todo application:
 
 . The presentation layer (e.g., a web server or mobile client) receives a request to create, read, update, or delete a todo item.
@@ -111,10 +119,12 @@ Here's an example of how the layers of a DDD architecture might interact when pe
 
 . The application layer creates a command object or query object that represents the request, and passes it to the domain layer.
 
-. The domain layer contains the business logic for the application, including the todo item aggregate root. The aggregate root processes the command or query and updates the state of the todo item domain object as necessary.
+. The domain layer contains the business logic for the application, including the todo item aggregate root.
+The aggregate root processes the command or query and updates the state of the todo item domain object as necessary.
 
 . When the domain layer needs to persist the updated state of the todo item, it passes a request to the infrastructure layer.
 
-. The infrastructure layer contains the code that interacts with external systems such as databases, file systems, and APIs. It receives the request from the domain layer and performs the necessary CRUD operation on the todo item.
+. The infrastructure layer contains the code that interacts with external systems such as databases, file systems, and APIs.
+It receives the request from the domain layer and performs the necessary CRUD operation on the todo item.
 
 . Once the operation is complete, the infrastructure layer returns a response to the domain layer, which is then passed back up through the application and presentation layers to the client that made the original request.
