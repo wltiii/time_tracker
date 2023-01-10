@@ -15,6 +15,4 @@
 ///   };
 /// }
 
-// TODO(wltiii) will this typedef work with freezed?
-// typedef Json = Map<String, Object?>;
-typedef Json = Map<String, dynamic>;
+typedef Json = Map<String, Object?>;
