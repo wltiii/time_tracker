@@ -75,6 +75,11 @@ class CacheFailure extends Failure {
       : super(ExceptionMessage('Cache failure.'), additionalInfo);
 }
 
+class InconsistencyFailure extends Failure {
+  InconsistencyFailure([AdditionalInfo? additionalInfo])
+      : super(ExceptionMessage('Not found.'), additionalInfo);
+}
+
 class NotFoundFailure extends Failure {
   NotFoundFailure([AdditionalInfo? additionalInfo])
       : super(ExceptionMessage('Not found.'), additionalInfo);
