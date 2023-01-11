@@ -1,12 +1,15 @@
-// import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
+import 'package:time_tracker/domain/core/extensions/date_time_range.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 
 class MockTimeEntryRepository implements TimeEntryRepository {
-  final _timeEntries = <int, TimeEntry>{};
+  final _timeEntries = <String, TimeEntry>{};
   int _nextId = 1;
 
   @override
@@ -52,5 +55,28 @@ class MockTimeEntryRepository implements TimeEntryRepository {
     _timeEntries[entity.id] = entity;
 
     return Future.value(Right(entity));
+  }
+
+  @override
+  Future<Either<Failure, List<TimeEntry>>> getTimeboxedEntries({
+    // TODO take a TimeEntryRange
+    required StartTime start,
+    required EndTime end,
+  }) async {
+    // TODO use TimeEntryRange
+    final range = DateTimeRange(
+      start: start.dateTime,
+      end: end.dateTime,
+    );
+    final timeboxedEntries = <TimeEntry>[];
+    final entries = _timeEntries.values;
+
+    // TODO(wltiii): add range getter on TimeEntry (TimeEntryRange)
+    for (final entry in entries) {
+      if (range.isOverlapping(entry.timeEntryRange)) {
+        timeboxedEntries.add(entry);
+      }
+    }
+    return Right(timeboxedEntries);
   }
 }
