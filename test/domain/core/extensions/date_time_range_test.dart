@@ -14,7 +14,7 @@ void main() {
         final thisRange = DateTimeRange(start: thisStart, end: thisEnd);
         final otherRange = DateTimeRange(start: otherStart, end: otherEnd);
 
-        expect(thisRange.overlapsWith(otherRange), isFalse);
+        expect(thisRange.isOverlapping(otherRange), isFalse);
       });
 
       test('this range after other returns false', () {
@@ -26,7 +26,7 @@ void main() {
         final thisRange = DateTimeRange(start: thisStart, end: thisEnd);
         final otherRange = DateTimeRange(start: otherStart, end: otherEnd);
 
-        expect(thisRange.overlapsWith(otherRange), isFalse);
+        expect(thisRange.isOverlapping(otherRange), isFalse);
       });
 
       test('ranges with same start/end returns true', () {
@@ -39,7 +39,7 @@ void main() {
         final thisRange = DateTimeRange(start: thisStart, end: thisEnd);
         final otherRange = DateTimeRange(start: otherStart, end: otherEnd);
 
-        expect(thisRange.overlapsWith(otherRange), isTrue);
+        expect(thisRange.isOverlapping(otherRange), isTrue);
       });
 
       test('start overlaps other range returns true', () {
@@ -51,7 +51,7 @@ void main() {
         final thisRange = DateTimeRange(start: thisStart, end: thisEnd);
         final otherRange = DateTimeRange(start: otherStart, end: otherEnd);
 
-        expect(thisRange.overlapsWith(otherRange), isTrue);
+        expect(thisRange.isOverlapping(otherRange), isTrue);
       });
 
       test('end overlaps other range returns true', () {
@@ -63,7 +63,7 @@ void main() {
         final thisRange = DateTimeRange(start: thisStart, end: thisEnd);
         final otherRange = DateTimeRange(start: otherStart, end: otherEnd);
 
-        expect(thisRange.overlapsWith(otherRange), isTrue);
+        expect(thisRange.isOverlapping(otherRange), isTrue);
       });
     });
   });
