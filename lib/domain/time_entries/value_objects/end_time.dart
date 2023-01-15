@@ -9,22 +9,28 @@ class EndTime extends Equatable {
   }) {
     final upperBound = DateTime.now();
     final lowerBound = upperBound.subtract(const Duration(days: 7));
-    final endTime = dateTime ?? upperBound;
 
-    if (endTime.isAfter(upperBound)) {
-      throw ValueException(ExceptionMessage('End time cannot be after the current time.'));
+    if (dateTime != null && dateTime.isAfter(upperBound)) {
+      throw ValueException(
+          ExceptionMessage('End time cannot be after the current time.'));
+    } else if (dateTime != null && dateTime.isBefore(lowerBound)) {
+      throw ValueException(
+          ExceptionMessage('End time cannot be more than 7 days ago.'));
+    } else if (dateTime != null) {
+      _value = dateTime;
+    } else {
+      _value = DateTime.utc(275760, 09, 13);
     }
-    if (endTime.isBefore(lowerBound)) {
-      throw ValueException(ExceptionMessage('End time cannot be more than 7 days ago.'));
-    }
-
-    _value = endTime;
   }
+
+  /// Creates an instance as current DateTime.
+  EndTime.now() : this(dateTime: DateTime.now());
 
   /// Creates an instance from an Iso8601 string.
   ///
   /// Throws: FormatException if string is invalid.
-  EndTime.fromIso8601String(String iso8601String) : this(dateTime: DateTime.parse(iso8601String));
+  EndTime.fromIso8601String(String iso8601String)
+      : this(dateTime: DateTime.parse(iso8601String));
 
   late final DateTime _value;
 

@@ -3,18 +3,23 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 void main() {
-  test('without args', () {
-    var lowerBound = DateTime.now();
+  test('without args is infinite', () {
     var result = EndTime();
+
+    expect(result, isA<EndTime>());
+    expect(result.dateTime.toUtc(), equals(DateTime.utc(275760, 09, 13)));
+    expect(result.toString(), equals('275760-09-13 00:00:00.000Z'));
+  });
+
+  test('from now constructor', () {
+    var lowerBound = DateTime.now();
+    var result = EndTime.now();
     var upperBound = DateTime.now();
 
     expect(result, isA<EndTime>());
     expect(result.dateTime.isBefore(lowerBound), isFalse);
     expect(result.dateTime.isAfter(upperBound), isFalse);
     expect(result.iso8601String, equals(result.dateTime.toIso8601String()));
-    print(lowerBound.toString());
-    print(result.toString());
-    print(upperBound.toString());
   });
 
   test('from valid datetime arg', () {
