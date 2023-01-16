@@ -7,6 +7,7 @@ import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
 class MockTimeEntryRepository implements TimeEntryRepository {
   final _timeEntries = <String, TimeEntry>{};
@@ -14,47 +15,63 @@ class MockTimeEntryRepository implements TimeEntryRepository {
 
   @override
   Future<Either<Failure, TimeEntry>> add(TimeEntryModel timeEntryModel) async {
-    // final timeEntry = TimeEntry(
-    //   id: _nextId++,
-    //   model: timeEntryModel,
-    // );
     final timeEntry = TimeEntry(
-      id: _nextId++,
+      id: TimeEntryId((_nextId++).toString()),
       start: timeEntryModel.start.dateTime,
       end: timeEntryModel.end.dateTime,
     );
 
-    _timeEntries[timeEntry.id] = timeEntry;
+    _timeEntries[timeEntry.id.toString()] = timeEntry;
     return Future.value(Right(timeEntry));
   }
 
   @override
-  // Future<bool> delete(TimeEntry timeEntry) async {
-  Future<Either<Failure, void>> delete(TimeEntry timeEntry) async {
-    final entry = await get(timeEntry);
+  Future<Either<Failure, bool>> delete(TimeEntry timeEntry) async {
+    final result = await get(timeEntry.id);
 
-    if (entry.isRight()) _timeEntries.remove(timeEntry.id);
+    Failure? failure;
+    TimeEntry entry;
 
-    return Future.value(const Right(null));
+    result.fold(
+      (l) => failure = l,
+      (r) => entry = r,
+    );
+
+    if (result.isLeft()) {
+      return Either.left(failure!);
+    }
+
+    _timeEntries.remove(timeEntry.id);
+
+    return Either.right(true);
   }
 
   @override
-  Future<Either<Failure, TimeEntry>> get(TimeEntry entity) async {
-    final timeEntry = _timeEntries[entity.id];
+  Future<Either<Failure, TimeEntry>> get(TimeEntryId timeEntryId) async {
+    if (_timeEntries[id] == null) {
+      return Either.left(NotFoundFailure());
+    }
 
-    return timeEntry != null
-        ? Future.value(Right(timeEntry))
-        : Future.value(Left(NotFoundFailure()));
+    return Either.right(_timeEntries[id]!);
   }
+
+  // @override
+  // Future<Either<Failure, TimeEntry>> get(TimeEntryId id) async {
+  //   final timeEntry = _timeEntries[id];
+  //
+  //   return timeEntry != null
+  //       ? Future.value(Right(timeEntry))
+  //       : Future.value(Left(NotFoundFailure()));
+  // }
 
   @override
   Future<Either<Failure, TimeEntry>> update(TimeEntry entity) async {
-    final entry = await get(entity);
+    final entry = await get(entity.id);
     if (entry.isLeft()) return entry;
 
-    _timeEntries[entity.id] = entity;
+    _timeEntries[entity.id.value] = entity;
 
-    return Future.value(Right(entity));
+    return Either.right(entity);
   }
 
   @override
@@ -71,12 +88,12 @@ class MockTimeEntryRepository implements TimeEntryRepository {
     final timeboxedEntries = <TimeEntry>[];
     final entries = _timeEntries.values;
 
-    // TODO(wltiii): add range getter on TimeEntry (TimeEntryRange)
     for (final entry in entries) {
       if (range.isOverlapping(entry.timeEntryRange)) {
         timeboxedEntries.add(entry);
       }
     }
-    return Right(timeboxedEntries);
+
+    return Either.right(timeboxedEntries);
   }
 }
