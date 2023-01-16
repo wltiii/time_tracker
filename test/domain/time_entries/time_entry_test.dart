@@ -7,14 +7,36 @@ import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dar
 
 void main() {
   group('construction', () {
-    test('from default', () {
+    test('running time entry', () {
+      final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
+      final startTime = StartTime(dateTime: startDateTime);
+      final endTime = EndTime();
+      final givenModel = TimeEntryModel(start: startTime, end: endTime);
+
+      final result = TimeEntry(
+        id: TimeEntryId('abc123'),
+        start: startDateTime,
+        end: DateTime.utc(275760, 09, 13),
+      );
+
+      expect(result, isA<TimeEntry>());
+      expect(result.id, equals(TimeEntryId('abc123')));
+      final resultModel = TimeEntryModel(
+        start: result.start,
+        end: result.end,
+      );
+      expect(result.isRunning, isTrue);
+
+      expect(resultModel, equals(givenModel));
+    });
+
+    test('completed time entry', () {
       final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
       final startTime = StartTime(dateTime: startDateTime);
       final endDateTime = DateTime.now();
       final endTime = EndTime(dateTime: endDateTime);
       final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
-      // final result = TimeEntry(id: TimeEntryId('abc123'), model: givenModel);
       final result = TimeEntry(
         id: TimeEntryId('abc123'),
         start: startDateTime,
@@ -22,11 +44,12 @@ void main() {
       );
 
       expect(result, isA<TimeEntry>());
-      expect(result.id, equals('abc123'));
+      expect(result.id, equals(TimeEntryId('abc123')));
       final resultModel = TimeEntryModel(
         start: result.start,
         end: result.end,
       );
+      expect(result.isRunning, isFalse);
 
       expect(resultModel, equals(givenModel));
     });

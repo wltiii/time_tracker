@@ -24,7 +24,7 @@ class TimeEntryModel extends Equatable {
   }) {
     // TODO(wltiii): implement isAfter method allowing it to take a StartTime
     // if (!end.isAfter(start.dateTime)) {
-    if (!end.dateTime.isAfter(start.dateTime)) {
+    if (!end.dateTime.isAfter(start.dateTime) && !end.isInfinite) {
       throw ValueException(
           ExceptionMessage('End time must be after start time.'));
     }

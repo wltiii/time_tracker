@@ -9,6 +9,16 @@ void main() {
     expect(result, isA<EndTime>());
     expect(result.dateTime.toUtc(), equals(DateTime.utc(275760, 09, 13)));
     expect(result.toString(), equals('275760-09-13 00:00:00.000Z'));
+    expect(result.isInfinite, isTrue);
+  });
+
+  test('constructs with infinite datetime arg', () {
+    var result = EndTime(dateTime: DateTime.utc(275760, 09, 13));
+
+    expect(result, isA<EndTime>());
+    expect(result.dateTime.toUtc(), equals(DateTime.utc(275760, 09, 13)));
+    expect(result.toString(), equals('275760-09-13 00:00:00.000Z'));
+    expect(result.isInfinite, isTrue);
   });
 
   test('from now constructor', () {
@@ -20,6 +30,7 @@ void main() {
     expect(result.dateTime.isBefore(lowerBound), isFalse);
     expect(result.dateTime.isAfter(upperBound), isFalse);
     expect(result.iso8601String, equals(result.dateTime.toIso8601String()));
+    expect(result.isInfinite, isFalse);
   });
 
   test('from valid datetime arg', () {
@@ -28,6 +39,7 @@ void main() {
     var result = EndTime(dateTime: endTime);
 
     expect(result.dateTime, equals(endTime));
+    expect(result.isInfinite, isFalse);
   });
 
   test('from iso8601String', () {
@@ -38,6 +50,7 @@ void main() {
 
     expect(result.dateTime, equals(expected));
     expect(result.toString(), equals(expected.toString()));
+    expect(result.isInfinite, isFalse);
   });
 
   test('throws when constructing from future date', () {

@@ -18,7 +18,9 @@ class TimeEntry {
     required DateTime end,
   })  : _id = id,
         _model = TimeEntryModel(
-            start: StartTime(dateTime: start), end: EndTime(dateTime: end));
+          start: StartTime(dateTime: start),
+          end: EndTime(dateTime: end),
+        );
 
   TimeEntry.fromModel({
     required id,
@@ -36,8 +38,9 @@ class TimeEntry {
 
   bool overlapsWith(other) => _model.overlapsWith(other);
 
-  String get id => _id.value;
+  TimeEntryId get id => _id;
   StartTime get start => _model.start;
   EndTime get end => _model.end;
   TimeEntryRange get timeEntryRange => _model.timeEntryRange;
+  bool get isRunning => end.isInfinite;
 }
