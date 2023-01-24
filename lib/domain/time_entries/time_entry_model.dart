@@ -39,9 +39,8 @@ class TimeEntryModel extends Equatable {
   @EndTimeSerializer()
   final EndTime end;
 
-  bool overlapsWith(TimeEntryRange other) {
-    return timeEntryRange.isOverlapping(other);
-  }
+  bool overlapsWith(TimeEntryRange other) =>
+      timeEntryRange.isOverlapping(other);
 
   TimeEntryRange get timeEntryRange => TimeEntryRange(
         start: start,
