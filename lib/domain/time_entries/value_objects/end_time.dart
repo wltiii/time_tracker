@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 /// Represents the end time of a [TimeEntry]. The default is an "infinite",
@@ -6,6 +7,7 @@ import 'package:unrepresentable_state/unrepresentable_state.dart';
 ///
 /// Throws [ValueException] when the dateTime passed is more than seven days
 /// in the past or if it is greater than the current time.
+@JsonSerializable()
 class EndTime extends Equatable {
   EndTime({
     DateTime? dateTime,

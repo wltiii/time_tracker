@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 /// Throws: ValueException when the result would mean StartTime would be in an
 /// invalid state.
+@JsonSerializable()
 class StartTime extends Equatable {
   StartTime({
     DateTime? dateTime,
@@ -12,10 +14,12 @@ class StartTime extends Equatable {
     final startTime = dateTime ?? upperBound;
 
     if (startTime.isAfter(upperBound)) {
-      throw ValueException(ExceptionMessage('Start time cannot be after the current time.'));
+      throw ValueException(
+          ExceptionMessage('Start time cannot be after the current time.'));
     }
     if (startTime.isBefore(lowerBound)) {
-      throw ValueException(ExceptionMessage('Start time cannot be more than 7 days ago.'));
+      throw ValueException(
+          ExceptionMessage('Start time cannot be more than 7 days ago.'));
     }
 
     _value = startTime;
@@ -24,7 +28,8 @@ class StartTime extends Equatable {
   /// Creates an instance from an Iso8601 string.
   ///
   /// Throws: FormatException if string is invalid.
-  StartTime.fromIso8601String(String iso8601String) : this(dateTime: DateTime.parse(iso8601String));
+  StartTime.fromIso8601String(String iso8601String)
+      : this(dateTime: DateTime.parse(iso8601String));
 
   late final DateTime _value;
 
