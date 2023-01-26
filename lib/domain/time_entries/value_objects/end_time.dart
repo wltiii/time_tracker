@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
+part 'end_time.g.dart';
+
 /// Represents the end time of a [TimeEntry]. The default is an "infinite",
 /// which is the maximum value that can be represented by [DateTime].
 ///

@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
+part 'start_time.g.dart';
+
 /// Throws: ValueException when the result would mean StartTime would be in an
 /// invalid state.
 @JsonSerializable()
