@@ -38,7 +38,7 @@ class TimeEntryService {
       if (model.overlapsWith(timeEntry.timeEntryRange)) {
         return Future.value(
           Left(
-            InconsistencyFailure(
+            InvalidStateFailure(
                 AdditionalInfo('Time entry overlaps with existing entry having '
                     'start ${timeEntry.start.iso8601String} and '
                     'end ${timeEntry.end.iso8601String}.')),

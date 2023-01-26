@@ -54,7 +54,7 @@ abstract class AuthenticationFailure extends Failure {
         );
 }
 
-class AuthenticationEmailInvalidFailure extends Failure {
+class AuthenticationEmailInvalidFailure extends AuthenticationFailure {
   AuthenticationEmailInvalidFailure([AdditionalInfo? additionalInfo])
       : super(
           ExceptionMessage('Email address is invalid.'),
@@ -62,7 +62,7 @@ class AuthenticationEmailInvalidFailure extends Failure {
         );
 }
 
-class AuthenticationWeakPasswordFailure extends Failure {
+class AuthenticationWeakPasswordFailure extends AuthenticationFailure {
   AuthenticationWeakPasswordFailure([AdditionalInfo? additionalInfo])
       : super(
           ExceptionMessage('The password provided is too weak.'),
@@ -75,9 +75,9 @@ class CacheFailure extends Failure {
       : super(ExceptionMessage('Cache failure.'), additionalInfo);
 }
 
-class InconsistencyFailure extends Failure {
-  InconsistencyFailure([AdditionalInfo? additionalInfo])
-      : super(ExceptionMessage('Not found.'), additionalInfo);
+class InvalidStateFailure extends Failure {
+  InvalidStateFailure([AdditionalInfo? additionalInfo])
+      : super(ExceptionMessage('Invalid state.'), additionalInfo);
 }
 
 class NotFoundFailure extends Failure {
