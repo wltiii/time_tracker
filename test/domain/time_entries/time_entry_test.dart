@@ -4,6 +4,7 @@ import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 
 void main() {
   group('construction', () {
@@ -52,6 +53,78 @@ void main() {
       expect(result.isRunning, isFalse);
 
       expect(resultModel, equals(givenModel));
+      expect(result.timeEntryRange, equals(givenModel.timeEntryRange));
+    });
+
+    test('from model', () {
+      final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
+      final startTime = StartTime(dateTime: startDateTime);
+      final endDateTime = DateTime.now();
+      final endTime = EndTime(dateTime: endDateTime);
+      final givenModel = TimeEntryModel(start: startTime, end: endTime);
+
+      final result = TimeEntry.fromModel(
+        id: TimeEntryId('abc123'),
+        model: givenModel,
+      );
+
+      expect(result, isA<TimeEntry>());
+      expect(result.id, equals(TimeEntryId('abc123')));
+      final resultModel = TimeEntryModel(
+        start: result.start,
+        end: result.end,
+      );
+      expect(result.isRunning, isFalse);
+
+      expect(resultModel, equals(givenModel));
+    });
+  });
+
+  group('overlapsWith', () {
+    test('true when overlapping', () {
+      final now = DateTime.now();
+      final nowLessOneHour = now.subtract(const Duration(hours: 1));
+      final nowLessTwoHours = now.subtract(const Duration(hours: 2));
+      final nowLessThreeHours = now.subtract(const Duration(hours: 3));
+
+      final givenStartTime = StartTime(dateTime: nowLessTwoHours);
+      final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
+      final givenEndTime = EndTime(dateTime: now);
+      final givenOtherEndTime = EndTime(dateTime: nowLessOneHour);
+
+      final otherTimeRange =
+          TimeEntryRange(start: givenOtherStartTime, end: givenOtherEndTime);
+
+      final givenTimeEntry = TimeEntry(
+        id: TimeEntryId('abc123'),
+        start: givenStartTime.dateTime,
+        end: givenEndTime.dateTime,
+      );
+
+      expect(givenTimeEntry.overlapsWith(otherTimeRange), isTrue);
+    });
+
+    test('false when not overlapping', () {
+      final now = DateTime.now();
+      final nowLessOneHour = now.subtract(const Duration(hours: 1));
+      final nowLessTwoHours = now.subtract(const Duration(hours: 2));
+      final nowLessThreeHours = now.subtract(const Duration(hours: 3));
+
+      final givenStartTime = StartTime(dateTime: nowLessOneHour);
+      final givenEndTime = EndTime(dateTime: now);
+      final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
+      final givenOtherEndTime = EndTime(dateTime: nowLessTwoHours);
+
+      final otherTimeRange =
+          TimeEntryRange(start: givenOtherStartTime, end: givenOtherEndTime);
+
+      final givenTimeEntry = TimeEntry(
+        id: TimeEntryId('abc123'),
+        start: givenStartTime.dateTime,
+        end: givenEndTime.dateTime,
+      );
+
+      expect(givenTimeEntry.overlapsWith(otherTimeRange), isFalse);
     });
   });
 
