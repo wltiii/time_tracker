@@ -168,28 +168,70 @@ void main() {
   // perhaps this is frivolous.
   // TODO(wltiii): think about this. is there a better solution? is this going overboard?
   group('json', () {
-    test('from/to', () {
-      final startTime = StartTime(
-        dateTime: DateTime.now().subtract(
-          const Duration(
-            hours: 1,
-          ),
-        ),
+    test('from', () {
+      final startTime =
+          StartTime(dateTime: DateTime.parse('2023-01-24T08:02:52.360342'));
+      final endTime =
+          EndTime(dateTime: DateTime.parse('2023-01-24T17:01:36.140342'));
+
+      final expectedTimeEntry = TimeEntryModel(
+        start: startTime,
+        end: endTime,
       );
 
-      final endTime = EndTime(dateTime: DateTime.now());
+      final givenJson = {
+        'start': '2023-01-24T08:02:52.360342',
+        'end': '2023-01-24T17:01:36.140342',
+      };
+
+      expect(
+        TimeEntryModel.fromJson(givenJson),
+        equals(expectedTimeEntry),
+      );
+    });
+
+    test('to', () {
+      final startTime = StartTime(
+        dateTime: DateTime.parse('2023-01-24T08:02:52.360342'),
+      );
+      final endTime = EndTime(
+        dateTime: DateTime.parse('2023-01-24T17:01:36.140342'),
+      );
 
       final givenTimeEntry = TimeEntryModel(
         start: startTime,
         end: endTime,
       );
 
-      print('Model json = ${givenTimeEntry.toJson()}');
-
-      expect(
-        TimeEntryModel.fromJson(givenTimeEntry.toJson()),
-        equals(givenTimeEntry),
-      );
+      final expectedJson = {
+        'start': '2023-01-24T08:02:52.360342',
+        'end': '2023-01-24T17:01:36.140342'
+      };
+      expect(givenTimeEntry.toJson(), equals(expectedJson));
     });
+
+    // test('from/to', () {
+    //   final startTime = StartTime(
+    //     dateTime: DateTime.now().subtract(
+    //       const Duration(
+    //         hours: 1,
+    //       ),
+    //     ),
+    //   );
+    //
+    //   final endTime = EndTime(dateTime: DateTime.now());
+    //
+    //   final givenTimeEntry = TimeEntryModel(
+    //     start: startTime,
+    //     end: endTime,
+    //   );
+    //
+    //   print('Model json = ${givenTimeEntry.toJson()}');
+    //
+    //   expect(
+    //     TimeEntryModel.fromJson(givenTimeEntry.toJson()),
+    //     equals(givenTimeEntry),
+    //   );
+    // });
   });
 }

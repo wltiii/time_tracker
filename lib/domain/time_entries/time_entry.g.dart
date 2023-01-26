@@ -7,13 +7,13 @@ part of 'time_entry.dart';
 // **************************************************************************
 
 TimeEntry _$TimeEntryFromJson(Map<String, dynamic> json) => TimeEntry(
-      id: json['id'],
+      id: const TimeEntryIdSerializer().fromJson(json['id'] as String),
       start: DateTime.parse(json['start'] as String),
       end: DateTime.parse(json['end'] as String),
     );
 
 Map<String, dynamic> _$TimeEntryToJson(TimeEntry instance) => <String, dynamic>{
-      'id': instance.id,
-      'start': instance.start,
-      'end': instance.end,
+      'id': const TimeEntryIdSerializer().toJson(instance.id),
+      'start': const StartTimeSerializer().toJson(instance.start),
+      'end': const EndTimeSerializer().toJson(instance.end),
     };

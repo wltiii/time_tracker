@@ -56,38 +56,68 @@ void main() {
   });
 
   group('json', () {
-    test('from/to', () {
-      fail('Not yet implemented.');
+    /// TODO(wltiii): should this raise all model objects to top level, or should entity json have a model object? I think the former.
+    /// i.e
+    ///
+    /// {
+    ///     id: 23456789
+    ///     start: 2023-01-05T13:55:54.163113,
+    ///     end: 2023-01-05T14:55:54.164525
+    /// }
+    /// - or -
+    /// {
+    ///     id: 23456789
+    ///     model: {
+    ///         start: 2023-01-05T13:55:54.163113,
+    ///         end: 2023-01-05T14:55:54.164525
+    ///     }
+    /// }
+    ///
+    test('from', () {
+      final givenStartTimeString =
+          DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
+      final givenEndTimeString = DateTime.now().toIso8601String();
+      final startTime =
+          StartTime(dateTime: DateTime.parse(givenStartTimeString));
+      final endTime = EndTime(dateTime: DateTime.parse(givenEndTimeString));
 
-      final givenTimeEntry = TimeEntryModel(
-        start: StartTime(
-            dateTime: DateTime.now().subtract(
-          const Duration(hours: 1),
-        )),
-        end: EndTime(dateTime: DateTime.now()),
+      final expectedTimeEntry = TimeEntry(
+          id: TimeEntryId('abc123'),
+          start: startTime.dateTime,
+          end: endTime.dateTime);
+
+      final givenJson = {
+        'id': 'abc123',
+        'start': givenStartTimeString,
+        'end': givenEndTimeString
+      };
+
+      expect(
+        TimeEntry.fromJson(givenJson),
+        equals(expectedTimeEntry),
       );
+    });
 
-      /// TODO(wltiii): should this raise all model objects to top level, or should entity json have a model object?
-      /// i.e
-      ///
-      /// {
-      ///     id: 23456789
-      ///     start: 2023-01-05T13:55:54.163113,
-      ///     end: 2023-01-05T14:55:54.164525
-      /// }
-      /// - or -
-      /// {
-      ///     id: 23456789
-      ///     model: {
-      ///         start: 2023-01-05T13:55:54.163113,
-      ///         end: 2023-01-05T14:55:54.164525
-      ///     }
-      /// }
+    test('to', () {
+      final givenStartTimeString =
+          DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
+      final givenEndTimeString = DateTime.now().toIso8601String();
+      final startTime =
+          StartTime(dateTime: DateTime.parse(givenStartTimeString));
+      final endTime = EndTime(dateTime: DateTime.parse(givenEndTimeString));
 
-      // expect(
-      //   TimeEntry.fromJson(givenTimeEntry.toJson()),
-      //   equals(givenTimeEntry),
-      // );
+      final givenTimeEntry = TimeEntry(
+          id: TimeEntryId('abc123'),
+          start: startTime.dateTime,
+          end: endTime.dateTime);
+
+      final expectedJson = {
+        'id': 'abc123',
+        'start': givenStartTimeString,
+        'end': givenEndTimeString
+      };
+
+      expect(givenTimeEntry.toJson(), equals(expectedJson));
     });
   });
 }
