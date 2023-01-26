@@ -3,6 +3,7 @@ import 'package:time_tracker/application/repositories/time_entry_repository.dart
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
 class EnterTimeRetroactivelyHandler
 // implements UseCaseHandler<EnterTimeRetroactivelyCommand, TimeEntry> {
@@ -40,7 +41,7 @@ class EnterTimeRetroactivelyHandler
     // TODO(wltiii): calls should be made from the entity layer
     return await _repository.update(
       TimeEntry(
-        id: '1',
+        id: TimeEntryId('1'),
         start: timeEntryModel.start.dateTime,
         end: timeEntryModel.end.dateTime,
       ),
