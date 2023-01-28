@@ -2,8 +2,21 @@
 
 == Explanation
 
+This folder contains the classes that handle the user interface and the user interactions with the application. This would include the classes for web or mobile views, controllers, and other classes that handle the presentation logic.
+
 The presentation layer contains the user interface components of a Flutter project using Domain-Driven Design (DDD). This may include screens, widgets, and other visual elements that the user interacts with, as well as the code that manages routing and navigation within the application.
 
 . Screens are the top-level components that represent a specific view in the application. For example, in a to-do list application, there might be a screen for creating tasks, a screen for viewing tasks, and a screen for viewing task history.
 
 . Widgets are the building blocks of the user interface. They are reusable components that can be composed to create the user interface of the application. For example, in a to-do list application, there might be a widget for displaying a task, a widget for editing a task, and a widget for displaying a list of tasks.
+
+== The Presentation Layer In Backend Applications
+
+The Presentation layer in a backend application would handle the communication between the backend and external clients, it would be responsible for handling the incoming HTTP requests, validate the input and pass it to the appropriate use cases in the Application layer, and return the appropriate responses to the clients.
+
+The Presentation layer is also known as the Application Programming Interface (API) layer.
+It acts as the interface between the backend application and the external clients such as web, mobile or other external systems.
+The classes in this layer would handle the HTTP requests and responses, map them to the appropriate use cases in the Application layer and return the appropriate responses to the clients.
+
+The classes in the Presentation layer would include controllers, which handle the incoming HTTP requests, validate the input and pass it to the appropriate use cases in the Application layer.
+It would also include classes that handle the serialization and deserialization of data, as well as classes that handle security and authentication.

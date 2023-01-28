@@ -4,6 +4,9 @@
 
 This layer contains the business logic of the application, such as application services and use cases. It is responsible for orchestrating the flow of data between the _presentation_ layer and the _domain_ layer.
 
+The application layer handles the technical concerns of the application, such as database access, logging, and communication with external systems. _*QUESTION* is this
+statement in conflict with the responsibilities of the DOMAIN layer?_
+
 The business logic of is implemented via:
 
 . Services for creating, completing, and viewing tasks.

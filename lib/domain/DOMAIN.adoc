@@ -2,7 +2,9 @@
 
 == Explanation
 
-This layer contains the core domain entities and logic, such as value objects, entities, and domain services.
+This layer encapsulates the business rules and logic of the application.
+It contains all the classes that represent the core domain concepts and entities, such as value objects, entities, and domain services.
+In a shopping cart application, this could be entities such as Product, Cart, Customer and Order.
 
 The domain layer is the central part of a Flutter project using Domain-Driven Design (DDD). It contains the core entities and logic of the application, independent of the technical details of the implementation.
 
@@ -15,6 +17,21 @@ Domain services are classes that implement business logic that is not specific t
 *The domain layer should be independent of the user interface and the technical implementation of the application.* This allows the domain logic to be tested, maintained, and reused in other contexts.
 
 Additionally, the domain layer should be the central focus of the design, with the other layers serving to support and implement the core domain logic.
+
+== The Aggregate Root
+
+An *aggregate root* typically exists in the Domain top-level folder, as it is a core domain concept.
+_It represents a single unit of change and consistency in the domain model._
+It also acts as a boundary for the consistency of the aggregate, ensuring that any changes made to the objects within the aggregate are valid according to the business rules.
+
+An aggregate root is:
+
+. An object that acts as a gateway to a cluster of related objects, known as an aggregate.
+. A group of domain objects that are considered as a single unit for the purpose of data changes.
+. The only object within the aggregate that can be directly accessed.
+. The enforcer of the invariants of the aggregate.
+
+For example, in a shopping cart application, the Cart class would be the aggregate root, as it is the object that contains the collection of Product objects and manages their state. It also enforces the business rules that govern the cart, such as the maximum number of items that can be added to the cart and the total cost of the cart. The Cart class is the only class that can be accessed directly and any changes to the Product objects inside the cart should be made through the Cart class.
 
 == Potential Domain Objects
 
