@@ -15,6 +15,7 @@ class TimeEntryService {
   // TODO(wltiii): for the MVP, the invariant should be User,
   // TODO(wltiii): other usecases might consider overlapping entries,
   // TODO(wltiii): enforcing only those that cannot overlap, by the other things tracked (Project, Client, Task, other?)
+  // TODO(wltiii): it seems validation should be done in the entity
   Future<Either<Failure, bool>> dateRangeConsistencyValidator(
       TimeEntryModel model) async {
     final result = await _repository.getTimeboxedEntries(
