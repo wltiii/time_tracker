@@ -22,13 +22,17 @@ class TimeEntryModel extends Equatable {
     required this.start,
     required this.end,
   }) {
-    // TODO(wltiii): implement isAfter method allowing it to take a StartTime
-    // if (!end.isAfter(start.dateTime)) {
-    if (!end.dateTime.isAfter(start.dateTime) && !end.isInfinite) {
+    if (!end.isAfter(start) && !end.isInfinite) {
       throw ValueException(
           ExceptionMessage('End time must be after start time.'));
     }
   }
+
+  TimeEntryModel.runningEntry()
+      : this(
+          start: StartTime(),
+          end: EndTime.endOfTime(),
+        );
 
   factory TimeEntryModel.fromJson(Json json) => _$TimeEntryModelFromJson(json);
 

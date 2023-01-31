@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
@@ -15,7 +16,7 @@ void main() {
           ),
         ),
       );
-      // final startTime = givenStartTime;
+
       final givenEndTime = EndTime(dateTime: DateTime.now());
 
       var result = TimeEntryModel(start: givenStartTime, end: givenEndTime);
@@ -53,6 +54,17 @@ void main() {
           ),
         ),
       );
+    });
+
+    test('from runningEntry constructor', () {
+      final beforeConstruction = DateTime.now();
+      final result = TimeEntryModel.runningEntry();
+      final afterConstruction = DateTime.now();
+
+      expect(result, isA<TimeEntryModel>());
+      expect(result.start.dateTime.isAfter(beforeConstruction), isTrue);
+      expect(result.start.dateTime.isBefore(afterConstruction), isTrue);
+      expect(result.end, equals(EndTime(dateTime: DateTimeHelper.endOfTime())));
     });
   });
 
