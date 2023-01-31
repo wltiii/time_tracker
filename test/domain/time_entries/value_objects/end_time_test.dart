@@ -1,25 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 void main() {
   group('constructs', () {
-    test('without args is infinite', () {
-      var result = EndTime();
+    test('from datetime', () {
+      var endTime = DateTime.now().subtract(const Duration(hours: 1));
 
-      expect(result, isA<EndTime>());
-      expect(result.dateTime.toUtc(), equals(DateTime.utc(275760, 09, 13)));
-      expect(result.toString(), equals('275760-09-13 00:00:00.000Z'));
-      expect(result.isInfinite, isTrue);
-    });
+      var result = EndTime(dateTime: endTime);
 
-    test('constructs with infinite datetime arg', () {
-      var result = EndTime(dateTime: DateTime.utc(275760, 09, 13));
-
-      expect(result, isA<EndTime>());
-      expect(result.dateTime.toUtc(), equals(DateTime.utc(275760, 09, 13)));
-      expect(result.toString(), equals('275760-09-13 00:00:00.000Z'));
-      expect(result.isInfinite, isTrue);
+      expect(result.dateTime, equals(endTime));
+      expect(result.isInfinite, isFalse);
     });
 
     test('from now constructor', () {
@@ -34,13 +27,14 @@ void main() {
       expect(result.isInfinite, isFalse);
     });
 
-    test('from valid datetime arg', () {
-      var endTime = DateTime.now().subtract(const Duration(hours: 1));
+    test('from endOfTime constructor', () {
+      var result = EndTime.endOfTime();
 
-      var result = EndTime(dateTime: endTime);
-
-      expect(result.dateTime, equals(endTime));
-      expect(result.isInfinite, isFalse);
+      expect(result, isA<EndTime>());
+      expect(result.dateTime, DateTimeHelper.endOfTime());
+      expect(result.iso8601String,
+          equals(DateTimeHelper.endOfTime().toIso8601String()));
+      expect(result.isInfinite, isTrue);
     });
 
     test('from iso8601String', () {
@@ -97,6 +91,22 @@ void main() {
           ),
         ),
       );
+    });
+  });
+
+  group('function', () {
+    test('isAfter returns true', () {
+      var givenStartTime = StartTime(dateTime: DateTime.now());
+      var result = EndTime.now();
+
+      expect(result.isAfter(givenStartTime), isTrue);
+    });
+
+    test('isAfter returns false', () {
+      var result = EndTime.now();
+      var givenStartTime = StartTime(dateTime: DateTime.now());
+
+      expect(result.isAfter(givenStartTime), isFalse);
     });
   });
 

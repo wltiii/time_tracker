@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 part 'end_time.g.dart';
@@ -12,16 +14,13 @@ part 'end_time.g.dart';
 @JsonSerializable()
 class EndTime extends Equatable {
   EndTime({
-    DateTime? dateTime,
+    required DateTime dateTime,
   }) {
     final upperBound = DateTime.now();
     final lowerBound = upperBound.subtract(const Duration(days: 7));
 
-    if (dateTime == _infiniteTime) {
-      _value = _infiniteTime;
-      return;
-    } else if (dateTime == null) {
-      _value = _infiniteTime;
+    if (dateTime == DateTimeHelper.endOfTime()) {
+      _value = dateTime;
       return;
     }
 
@@ -40,6 +39,9 @@ class EndTime extends Equatable {
   /// Creates an instance as current DateTime.
   EndTime.now() : this(dateTime: DateTime.now());
 
+  /// Creates an instance equal to the end of time
+  EndTime.endOfTime() : this(dateTime: DateTimeHelper.endOfTime());
+
   /// Creates an instance from an Iso8601 string.
   ///
   /// Throws: FormatException if string is invalid.
@@ -47,16 +49,15 @@ class EndTime extends Equatable {
       : this(dateTime: DateTime.parse(iso8601String));
 
   late final DateTime _value;
-  final DateTime _infiniteTime = DateTime.utc(275760, 09, 13);
 
+  bool isAfter(StartTime startTime) => dateTime.isAfter(startTime.dateTime);
   DateTime get dateTime => _value;
   String get iso8601String => _value.toIso8601String();
-  bool get isInfinite => _value == _infiniteTime;
+  bool get isInfinite => _value == DateTimeHelper.endOfTime();
 
   @override
   String toString() => _value.toString();
 
-  //TODO(wltiii): it was necessary to extend Equatable when implementing TimeEntry serialization by hand. Will likely be needed when serialization is done by serializable. Validate.
   @override
   List<Object> get props => [_value];
 }

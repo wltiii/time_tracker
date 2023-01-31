@@ -7,9 +7,7 @@ part of 'end_time.dart';
 // **************************************************************************
 
 EndTime _$EndTimeFromJson(Map<String, dynamic> json) => EndTime(
-      dateTime: json['dateTime'] == null
-          ? null
-          : DateTime.parse(json['dateTime'] as String),
+      dateTime: DateTime.parse(json['dateTime'] as String),
     );
 
 Map<String, dynamic> _$EndTimeToJson(EndTime instance) => <String, dynamic>{
