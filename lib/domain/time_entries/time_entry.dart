@@ -25,7 +25,7 @@ class TimeEntry extends Equatable {
           end: EndTime(dateTime: end),
         );
 
-  TimeEntry.fromModel({
+  const TimeEntry.fromModel({
     required id,
     required model,
   })  : _id = id,
