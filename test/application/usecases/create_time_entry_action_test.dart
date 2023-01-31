@@ -17,7 +17,7 @@ void main() {
       final action = CreateTimeEntryAction(repository);
       final timeEntryModel = TimeEntryModel(
         start: StartTime(dateTime: DateTime.now()),
-        end: EndTime(),
+        end: EndTime.endOfTime(),
       );
 
       final result = await action(timeEntryModel);

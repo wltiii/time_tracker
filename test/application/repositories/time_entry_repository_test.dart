@@ -19,7 +19,7 @@ void main() {
       final command = CreateTimeEntryCommand(
         TimeEntryModel(
           start: StartTime(dateTime: DateTime.now()),
-          end: EndTime(),
+          end: EndTime.endOfTime(),
         ),
       );
 
