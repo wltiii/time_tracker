@@ -11,7 +11,7 @@ void main() {
     test('running time entry', () {
       final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
       final startTime = StartTime(dateTime: startDateTime);
-      final endTime = EndTime();
+      final endTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
       final result = TimeEntry(
