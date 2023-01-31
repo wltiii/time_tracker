@@ -13,9 +13,6 @@ void main() {
       expect(result.dateTime.isBefore(lowerBound), isFalse);
       expect(result.dateTime.isAfter(upperBound), isFalse);
       expect(result.iso8601String, equals(result.dateTime.toIso8601String()));
-      print(lowerBound.toString());
-      print(result.toString());
-      print(upperBound.toString());
     });
 
     test('from valid datetime arg', () {
