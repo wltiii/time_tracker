@@ -24,6 +24,7 @@ class EndTime extends Equatable {
       return;
     }
 
+    /// TODO(wltiii): this is an invalid invariant. JSON could be less.
     if (dateTime.isAfter(upperBound)) {
       throw ValueException(
           ExceptionMessage('End time cannot be after the current time.'));
