@@ -169,6 +169,7 @@ void main() {
     });
   });
 
+  // TODO(wltiii): think about this. is there a better solution? is this going overboard?
   // testing generated code seems rather silly. in the case of
   // the from/to json, we are doing much more than verifying the
   // methods have been implemented.
@@ -178,7 +179,6 @@ void main() {
   // this should not be too controversial. That said, from/to json
   // methods would likely be inherently covered by other tests, so
   // perhaps this is frivolous.
-  // TODO(wltiii): think about this. is there a better solution? is this going overboard?
   group('json', () {
     test('from', () {
       final startTime =
