@@ -9,12 +9,12 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
-import '../../infrastructure/repositories/mock_time_entry_repository.dart';
+import '../../infrastructure/repositories/time_entry_repository_mock.dart';
 
 void main() {
   group('CreateTimeEntryCommandHandler', () {
     test('time entry created when no existing entries', () async {
-      final repository = MockTimeEntryRepository();
+      final repository = TimeEntryRepositoryMock();
       final handler = CreateTimeEntryHandler(repository);
       final command = CreateTimeEntryCommand(
         TimeEntryModel(
@@ -43,7 +43,7 @@ void main() {
   // TODO(wltiii): test other command handlers
   // group('GetTimeEntryQueryHandler', () {
   //   test('should return a time entry', () async {
-  //     final repository = MockTimeEntryRepository();
+  //     final repository = TimeEntryRepositoryMock();
   //     final handler = GetTimeEntryQueryHandler(repository);
   //     final timeEntry = TimeEntry(1, 2, DateTime.now(),
   //         DateTime.now().add(Duration(hours: 2)), 'Worked on project');
@@ -56,7 +56,7 @@ void main() {
 
   // group('UpdateTimeEntryCommandHandler', () {
   //   test('should update a time entry', () async {
-  //     final repository = MockTimeEntryRepository();
+  //     final repository = TimeEntryRepositoryMock();
   //     final handler = UpdateTimeEntryCommandHandler(repository);
   //     final timeEntry = TimeEntry(1, 2, DateTime.now(),
   //         DateTime.now().add(Duration(hours: 1)), 'Worked on project X');
@@ -81,7 +81,7 @@ void main() {
 
   // group('DeleteTimeEntryCommandHandler', () {
   //   test('should delete a time entry', () async {
-  //     final repository = MockTimeEntryRepository();
+  //     final repository = TimeEntryRepositoryMock();
   //     final handler = DeleteTimeEntryCommandHandler(repository);
   //     final timeEntry = TimeEntry(1, 2, DateTime.now(),
   //         DateTime.now().add(Duration(hours: 1)), 'Worked on project X');

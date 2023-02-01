@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
@@ -9,7 +10,7 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
-class MockTimeEntryRepository implements TimeEntryRepository {
+class TimeEntryRepositoryMock implements TimeEntryRepository {
   final _timeEntries = <String, TimeEntry>{};
   int _nextId = 1;
 
@@ -29,40 +30,29 @@ class MockTimeEntryRepository implements TimeEntryRepository {
   Future<Either<Failure, bool>> delete(TimeEntry timeEntry) async {
     final result = await get(timeEntry.id);
 
-    Failure? failure;
-    TimeEntry entry;
-
-    result.fold(
-      (l) => failure = l,
-      (r) => entry = r,
-    );
-
-    if (result.isLeft()) {
-      return Either.left(failure!);
-    }
-
-    _timeEntries.remove(timeEntry.id);
-
-    return Either.right(true);
+    return result.fold((l) {
+      return Either.left(l);
+    }, (r) {
+      _timeEntries.remove(timeEntry.id);
+      return Either.right(true);
+    });
   }
 
   @override
   Future<Either<Failure, TimeEntry>> get(TimeEntryId timeEntryId) async {
-    if (_timeEntries[id] == null) {
+    if (_timeEntries.isEmpty) {
+      return Either.left(NotFoundFailure());
+    }
+    final entry = _timeEntries.entries.firstWhereOrNull(
+      (entry) => entry.key == timeEntryId.id,
+    );
+
+    if (entry == null) {
       return Either.left(NotFoundFailure());
     }
 
-    return Either.right(_timeEntries[id]!);
+    return Either.right(entry.value);
   }
-
-  // @override
-  // Future<Either<Failure, TimeEntry>> get(TimeEntryId id) async {
-  //   final timeEntry = _timeEntries[id];
-  //
-  //   return timeEntry != null
-  //       ? Future.value(Right(timeEntry))
-  //       : Future.value(Left(NotFoundFailure()));
-  // }
 
   @override
   Future<Either<Failure, TimeEntry>> update(TimeEntry entity) async {

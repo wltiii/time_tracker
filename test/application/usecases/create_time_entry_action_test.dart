@@ -8,12 +8,12 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
-import '../../infrastructure/repositories/mock_time_entry_repository.dart';
+import '../../infrastructure/repositories/time_entry_repository_mock.dart';
 
 void main() {
   group('CreateTimeEntryAction', () {
     test('time entry created when no existing entries', () async {
-      final repository = MockTimeEntryRepository();
+      final repository = TimeEntryRepositoryMock();
       final action = CreateTimeEntryAction(repository);
       final timeEntryModel = TimeEntryModel(
         start: StartTime(dateTime: DateTime.now()),
