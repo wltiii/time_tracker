@@ -2,8 +2,8 @@ import 'package:time_tracker/application/usecases/use_case_command.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 
-class CreateTimeEntryCommand implements UseCaseCommand<TimeEntry> {
-  CreateTimeEntryCommand(
+class StartTimerCommand implements UseCaseCommand<TimeEntry> {
+  StartTimerCommand(
     TimeEntryModel timeEntryModel,
   ) : _timeEntryModel = timeEntryModel;
 

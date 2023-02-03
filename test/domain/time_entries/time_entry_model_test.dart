@@ -179,6 +179,7 @@ void main() {
   // this should not be too controversial. That said, from/to json
   // methods would likely be inherently covered by other tests, so
   // perhaps this is frivolous.
+  //TODO(wltiii): BROKEN for invalid invariant re: start and end times. The times can be any historical value when deserialized. Other instances, such as creating new, would have other requirements.
   group('json', () {
     test('from', () {
       final startTime =

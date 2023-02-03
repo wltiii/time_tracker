@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:time_tracker/application/repositories/time_entry_repository.dart';
 import 'package:time_tracker/application/usecases/enter_time_retroactively/enter_time_retroactively_handler.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
+import 'package:time_tracker/infrastructure/repositories/time_entry_repository.dart';
 
 //TODO(wltiii): toying with the idea of an abstract action (usecase?) class using generics
 //TODO(wltiii): rather than calling it action, call it usecase?

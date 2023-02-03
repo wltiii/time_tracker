@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:time_tracker/application/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/core/extensions/date_time_range.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
@@ -9,6 +8,7 @@ import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
+import 'package:time_tracker/infrastructure/repositories/time_entry_repository.dart';
 
 class TimeEntryRepositoryMock implements TimeEntryRepository {
   final _timeEntries = <String, TimeEntry>{};

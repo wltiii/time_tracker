@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:time_tracker/application/usecases/create_time_entry/create_time_entry_command.dart';
-import 'package:time_tracker/application/usecases/create_time_entry/create_time_entry_handler.dart';
+import 'package:time_tracker/application/usecases/start_timer/start_timer_command.dart';
+import 'package:time_tracker/application/usecases/start_timer/start_timer_handler.dart';
 import 'package:time_tracker/domain/core/extensions/either.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
@@ -9,14 +9,14 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
-import '../../infrastructure/repositories/time_entry_repository_mock.dart';
+import '../../../infrastructure/repositories/time_entry_repository_mock.dart';
 
 void main() {
-  group('CreateTimeEntryCommandHandler', () {
+  group('StartTimerHandler', () {
     test('time entry created when no existing entries', () async {
       final repository = TimeEntryRepositoryMock();
-      final handler = CreateTimeEntryHandler(repository);
-      final command = CreateTimeEntryCommand(
+      final handler = StartTimerHandler(repository);
+      final command = StartTimerCommand(
         TimeEntryModel(
           start: StartTime(dateTime: DateTime.now()),
           end: EndTime.endOfTime(),
