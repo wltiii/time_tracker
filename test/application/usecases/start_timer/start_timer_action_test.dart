@@ -1,8 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
-import 'package:time_tracker/domain/core/extensions/either.dart';
-import 'package:time_tracker/domain/error/failures.dart';
-import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
@@ -22,18 +19,14 @@ void main() {
 
       final result = await action(timeEntryModel);
 
-      Failure? failure;
-      TimeEntry? resultEntry;
-
       result.fold(
-        (l) => failure = l,
-        (r) => resultEntry = r,
+        (l) {
+          fail('Add should not return left');
+        },
+        (r) {
+          expect(r.id, equals(TimeEntryId('1')));
+        },
       );
-      var rightEntry = result.right();
-
-      expect(result.isRight(), isTrue);
-      expect(resultEntry, equals(rightEntry));
-      expect(resultEntry!.id, equals(TimeEntryId('1')));
     });
   });
 }

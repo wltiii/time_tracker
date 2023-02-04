@@ -11,10 +11,11 @@ class TimeEntryService {
 
   final TimeEntryRepository _repository;
 
-  // TODO(wltiii): getAllFor(what exactly?). User, I would think.
+  // TODO(wltiii): getTimeboxedEntries(what exactly?). User, I would think.
   // TODO(wltiii): for the MVP, the invariant should be User,
   // TODO(wltiii): other usecases might consider overlapping entries,
-  // TODO(wltiii): enforcing only those that cannot overlap, by the other things tracked (Project, Client, Task, other?)
+  // TODO(wltiii): enforcing only those that cannot overlap, by the other
+  // TODO(wltiii): things tracked (Project, Client, Task, other?)
   // TODO(wltiii): it seems validation should be done in the entity
   Future<Either<Failure, bool>> dateRangeConsistencyValidator(
       TimeEntryModel model) async {
@@ -23,31 +24,34 @@ class TimeEntryService {
       end: model.end,
     );
 
-    Failure? failure;
-    var entries = <TimeEntry>[];
-
-    result.fold(
-      (l) => failure = l,
-      (r) => entries = r,
+    return result.fold(
+      (l) {
+        return Either.left(l);
+      },
+      (entries) {
+        return Future.value(
+          _timeRangeOverlapsWithExistingTimeEntry(
+            model,
+            entries,
+          ),
+        );
+      },
     );
+  }
 
-    if (result.isLeft()) {
-      return Either.left(failure!);
-    }
-
+  Either<Failure, bool> _timeRangeOverlapsWithExistingTimeEntry(
+      TimeEntryModel model, List<TimeEntry> entries) {
     for (final timeEntry in entries) {
       if (model.overlapsWith(timeEntry.timeEntryRange)) {
-        return Future.value(
-          Left(
-            InvalidStateFailure(
-                AdditionalInfo('Time entry overlaps with existing entry having '
-                    'start ${timeEntry.start.iso8601String} and '
-                    'end ${timeEntry.end.iso8601String}.')),
-          ),
+        return Either.left(
+          InvalidStateFailure(
+              AdditionalInfo('Time entry overlaps with existing entry having '
+                  'start ${timeEntry.start.iso8601String} and '
+                  'end ${timeEntry.end.iso8601String}.')),
         );
       }
     }
 
-    return Either.right(true);
+    return Either.right(false);
   }
 }

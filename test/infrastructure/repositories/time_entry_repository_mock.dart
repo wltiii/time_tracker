@@ -30,12 +30,15 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
   Future<Either<Failure, bool>> delete(TimeEntry timeEntry) async {
     final result = await get(timeEntry.id);
 
-    return result.fold((l) {
-      return Either.left(l);
-    }, (r) {
-      _timeEntries.remove(timeEntry.id);
-      return Either.right(true);
-    });
+    return result.fold(
+      (l) {
+        return Either.left(l);
+      },
+      (r) {
+        _timeEntries.remove(timeEntry.id);
+        return Either.right(true);
+      },
+    );
   }
 
   @override

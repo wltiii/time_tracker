@@ -39,58 +39,59 @@ void main() {
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
-      print('givenAddedTimeEntry is $givenAddedTimeEntry');
+
       expect(
         givenAddedTimeEntry.isRight(),
         isTrue,
-        reason: 'Test setup failure.',
+        reason: 'Test setup failure. Could not add time entry to '
+            'repository. TimeEntry: $givenModel',
       );
 
       final result = await repository.delete(givenAddedTimeEntry.right()!);
 
-      Failure? failure;
-      bool? entry;
-
       result.fold(
-        (l) => failure = l,
-        (r) => entry = r,
+        (l) {
+          fail('Add should not return left');
+        },
+        (r) {
+          expect(r, isTrue);
+        },
       );
-      var rightEntry = result.right();
-
-      expect(result.isRight(), isTrue);
-      expect(entry, isTrue);
     });
   });
 
   group('get', () {
     test('returns Either(Right(TimeEntry))', () async {
       final repository = TimeEntryRepositoryMock();
+      final givenStartTime = StartTime(dateTime: DateTime.now());
+      final givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime.now()),
-        end: EndTime.endOfTime(),
+        start: givenStartTime,
+        end: givenEndTime,
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
-      print('givenAddedTimeEntry is $givenAddedTimeEntry');
+
       expect(
         givenAddedTimeEntry.isRight(),
         isTrue,
-        reason: 'Test setup failure.',
+        reason: 'Test setup failure. Could not add time entry to '
+            'repository. TimeEntry: $givenModel',
       );
 
       final result = await repository.get(givenAddedTimeEntry.right()!.id);
 
-      // Failure? failure;
-      // TimeEntry? entry;
-      //
-      // result.fold(
-      //   (l) => failure = l,
-      //   (r) => entry = r,
-      // );
-      // var rightEntry = result.right();
-
-      expect(result.isRight(), isTrue);
-      // expect(entry, isTrue);
+      result.fold(
+        (l) {
+          fail('Get should not return left');
+        },
+        (r) {
+          expect(r.id, isNotNull);
+          expect(r.id, equals(TimeEntryId('1')));
+          expect(r.start, equals(givenStartTime));
+          expect(r.end, equals(givenEndTime));
+        },
+      );
     });
 
     test('returns Either(Left(Failure))', () async {
@@ -101,26 +102,24 @@ void main() {
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
-      print('givenAddedTimeEntry is $givenAddedTimeEntry');
+
       expect(
         givenAddedTimeEntry.isRight(),
         isTrue,
-        reason: 'Test setup failure.',
+        reason: 'Test setup failure. Could not add time entry to '
+            'repository. TimeEntry: $givenModel',
       );
 
       final result = await repository.get(TimeEntryId('x'));
 
-      // Failure? failure;
-      // TimeEntry? entry;
-      //
-      // result.fold(
-      //   (l) => failure = l,
-      //   (r) => entry = r,
-      // );
-      // var rightEntry = result.right();
-
-      expect(result.isLeft(), isTrue);
-      // expect(entry, isTrue);
+      result.fold(
+        (l) {
+          expect(l, isA<NotFoundFailure>());
+        },
+        (r) {
+          fail('Get should not return right when for id "x".');
+        },
+      );
     });
   });
 }
