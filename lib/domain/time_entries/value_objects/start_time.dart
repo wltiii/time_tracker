@@ -11,20 +11,20 @@ class StartTime extends Equatable {
   StartTime({
     DateTime? dateTime,
   }) {
-    final upperBound = DateTime.now();
-    final lowerBound = upperBound.subtract(const Duration(days: 7));
-    final startTime = dateTime ?? upperBound;
+    final currentDateTime = DateTime.now();
+    // final sevenDaysPastTense = currentDateTime.subtract(const Duration(days: 7));
+    final startTime = dateTime ?? currentDateTime;
 
-    if (startTime.isAfter(upperBound)) {
+    if (startTime.isAfter(currentDateTime)) {
       throw ValueException(
           ExceptionMessage('Start time cannot be after the current time.'));
     }
 
     /// TODO(wltiii): this is an invalid invariant. JSON could be less.
-    if (startTime.isBefore(lowerBound)) {
-      throw ValueException(
-          ExceptionMessage('Start time cannot be more than 7 days ago.'));
-    }
+    // if (startTime.isBefore(sevenDaysPastTense)) {
+    //   throw ValueException(
+    //       ExceptionMessage('Start time cannot be more than 7 days ago.'));
+    // }
 
     _value = startTime;
   }

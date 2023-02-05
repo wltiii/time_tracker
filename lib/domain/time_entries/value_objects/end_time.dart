@@ -16,23 +16,24 @@ class EndTime extends Equatable {
   EndTime({
     required DateTime dateTime,
   }) {
-    final upperBound = DateTime.now();
-    final lowerBound = upperBound.subtract(const Duration(days: 7));
+    final currentDateTime = DateTime.now();
+    // final sevenDaysPastTense = currentDateTime.subtract(const Duration(days: 7));
 
     if (dateTime == DateTimeHelper.endOfTime()) {
       _value = dateTime;
       return;
     }
 
-    /// TODO(wltiii): this is an invalid invariant. JSON could be less.
-    if (dateTime.isAfter(upperBound)) {
+    if (dateTime.isAfter(currentDateTime)) {
       throw ValueException(
           ExceptionMessage('End time cannot be after the current time.'));
     }
-    if (dateTime.isBefore(lowerBound)) {
-      throw ValueException(
-          ExceptionMessage('End time cannot be more than 7 days ago.'));
-    }
+
+    /// TODO(wltiii): this is an invalid invariant. JSON could be less.
+    // if (dateTime.isBefore(sevenDaysPastTense)) {
+    //   throw ValueException(
+    //       ExceptionMessage('End time cannot be more than 7 days ago.'));
+    // }
 
     _value = dateTime;
   }

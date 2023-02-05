@@ -50,22 +50,23 @@ void main() {
       );
     });
 
-    test('throws when constructing with date more than seven days old', () {
-      final pastDate = DateTime.now().subtract(const Duration(days: 7));
-
-      expect(
-        () => StartTime(dateTime: pastDate),
-        throwsA(
-          predicate(
-            (e) =>
-                e is ValueException &&
-                e.message ==
-                    'Invalid value. '
-                        'Start time cannot be more than 7 days ago.',
-          ),
-        ),
-      );
-    });
+    /// TODO(wltiii): this is an invalid invariant. JSON could be less.
+    // test('throws when constructing with date more than seven days old', () {
+    //   final pastDate = DateTime.now().subtract(const Duration(days: 7));
+    //
+    //   expect(
+    //     () => StartTime(dateTime: pastDate),
+    //     throwsA(
+    //       predicate(
+    //         (e) =>
+    //             e is ValueException &&
+    //             e.message ==
+    //                 'Invalid value. '
+    //                     'Start time cannot be more than 7 days ago.',
+    //       ),
+    //     ),
+    //   );
+    // });
 
     test('throws on invalid string using fromIso8601String constructor', () {
       expect(
