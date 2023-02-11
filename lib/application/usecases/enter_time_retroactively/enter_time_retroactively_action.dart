@@ -1,18 +1,15 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:time_tracker/application/usecases/enter_time_retroactively/enter_time_retroactively_handler.dart';
 import 'package:time_tracker/domain/error/failures.dart';
+import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
-import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
-import 'package:time_tracker/infrastructure/repositories/time_entry_repository.dart';
 
-//TODO(wltiii): toying with the idea of an abstract action (usecase?) class using generics
-//TODO(wltiii): rather than calling it action, call it usecase?
-class EnterTimeRetroactivelyAction /*implements UseCaseAction<TimeEntry>*/ {
+//TODO(wltiii): WIP - not handling retroactive updates yet
+class EnterTimeRetroactivelyAction {
   EnterTimeRetroactivelyAction(this._repository);
 
   final TimeEntryRepository _repository;
 
-  Future<Either<Failure, TimeEntry>> call(TimeEntryModel timeEntryModel) async {
+  Future<Either<Failure, TimeEntry>> call(TimeEntry timeEntry) async {
     // TODO(wltiii): use model rather than command? I don't think that will work
     // TODO(wltiii): as the ID is needed for this action. Does that indicate the
     // TODO(wltiii): entity should be used or a command object?
@@ -21,8 +18,10 @@ class EnterTimeRetroactivelyAction /*implements UseCaseAction<TimeEntry>*/ {
     // TODO(wltiii): repository calls are made in this layer, and others
     // TODO(wltiii): state that the domain layer has the dependency.
     // TODO(wltiii): I AM CONFUSED
-    final handler = EnterTimeRetroactivelyHandler(_repository);
+    // final handler = EnterTimeRetroactivelyHandler(_repository);
     // return await handler.handle(command);
-    return await handler.handle(timeEntryModel);
+    // return await handler.handle(timeEntryModel);
+
+    return await _repository.update(timeEntry);
   }
 }
