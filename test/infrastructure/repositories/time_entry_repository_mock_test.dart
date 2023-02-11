@@ -13,7 +13,7 @@ void main() {
     test('returns Either(Right(TimeEntry))', () async {
       final repository = TimeEntryRepositoryMock();
       final givenModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime.now()),
+        startTime: StartTime(dateTime: DateTime.now()),
         end: EndTime.endOfTime(),
       );
 
@@ -34,7 +34,7 @@ void main() {
     test('returns Either(Right(TimeEntry))', () async {
       final repository = TimeEntryRepositoryMock();
       final givenModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime.now()),
+        startTime: StartTime(dateTime: DateTime.now()),
         end: EndTime.endOfTime(),
       );
 
@@ -66,7 +66,7 @@ void main() {
       final givenStartTime = StartTime(dateTime: DateTime.now());
       final givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
-        start: givenStartTime,
+        startTime: givenStartTime,
         end: givenEndTime,
       );
 
@@ -97,7 +97,7 @@ void main() {
     test('returns Either(Left(Failure))', () async {
       final repository = TimeEntryRepositoryMock();
       final givenModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime.now()),
+        startTime: StartTime(dateTime: DateTime.now()),
         end: EndTime.endOfTime(),
       );
 
