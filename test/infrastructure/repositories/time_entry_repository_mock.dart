@@ -18,7 +18,7 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
     final timeEntry = TimeEntry(
       id: TimeEntryId((_nextId++).toString()),
       start: timeEntryModel.startTime.dateTime,
-      end: timeEntryModel.end.dateTime,
+      end: timeEntryModel.endTime.dateTime,
     );
 
     _timeEntries[timeEntry.id.toString()] = timeEntry;

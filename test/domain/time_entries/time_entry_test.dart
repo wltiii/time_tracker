@@ -12,7 +12,7 @@ void main() {
       final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
       final startTime = StartTime(dateTime: startDateTime);
       final endTime = EndTime.endOfTime();
-      final givenModel = TimeEntryModel(start: startTime, end: endTime);
+      final givenModel = TimeEntryModel(startTime: startTime, endTime: endTime);
 
       final result = TimeEntry(
         id: TimeEntryId('abc123'),
@@ -23,8 +23,8 @@ void main() {
       expect(result, isA<TimeEntry>());
       expect(result.id, equals(TimeEntryId('abc123')));
       final resultModel = TimeEntryModel(
-        start: result.start,
-        end: result.end,
+        startTime: result.start,
+        endTime: result.end,
       );
       expect(result.isRunning, isTrue);
 
@@ -36,7 +36,7 @@ void main() {
       final startTime = StartTime(dateTime: startDateTime);
       final endDateTime = DateTime.now();
       final endTime = EndTime(dateTime: endDateTime);
-      final givenModel = TimeEntryModel(start: startTime, end: endTime);
+      final givenModel = TimeEntryModel(startTime: startTime, endTime: endTime);
 
       final result = TimeEntry(
         id: TimeEntryId('abc123'),
@@ -47,8 +47,8 @@ void main() {
       expect(result, isA<TimeEntry>());
       expect(result.id, equals(TimeEntryId('abc123')));
       final resultModel = TimeEntryModel(
-        start: result.start,
-        end: result.end,
+        startTime: result.start,
+        endTime: result.end,
       );
       expect(result.isRunning, isFalse);
 
@@ -61,7 +61,7 @@ void main() {
       final startTime = StartTime(dateTime: startDateTime);
       final endDateTime = DateTime.now();
       final endTime = EndTime(dateTime: endDateTime);
-      final givenModel = TimeEntryModel(start: startTime, end: endTime);
+      final givenModel = TimeEntryModel(startTime: startTime, endTime: endTime);
 
       final result = TimeEntry.fromModel(
         id: TimeEntryId('abc123'),
@@ -71,8 +71,8 @@ void main() {
       expect(result, isA<TimeEntry>());
       expect(result.id, equals(TimeEntryId('abc123')));
       final resultModel = TimeEntryModel(
-        start: result.start,
-        end: result.end,
+        startTime: result.start,
+        endTime: result.end,
       );
       expect(result.isRunning, isFalse);
 
@@ -92,8 +92,10 @@ void main() {
       final givenEndTime = EndTime(dateTime: now);
       final givenOtherEndTime = EndTime(dateTime: nowLessOneHour);
 
-      final otherTimeRange =
-          TimeEntryRange(start: givenOtherStartTime, end: givenOtherEndTime);
+      final otherTimeRange = TimeEntryRange(
+        startTime: givenOtherStartTime,
+        endTime: givenOtherEndTime,
+      );
 
       final givenTimeEntry = TimeEntry(
         id: TimeEntryId('abc123'),
@@ -115,8 +117,10 @@ void main() {
       final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
       final givenOtherEndTime = EndTime(dateTime: nowLessTwoHours);
 
-      final otherTimeRange =
-          TimeEntryRange(start: givenOtherStartTime, end: givenOtherEndTime);
+      final otherTimeRange = TimeEntryRange(
+        startTime: givenOtherStartTime,
+        endTime: givenOtherEndTime,
+      );
 
       final givenTimeEntry = TimeEntry(
         id: TimeEntryId('abc123'),

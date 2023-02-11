@@ -14,7 +14,7 @@ void main() {
       final repository = TimeEntryRepositoryMock();
       final givenModel = TimeEntryModel(
         startTime: StartTime(dateTime: DateTime.now()),
-        end: EndTime.endOfTime(),
+        endTime: EndTime.endOfTime(),
       );
 
       final result = await repository.add(givenModel);
@@ -35,7 +35,7 @@ void main() {
       final repository = TimeEntryRepositoryMock();
       final givenModel = TimeEntryModel(
         startTime: StartTime(dateTime: DateTime.now()),
-        end: EndTime.endOfTime(),
+        endTime: EndTime.endOfTime(),
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
@@ -67,7 +67,7 @@ void main() {
       final givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
         startTime: givenStartTime,
-        end: givenEndTime,
+        endTime: givenEndTime,
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
@@ -98,7 +98,7 @@ void main() {
       final repository = TimeEntryRepositoryMock();
       final givenModel = TimeEntryModel(
         startTime: StartTime(dateTime: DateTime.now()),
-        end: EndTime.endOfTime(),
+        endTime: EndTime.endOfTime(),
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
