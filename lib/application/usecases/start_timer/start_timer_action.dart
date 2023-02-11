@@ -1,30 +1,52 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:time_tracker/application/usecases/start_timer/start_timer_command.dart';
-import 'package:time_tracker/application/usecases/start_timer/start_timer_handler.dart';
+import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
+import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
+import 'package:time_tracker/domain/services/time_entry_validation_service.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
-import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
-import 'package:time_tracker/infrastructure/repositories/time_entry_repository.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 
-//TODO(wltiii): toying with the idea of an abstract action (usecase?) class using generics
-class StartTimerAction /*implements UseCaseAction<TimeEntry>*/ {
+class StartTimerAction {
   StartTimerAction(this._repository);
 
   final TimeEntryRepository _repository;
 
-  // TODO(wltiii): should model be used or value objects?
-  Future<Either<Failure, TimeEntry>> call(TimeEntryModel timeEntryModel) async {
-    final command = StartTimerCommand(timeEntryModel);
+  Future<Either<Failure, TimeEntry>> call() async {
+    final startTime = StartTime();
+    final endOfTime = EndTime.endOfTime();
 
-    // TODO(wltiii): should entity/model be used or a command object?
-    // TODO(wltiii): conflicting information - i see examples where
-    // TODO(wltiii): repository calls are made in this layer, and others
-    // TODO(wltiii): state that the domain layer has the dependency.
-    // TODO(wltiii): I AM CONFUSED
-    // TODO(wltiii): since the aggregate has the responsibility for dat
-    // TODO(wltiii): the solution is to have that call the repository.
-    final handler = StartTimerHandler(_repository);
-    return await handler.handle(command);
-    // return await handler.handle(timeEntryModel);
+    final timeBoxedEntries = await _repository.getTimeBoxedEntries(
+      timeEntryRange: TimeEntryRange(
+        startTime: startTime,
+        endTime: endOfTime,
+      ),
+    );
+
+    bool isValid = false;
+    TimeBoxedEntries? validatedTimeBoxedEntries;
+
+    timeBoxedEntries.fold((l) {
+      return Either.left(l);
+    }, (r) {
+      isValid = TimeEntryValidationService().dateTimeRangeIsConsistent(
+        modelToValidate: r.timeEntryModel,
+        existingEntries: r.timeEntryList,
+      );
+      if (isValid) validatedTimeBoxedEntries = r;
+    });
+
+    if (!isValid) {
+      return Either.left(
+        InvalidStateFailure(
+          AdditionalInfo('Time entry overlaps with an existing time entry.'),
+        ),
+      );
+    }
+
+    // it is valid, persist
+    return await _repository.add(validatedTimeBoxedEntries!.timeEntryModel);
   }
 }

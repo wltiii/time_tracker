@@ -1,30 +1,48 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
-import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
+import 'package:time_tracker/domain/error/additional_info.dart';
+import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
 import '../../../infrastructure/repositories/time_entry_repository_mock.dart';
 
 void main() {
-  group('CreateTimeEntryAction', () {
-    test('time entry created when no existing entries', () async {
+  group('StartTimerAction', () {
+    test('timer started when no entries already exist', () async {
       final repository = TimeEntryRepositoryMock();
       final action = StartTimerAction(repository);
-      final timeEntryModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime.now()),
-        end: EndTime.endOfTime(),
-      );
 
-      final result = await action(timeEntryModel);
+      final result = await action();
 
       result.fold(
         (l) {
-          fail('Add should not return left');
+          fail('Creating a timer should not fail.');
         },
         (r) {
           expect(r.id, equals(TimeEntryId('1')));
+        },
+      );
+    });
+
+    test('when timer overlaps with an existing timer it throws', () async {
+      final expectedFailure = InvalidStateFailure(
+        AdditionalInfo('Time entry overlaps with an existing time entry.'),
+      );
+
+      // initialize repo with entry that the result will overlap
+      final repository = TimeEntryRepositoryMock();
+      await StartTimerAction(repository).call();
+      final result = await StartTimerAction(repository).call();
+
+      result.fold(
+        (l) {
+          expect(l, isA<Failure>());
+          expect(l, isA<InvalidStateFailure>());
+          InvalidStateFailure f = l as InvalidStateFailure;
+          expect('$f', equals('$expectedFailure'));
+        },
+        (r) {
+          fail('Overlapping time entry did not throw.');
         },
       );
     });
