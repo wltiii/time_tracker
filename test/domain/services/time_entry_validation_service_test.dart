@@ -52,7 +52,7 @@ void main() {
       final givenOverlappingModel = TimeEntryModel(
         startTime: StartTime(
             dateTime: DateTime.now().subtract(const Duration(days: 5))),
-        end: EndTime(dateTime: DateTime.now()),
+        endTime: EndTime(dateTime: DateTime.now()),
       );
 
       final result = TimeEntryValidationService().dateTimeRangeIsConsistent(

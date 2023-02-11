@@ -15,5 +15,5 @@ class TimeBoxedEntries {
   final List<TimeEntry> timeEntryList;
 
   TimeEntryModel get timeEntryModel =>
-      TimeEntryModel(startTime: start, end: end);
+      TimeEntryModel(startTime: start, endTime: end);
 }
