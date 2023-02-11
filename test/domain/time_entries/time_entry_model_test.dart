@@ -19,17 +19,18 @@ void main() {
 
       final givenEndTime = EndTime(dateTime: DateTime.now());
 
-      var result = TimeEntryModel(start: givenStartTime, end: givenEndTime);
+      var result =
+          TimeEntryModel(startTime: givenStartTime, endTime: givenEndTime);
 
       expect(result, isA<TimeEntryModel>());
-      expect(result.start, equals(givenStartTime));
-      expect(result.end, equals(givenEndTime));
+      expect(result.startTime, equals(givenStartTime));
+      expect(result.endTime, equals(givenEndTime));
       expect(
         result.timeEntryRange,
         equals(
           TimeEntryRange(
-            start: givenStartTime,
-            end: givenEndTime,
+            startTime: givenStartTime,
+            endTime: givenEndTime,
           ),
         ),
       );
@@ -44,7 +45,7 @@ void main() {
       );
 
       expect(
-        () => TimeEntryModel(start: startTime, end: endTime),
+        () => TimeEntryModel(startTime: startTime, endTime: endTime),
         throwsA(
           predicate(
             (e) =>
@@ -62,31 +63,51 @@ void main() {
       final afterConstruction = DateTime.now();
 
       expect(result, isA<TimeEntryModel>());
-      expect(result.start.dateTime.isAfter(beforeConstruction), isTrue);
-      expect(result.start.dateTime.isBefore(afterConstruction), isTrue);
-      expect(result.end, equals(EndTime(dateTime: DateTimeHelper.endOfTime())));
+      expect(result.startTime.dateTime.isAfter(beforeConstruction), isTrue);
+      expect(result.startTime.dateTime.isBefore(afterConstruction), isTrue);
+      expect(result.endTime,
+          equals(EndTime(dateTime: DateTimeHelper.endOfTime())));
     });
   });
 
   group('time entry range', () {
     test('overlaps', () {
-      final now = DateTime.now();
-      final nowLessOneHour = now.subtract(const Duration(hours: 1));
-      final nowLessTwoHours = now.subtract(const Duration(hours: 2));
-      final nowLessThreeHours = now.subtract(const Duration(hours: 3));
+      /*
+      key: 1 value: TimeEntry(1, 2023-02-10 16:50:21.520101, 275760-09-13 00:00:00.000Z)
+key: 2 value: TimeEntry(2, 2023-02-10 16:50:21.540981, 275760-09-13 00:00:00.000Z)
+       */
 
-      final givenStartTime = StartTime(dateTime: nowLessTwoHours);
-      final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
-      final givenEndTime = EndTime(dateTime: now);
-      final givenOtherEndTime = EndTime(dateTime: nowLessOneHour);
+      final givenPersistedTimeRange = TimeEntryRange(
+        startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 21)),
+        endTime: EndTime.endOfTime(),
+      );
+      final givenOverlappingModel = TimeEntryModel(
+        startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 22)),
+        endTime: EndTime.endOfTime(),
+      );
 
-      final givenTimeEntryModel =
-          TimeEntryModel(start: givenStartTime, end: givenEndTime);
-      final otherTimeRange =
-          TimeEntryRange(start: givenOtherStartTime, end: givenOtherEndTime);
-
-      expect(givenTimeEntryModel.overlapsWith(otherTimeRange), isTrue);
+      expect(
+          givenOverlappingModel.overlapsWith(givenPersistedTimeRange), isTrue);
     });
+
+    // test('overlaps', () {
+    //   final now = DateTime.now();
+    //   final nowLessOneHour = now.subtract(const Duration(hours: 1));
+    //   final nowLessTwoHours = now.subtract(const Duration(hours: 2));
+    //   final nowLessThreeHours = now.subtract(const Duration(hours: 3));
+    //
+    //   final givenStartTime = StartTime(dateTime: nowLessTwoHours);
+    //   final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
+    //   final givenEndTime = EndTime(dateTime: now);
+    //   final givenOtherEndTime = EndTime(dateTime: nowLessOneHour);
+    //
+    //   final givenTimeEntryModel =
+    //       TimeEntryModel(startTime: givenStartTime, end: givenEndTime);
+    //   final otherTimeRange = TimeEntryRange(
+    //       startTime: givenOtherStartTime, endTime: givenOtherEndTime);
+    //
+    //   expect(givenTimeEntryModel.overlapsWith(otherTimeRange), isTrue);
+    // });
 
     test('does not overlap', () {
       final now = DateTime.now();
@@ -99,10 +120,14 @@ void main() {
       final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
       final givenOtherEndTime = EndTime(dateTime: nowLessTwoHours);
 
-      final givenTimeEntryModel =
-          TimeEntryModel(start: givenStartTime, end: givenEndTime);
-      final otherTimeRange =
-          TimeEntryRange(start: givenOtherStartTime, end: givenOtherEndTime);
+      final givenTimeEntryModel = TimeEntryModel(
+        startTime: givenStartTime,
+        endTime: givenEndTime,
+      );
+      final otherTimeRange = TimeEntryRange(
+        startTime: givenOtherStartTime,
+        endTime: givenOtherEndTime,
+      );
 
       expect(givenTimeEntryModel.overlapsWith(otherTimeRange), isFalse);
     });
@@ -126,8 +151,8 @@ void main() {
       );
       final endTime = EndTime(dateTime: DateTime.now());
 
-      final expected = TimeEntryModel(start: startTime, end: endTime);
-      final result = TimeEntryModel(start: startTime, end: endTime);
+      final expected = TimeEntryModel(startTime: startTime, endTime: endTime);
+      final result = TimeEntryModel(startTime: startTime, endTime: endTime);
 
       expect(result, equals(expected));
     });
@@ -158,13 +183,15 @@ void main() {
       );
 
       expect(
-        TimeEntryModel(start: startTime, end: endTime),
-        isNot(equals(TimeEntryModel(start: anotherStartTime, end: endTime))),
+        TimeEntryModel(startTime: startTime, endTime: endTime),
+        isNot(equals(
+            TimeEntryModel(startTime: anotherStartTime, endTime: endTime))),
       );
 
       expect(
-        TimeEntryModel(start: startTime, end: endTime),
-        isNot(equals(TimeEntryModel(start: startTime, end: anotherEndTime))),
+        TimeEntryModel(startTime: startTime, endTime: endTime),
+        isNot(equals(
+            TimeEntryModel(startTime: startTime, endTime: anotherEndTime))),
       );
     });
   });
@@ -188,13 +215,13 @@ void main() {
           EndTime(dateTime: DateTime.parse('2023-01-24T17:01:36.140342'));
 
       final expectedTimeEntry = TimeEntryModel(
-        start: startTime,
-        end: endTime,
+        startTime: startTime,
+        endTime: endTime,
       );
 
       final givenJson = {
-        'start': '2023-01-24T08:02:52.360342',
-        'end': '2023-01-24T17:01:36.140342',
+        'startTime': '2023-01-24T08:02:52.360342',
+        'endTime': '2023-01-24T17:01:36.140342',
       };
 
       expect(
@@ -212,13 +239,13 @@ void main() {
       );
 
       final givenTimeEntry = TimeEntryModel(
-        start: startTime,
-        end: endTime,
+        startTime: startTime,
+        endTime: endTime,
       );
 
       final expectedJson = {
-        'start': '2023-01-24T08:02:52.360342',
-        'end': '2023-01-24T17:01:36.140342'
+        'startTime': '2023-01-24T08:02:52.360342',
+        'endTime': '2023-01-24T17:01:36.140342'
       };
       expect(givenTimeEntry.toJson(), equals(expectedJson));
     });

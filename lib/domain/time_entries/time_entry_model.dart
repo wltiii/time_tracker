@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:time_tracker/domain/core/extensions/date_time_range.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 import 'package:time_tracker/domain/time_entries/value_serializers/end_time_serializer.dart';
 import 'package:time_tracker/domain/time_entries/value_serializers/start_time_serializer.dart';
@@ -19,10 +20,10 @@ part 'time_entry_model.g.dart';
 @JsonSerializable()
 class TimeEntryModel extends Equatable {
   TimeEntryModel({
-    required this.start,
-    required this.end,
+    required this.startTime,
+    required this.endTime,
   }) {
-    if (!end.isAfter(start) && !end.isInfinite) {
+    if (!(endTime.isAfter(startTime) || endTime.isInfinite)) {
       throw ValueException(
           ExceptionMessage('End time must be after start time.'));
     }
@@ -30,8 +31,15 @@ class TimeEntryModel extends Equatable {
 
   TimeEntryModel.runningEntry()
       : this(
-          start: StartTime(),
-          end: EndTime.endOfTime(),
+          startTime: StartTime(),
+          endTime: EndTime.endOfTime(),
+        );
+
+  TimeEntryModel.validatedRunningEntry({
+    required TimeBoxedEntries timeBoxedEntries,
+  }) : this(
+          startTime: timeBoxedEntries.start,
+          endTime: timeBoxedEntries.end,
         );
 
   factory TimeEntryModel.fromJson(Json json) => _$TimeEntryModelFromJson(json);
@@ -39,18 +47,18 @@ class TimeEntryModel extends Equatable {
   Json toJson() => _$TimeEntryModelToJson(this);
 
   @StartTimeSerializer()
-  final StartTime start;
+  final StartTime startTime;
   @EndTimeSerializer()
-  final EndTime end;
+  final EndTime endTime;
 
   bool overlapsWith(TimeEntryRange other) =>
       timeEntryRange.isOverlapping(other);
 
   TimeEntryRange get timeEntryRange => TimeEntryRange(
-        start: start,
-        end: end,
+        startTime: startTime,
+        endTime: endTime,
       );
 
   @override
-  List<Object> get props => [start, end];
+  List<Object> get props => [startTime, endTime];
 }
