@@ -4,6 +4,7 @@ import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/services/time_entry_validation_service.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
+import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
@@ -19,9 +20,11 @@ class StartTimerAction {
     final endOfTime = EndTime.endOfTime();
 
     final timeBoxedEntries = await _repository.getTimeBoxedEntries(
-      timeEntryRange: TimeEntryRange(
-        startTime: startTime,
-        endTime: endOfTime,
+      timeEntryRange: TimeEntryRange.fromTimeEntryModel(
+        timeEntryModel: TimeEntryModel(
+          startTime: startTime,
+          endTime: endOfTime,
+        ),
       ),
     );
 

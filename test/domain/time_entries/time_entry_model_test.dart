@@ -28,13 +28,12 @@ void main() {
       expect(result.startTime, equals(givenStartTime));
       expect(result.endTime, equals(givenEndTime));
       expect(
-        result.timeEntryRange,
-        equals(
-          TimeEntryRange(
-            startTime: givenStartTime,
-            endTime: givenEndTime,
-          ),
-        ),
+        result.timeEntryRange.startTime,
+        equals(givenStartTime),
+      );
+      expect(
+        result.timeEntryRange.endTime,
+        equals(givenEndTime),
       );
     });
 
@@ -90,9 +89,11 @@ void main() {
 
   group('time entry range', () {
     test('overlaps', () {
-      final givenPersistedTimeRange = TimeEntryRange(
-        startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 21)),
-        endTime: EndTime.endOfTime(),
+      final givenPersistedTimeRange = TimeEntryRange.fromTimeEntryModel(
+        timeEntryModel: TimeEntryModel(
+          startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 21)),
+          endTime: EndTime.endOfTime(),
+        ),
       );
       final givenOverlappingModel = TimeEntryModel(
         startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 22)),
@@ -118,9 +119,11 @@ void main() {
         startTime: givenStartTime,
         endTime: givenEndTime,
       );
-      final otherTimeRange = TimeEntryRange(
-        startTime: givenOtherStartTime,
-        endTime: givenOtherEndTime,
+      final otherTimeRange = TimeEntryRange.fromTimeEntryModel(
+        timeEntryModel: TimeEntryModel(
+          startTime: givenOtherStartTime,
+          endTime: givenOtherEndTime,
+        ),
       );
 
       expect(givenTimeEntryModel.overlapsWith(otherTimeRange), isFalse);

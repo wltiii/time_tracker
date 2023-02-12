@@ -55,9 +55,8 @@ class TimeEntryModel extends Equatable {
   bool overlapsWith(TimeEntryRange other) =>
       timeEntryRange.isOverlapping(other);
 
-  TimeEntryRange get timeEntryRange => TimeEntryRange(
-        startTime: startTime,
-        endTime: endTime,
+  TimeEntryRange get timeEntryRange => TimeEntryRange.fromTimeEntryModel(
+        timeEntryModel: this,
       );
 
   @override

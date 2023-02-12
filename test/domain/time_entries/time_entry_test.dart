@@ -92,9 +92,11 @@ void main() {
       final givenEndTime = EndTime(dateTime: now);
       final givenOtherEndTime = EndTime(dateTime: nowLessOneHour);
 
-      final otherTimeRange = TimeEntryRange(
-        startTime: givenOtherStartTime,
-        endTime: givenOtherEndTime,
+      final otherTimeRange = TimeEntryRange.fromTimeEntryModel(
+        timeEntryModel: TimeEntryModel(
+          startTime: givenOtherStartTime,
+          endTime: givenOtherEndTime,
+        ),
       );
 
       final givenTimeEntry = TimeEntry(
@@ -117,9 +119,11 @@ void main() {
       final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
       final givenOtherEndTime = EndTime(dateTime: nowLessTwoHours);
 
-      final otherTimeRange = TimeEntryRange(
-        startTime: givenOtherStartTime,
-        endTime: givenOtherEndTime,
+      final otherTimeRange = TimeEntryRange.fromTimeEntryModel(
+        timeEntryModel: TimeEntryModel(
+          startTime: givenOtherStartTime,
+          endTime: givenOtherEndTime,
+        ),
       );
 
       final givenTimeEntry = TimeEntry(
