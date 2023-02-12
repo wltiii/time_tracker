@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
+import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
@@ -68,15 +70,26 @@ void main() {
       expect(result.endTime,
           equals(EndTime(dateTime: DateTimeHelper.endOfTime())));
     });
+
+    test('from validatedRunningEntry constructor', () {
+      final givenStartTime = StartTime();
+      final timeBoxedEntries = TimeBoxedEntries(
+        givenStartTime,
+        EndTime.endOfTime(),
+        <TimeEntry>[],
+      );
+      final result = TimeEntryModel.validatedRunningEntry(
+        timeBoxedEntries: timeBoxedEntries,
+      );
+
+      expect(result, isA<TimeEntryModel>());
+      expect(result.startTime, equals(givenStartTime));
+      expect(result.endTime, equals(EndTime.endOfTime()));
+    });
   });
 
   group('time entry range', () {
     test('overlaps', () {
-      /*
-      key: 1 value: TimeEntry(1, 2023-02-10 16:50:21.520101, 275760-09-13 00:00:00.000Z)
-key: 2 value: TimeEntry(2, 2023-02-10 16:50:21.540981, 275760-09-13 00:00:00.000Z)
-       */
-
       final givenPersistedTimeRange = TimeEntryRange(
         startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 21)),
         endTime: EndTime.endOfTime(),
@@ -89,25 +102,6 @@ key: 2 value: TimeEntry(2, 2023-02-10 16:50:21.540981, 275760-09-13 00:00:00.000
       expect(
           givenOverlappingModel.overlapsWith(givenPersistedTimeRange), isTrue);
     });
-
-    // test('overlaps', () {
-    //   final now = DateTime.now();
-    //   final nowLessOneHour = now.subtract(const Duration(hours: 1));
-    //   final nowLessTwoHours = now.subtract(const Duration(hours: 2));
-    //   final nowLessThreeHours = now.subtract(const Duration(hours: 3));
-    //
-    //   final givenStartTime = StartTime(dateTime: nowLessTwoHours);
-    //   final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
-    //   final givenEndTime = EndTime(dateTime: now);
-    //   final givenOtherEndTime = EndTime(dateTime: nowLessOneHour);
-    //
-    //   final givenTimeEntryModel =
-    //       TimeEntryModel(startTime: givenStartTime, end: givenEndTime);
-    //   final otherTimeRange = TimeEntryRange(
-    //       startTime: givenOtherStartTime, endTime: givenOtherEndTime);
-    //
-    //   expect(givenTimeEntryModel.overlapsWith(otherTimeRange), isTrue);
-    // });
 
     test('does not overlap', () {
       final now = DateTime.now();
@@ -249,29 +243,5 @@ key: 2 value: TimeEntry(2, 2023-02-10 16:50:21.540981, 275760-09-13 00:00:00.000
       };
       expect(givenTimeEntry.toJson(), equals(expectedJson));
     });
-
-    // test('from/to', () {
-    //   final startTime = StartTime(
-    //     dateTime: DateTime.now().subtract(
-    //       const Duration(
-    //         hours: 1,
-    //       ),
-    //     ),
-    //   );
-    //
-    //   final endTime = EndTime(dateTime: DateTime.now());
-    //
-    //   final givenTimeEntry = TimeEntryModel(
-    //     start: startTime,
-    //     end: endTime,
-    //   );
-    //
-    //   print('Model json = ${givenTimeEntry.toJson()}');
-    //
-    //   expect(
-    //     TimeEntryModel.fromJson(givenTimeEntry.toJson()),
-    //     equals(givenTimeEntry),
-    //   );
-    // });
   });
 }
