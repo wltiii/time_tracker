@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:time_tracker/domain/core/extensions/either.dart';
 import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
@@ -7,7 +8,6 @@ import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 
 class StartTimerAction {
@@ -28,19 +28,14 @@ class StartTimerAction {
       ),
     );
 
-    bool isValid = false;
-    TimeBoxedEntries? validatedTimeBoxedEntries;
+    if (timeBoxedEntries.isLeft()) {
+      return Either.left(timeBoxedEntries.left()!);
+    }
 
-    timeBoxedEntries.fold((l) {
-      //TODO(wltiii): this line is untested
-      return Either.left(l);
-    }, (r) {
-      isValid = TimeEntryValidationService().dateTimeRangeIsConsistent(
-        modelToValidate: r.timeEntryModel,
-        existingEntries: r.timeEntryList,
-      );
-      if (isValid) validatedTimeBoxedEntries = r;
-    });
+    final isValid = TimeEntryValidationService().dateTimeRangeIsConsistent(
+      modelToValidate: timeBoxedEntries.right()!.timeEntryModel,
+      existingEntries: timeBoxedEntries.right()!.timeEntryList,
+    );
 
     if (!isValid) {
       return Either.left(
@@ -51,6 +46,6 @@ class StartTimerAction {
     }
 
     // it is valid, persist
-    return await _repository.add(validatedTimeBoxedEntries!.timeEntryModel);
+    return await _repository.add(timeBoxedEntries.right()!.timeEntryModel);
   }
 }

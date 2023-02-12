@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/domain/core/extensions/date_time_range.dart';
+import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
@@ -12,6 +13,9 @@ import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.
 class TimeEntryRepositoryMock implements TimeEntryRepository {
   final _timeEntries = <String, TimeEntry>{};
   int _nextId = 1;
+  String failMethod = '';
+  Failure withFailure =
+      ServerFailure(AdditionalInfo('intentional failure for testing.'));
 
   @override
   Future<Either<Failure, TimeEntry>> add(TimeEntryModel timeEntryModel) async {
@@ -78,6 +82,8 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
   Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntries({
     required TimeEntryRange timeEntryRange,
   }) async {
+    if (failMethod == 'getTimeBoxedEntries') return Either.left(withFailure);
+
     final timeboxedEntries = <TimeEntry>[];
     final entries = _timeEntries.values;
 
@@ -94,5 +100,10 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
     );
 
     return Either.right(timeEntryList);
+  }
+
+  void fail({required String method, Failure? withFailure}) {
+    failMethod = method;
+    if (withFailure != null) this.withFailure = withFailure;
   }
 }

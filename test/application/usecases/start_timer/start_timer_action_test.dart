@@ -46,5 +46,23 @@ void main() {
         },
       );
     });
+
+    test('when timer repo call fails it throws', () async {
+      // initialize repo that will fail on call to getTimeBoxedEntries
+      final repository = TimeEntryRepositoryMock();
+      repository.fail(method: 'getTimeBoxedEntries');
+
+      final result = await StartTimerAction(repository).call();
+
+      result.fold(
+        (l) {
+          expect(l, isA<Failure>());
+          expect(l, isA<ServerFailure>());
+        },
+        (r) {
+          fail('Failing repository call did not throw.');
+        },
+      );
+    });
   });
 }

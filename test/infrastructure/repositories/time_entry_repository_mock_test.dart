@@ -40,23 +40,20 @@ void main() {
 
       final givenAddedTimeEntry = await repository.add(givenModel);
 
-      expect(
-        givenAddedTimeEntry.isRight(),
-        isTrue,
-        reason: 'Test setup failure. Could not add time entry to '
-            'repository. TimeEntry: $givenModel',
-      );
+      if (givenAddedTimeEntry.isLeft()) {
+        fail(
+          'Test setup failure. Could not add time entry to '
+          'repository. TimeEntry: $givenModel',
+        );
+      }
 
       final result = await repository.delete(givenAddedTimeEntry.right()!);
 
-      result.fold(
-        (l) {
-          fail('Add should not return left');
-        },
-        (r) {
-          expect(r, isTrue);
-        },
-      );
+      if (result.isLeft()) {
+        fail('Add should not return left');
+      }
+
+      expect(result.right(), isTrue);
     });
   });
 
@@ -72,26 +69,24 @@ void main() {
 
       final givenAddedTimeEntry = await repository.add(givenModel);
 
-      expect(
-        givenAddedTimeEntry.isRight(),
-        isTrue,
-        reason: 'Test setup failure. Could not add time entry to '
-            'repository. TimeEntry: $givenModel',
-      );
+      if (givenAddedTimeEntry.isLeft()) {
+        fail(
+          'Test setup failure. Could not add time entry to '
+          'repository. TimeEntry: $givenModel',
+        );
+      }
 
       final result = await repository.get(givenAddedTimeEntry.right()!.id);
 
-      result.fold(
-        (l) {
-          fail('Get should not return left');
-        },
-        (r) {
-          expect(r.id, isNotNull);
-          expect(r.id, equals(TimeEntryId('1')));
-          expect(r.start, equals(givenStartTime));
-          expect(r.end, equals(givenEndTime));
-        },
-      );
+      if (result.isLeft()) {
+        fail('Get should not return left');
+      }
+
+      final timeEntry = result.right()!;
+      expect(timeEntry.id, isNotNull);
+      expect(timeEntry.id, equals(TimeEntryId('1')));
+      expect(timeEntry.start, equals(givenStartTime));
+      expect(timeEntry.end, equals(givenEndTime));
     });
 
     test('returns Either(Left(Failure))', () async {
