@@ -133,23 +133,6 @@ void main() {
   });
 
   group('json', () {
-    /// TODO(wltiii): should this raise all model objects to top level, or should entity json have a model object? I think the former.
-    /// i.e
-    ///
-    /// {
-    ///     id: 23456789
-    ///     start: 2023-01-05T13:55:54.163113,
-    ///     end: 2023-01-05T14:55:54.164525
-    /// }
-    /// - or -
-    /// {
-    ///     id: 23456789
-    ///     model: {
-    ///         start: 2023-01-05T13:55:54.163113,
-    ///         end: 2023-01-05T14:55:54.164525
-    ///     }
-    /// }
-    ///
     test('from', () {
       final givenStartTimeString =
           DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
