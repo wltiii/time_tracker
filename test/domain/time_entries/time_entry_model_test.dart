@@ -73,9 +73,9 @@ void main() {
     test('from validatedRunningEntry constructor', () {
       final givenStartTime = StartTime();
       final timeBoxedEntries = TimeBoxedEntries(
-        givenStartTime,
-        EndTime.endOfTime(),
-        <TimeEntry>[],
+        start: givenStartTime,
+        end: EndTime.endOfTime(),
+        timeEntryList: <TimeEntry>[],
       );
       final result = TimeEntryModel.validatedRunningEntry(
         timeBoxedEntries: timeBoxedEntries,

@@ -4,23 +4,17 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 
 class TimeBoxedEntries {
-  //TODO(wltiii): should use required named parameters
-  // TimeBoxedEntries({
-  //   required this.start,
-  //   required this.end,
-  //   required this.timeEntryList,
-  // });
-  TimeBoxedEntries(
-    // TODO(wltiii): do not allow construction when end is < start
-    this.start,
-    this.end,
-    this.timeEntryList,
-  );
+  TimeBoxedEntries({
+    required StartTime start,
+    required EndTime end,
+    required this.timeEntryList,
+  }) {
+    timeEntryModel = TimeEntryModel(startTime: start, endTime: end);
+  }
 
-  final StartTime start;
-  final EndTime end;
+  late TimeEntryModel timeEntryModel;
   final List<TimeEntry> timeEntryList;
 
-  TimeEntryModel get timeEntryModel =>
-      TimeEntryModel(startTime: start, endTime: end);
+  StartTime get start => timeEntryModel.startTime;
+  EndTime get end => timeEntryModel.endTime;
 }

@@ -88,9 +88,9 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
     }
 
     final timeEntryList = TimeBoxedEntries(
-      timeEntryRange.startTime,
-      timeEntryRange.endTime,
-      timeboxedEntries,
+      start: timeEntryRange.startTime,
+      end: timeEntryRange.endTime,
+      timeEntryList: timeboxedEntries,
     );
 
     return Either.right(timeEntryList);
