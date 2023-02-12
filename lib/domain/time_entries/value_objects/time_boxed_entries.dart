@@ -11,6 +11,7 @@ class TimeBoxedEntries {
   //   required this.timeEntryList,
   // });
   TimeBoxedEntries(
+    // TODO(wltiii): do not allow construction when end is < start
     this.start,
     this.end,
     this.timeEntryList,
