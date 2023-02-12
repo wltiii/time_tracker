@@ -3,7 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/domain/core/extensions/either.dart';
 
 void main() {
-  test('returns right', () {
+  test('right() returns right', () {
     const right = 1;
 
     Either<String, int> e = const Right(right);
@@ -12,7 +12,7 @@ void main() {
     expect(e.left(), isNull);
   });
 
-  test('returns left', () {
+  test('left() returns left', () {
     const left = 'left';
 
     Either<String, int> e = const Left(left);
