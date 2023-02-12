@@ -4,6 +4,12 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 
 class TimeBoxedEntries {
+  //TODO(wltiii): should use required named parameters
+  // TimeBoxedEntries({
+  //   required this.start,
+  //   required this.end,
+  //   required this.timeEntryList,
+  // });
   TimeBoxedEntries(
     this.start,
     this.end,

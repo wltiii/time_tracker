@@ -29,6 +29,7 @@ class StartTimerAction {
     TimeBoxedEntries? validatedTimeBoxedEntries;
 
     timeBoxedEntries.fold((l) {
+      //TODO(wltiii): this line is untested
       return Either.left(l);
     }, (r) {
       isValid = TimeEntryValidationService().dateTimeRangeIsConsistent(
