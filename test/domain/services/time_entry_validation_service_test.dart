@@ -4,12 +4,19 @@ import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
 void main() {
   group('dateTimeRangeIsConsistent validation', () {
     test('returns true when there are no other entries', () async {
-      final givenModel = TimeEntryModel.runningEntry();
+      final givenModel = TimeEntryModel.validatedRunningEntry(
+        timeBoxedEntries: TimeBoxedEntries(
+          start: StartTime(),
+          end: EndTime.endOfTime(),
+          timeEntryList: [],
+        ),
+      );
 
       final service = TimeEntryValidationService();
 
@@ -29,7 +36,13 @@ void main() {
           end: DateTime.now().subtract(const Duration(days: 1)),
         )
       ];
-      final givenNonOverlappingModel = TimeEntryModel.runningEntry();
+      final givenNonOverlappingModel = TimeEntryModel.validatedRunningEntry(
+        timeBoxedEntries: TimeBoxedEntries(
+          start: StartTime(),
+          end: EndTime.endOfTime(),
+          timeEntryList: [],
+        ),
+      );
 
       final service = TimeEntryValidationService();
 
