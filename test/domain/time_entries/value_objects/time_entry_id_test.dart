@@ -32,22 +32,4 @@ void main() {
       expect(x, isNot(equals(y)));
     });
   });
-
-  // TODO(wltiii): how to test serializers???
-  // group('json', () {
-  //   var jsonModel = {
-  //     'id': 'abc123',
-  //   };
-  //
-  //   test('from json', () {});
-  //
-  //   test('to json', () {
-  //     final timeEntryId = TimeEntryId('xyz789');
-  //
-  //     var expectedResult = {'id': 'xyz789'};
-  //
-  //     final result = timeEntryId.toJson();
-  //     expect(result, equals(expectedResult));
-  //   });
-  // });
 }
