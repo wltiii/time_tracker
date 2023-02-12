@@ -29,6 +29,7 @@ class TimeEntryModel extends Equatable {
     }
   }
 
+  //TODO(wltiii): this constructor is only used in tests. remove.
   TimeEntryModel.runningEntry()
       : this(
           startTime: StartTime(),
