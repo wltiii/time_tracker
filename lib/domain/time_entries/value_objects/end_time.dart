@@ -29,12 +29,6 @@ class EndTime extends Equatable {
           ExceptionMessage('End time cannot be after the current time.'));
     }
 
-    /// TODO(wltiii): this is an invalid invariant. JSON could be less.
-    // if (dateTime.isBefore(sevenDaysPastTense)) {
-    //   throw ValueException(
-    //       ExceptionMessage('End time cannot be more than 7 days ago.'));
-    // }
-
     _value = dateTime;
   }
 

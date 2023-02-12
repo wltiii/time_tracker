@@ -20,12 +20,6 @@ class StartTime extends Equatable {
           ExceptionMessage('Start time cannot be after the current time.'));
     }
 
-    /// TODO(wltiii): this is an invalid invariant. JSON could be less.
-    // if (startTime.isBefore(sevenDaysPastTense)) {
-    //   throw ValueException(
-    //       ExceptionMessage('Start time cannot be more than 7 days ago.'));
-    // }
-
     _value = startTime;
   }
 
