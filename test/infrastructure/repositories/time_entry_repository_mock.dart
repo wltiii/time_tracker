@@ -54,6 +54,8 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
 
   @override
   Future<Either<Failure, TimeEntry>> get(TimeEntryId timeEntryId) async {
+    if (failMethod == 'get') return Either.left(withFailure);
+
     if (_timeEntries.isEmpty) {
       return Either.left(NotFoundFailure());
     }
