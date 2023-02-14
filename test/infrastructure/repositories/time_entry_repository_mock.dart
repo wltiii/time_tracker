@@ -73,6 +73,8 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
 
   @override
   Future<Either<Failure, TimeEntry>> update(TimeEntry entity) async {
+    if (failMethod == 'update') return Either.left(withFailure);
+
     final entry = await get(entity.id);
     if (entry.isLeft()) return entry;
 

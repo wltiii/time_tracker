@@ -127,5 +127,41 @@ void main() {
         },
       );
     });
+
+    test('when call to getTimeBoxedEntries fails it throws', () async {
+      // initialize repo that will fail on call to getTimeBoxedEntries
+      final repository = TimeEntryRepositoryMock();
+      repository.fail(method: 'getTimeBoxedEntries');
+
+      final givenExistingStartTime = StartTime(dateTime: DateTime.now());
+      final givenExistingEndTime = EndTime.endOfTime();
+      final givenExistingEntryModel = TimeEntryModel(
+        startTime: givenExistingStartTime,
+        endTime: givenExistingEndTime,
+      );
+
+      final givenExistingTimeEntry =
+          await repository.add(givenExistingEntryModel);
+
+      if (givenExistingTimeEntry.isLeft()) {
+        fail(
+          'Test setup failure. Could not add time entry to '
+          'repository. TimeEntry: $givenExistingEntryModel',
+        );
+      }
+
+      final action = StopTimerAction(repository);
+      final result = await action(givenExistingTimeEntry.right()!.id);
+
+      result.fold(
+        (l) {
+          expect(l, isA<Failure>());
+          expect(l, isA<ServerFailure>());
+        },
+        (r) {
+          fail('Failing repository call did not throw.');
+        },
+      );
+    });
   });
 }
