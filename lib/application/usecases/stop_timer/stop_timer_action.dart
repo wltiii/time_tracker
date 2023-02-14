@@ -4,10 +4,11 @@ import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
+import 'package:time_tracker/domain/time_entries/usecases/stop_timer_action.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
-class StopTimerAction {
+class StopTimerAction implements StopTimerUseCaseAction {
   StopTimerAction(this._repository);
 
   final TimeEntryRepository _repository;

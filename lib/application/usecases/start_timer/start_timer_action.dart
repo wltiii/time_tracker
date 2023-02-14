@@ -6,10 +6,11 @@ import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/services/time_entry_validation_service.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
+import 'package:time_tracker/domain/time_entries/usecases/start_timer_action.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 
-class StartTimerAction {
+class StartTimerAction implements StartTimerUseCaseAction {
   StartTimerAction(this._repository);
 
   final TimeEntryRepository _repository;
