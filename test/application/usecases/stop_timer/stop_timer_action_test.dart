@@ -33,9 +33,6 @@ void main() {
         );
       }
 
-      print('initial entry created:');
-      repository.showPersistedEntries();
-
       final expectedEndTimeRange = DateTimeRange(
         start: StartTime().dateTime,
         end: StartTime().dateTime.add(const Duration(seconds: 5)),
@@ -43,9 +40,6 @@ void main() {
 
       final action = StopTimerAction(repository);
       final result = await action(givenExistingTimeEntry.right()!.id);
-
-      print('stop time action completed:');
-      repository.showPersistedEntries();
 
       result.fold(
         (l) {
@@ -59,24 +53,43 @@ void main() {
       );
     });
 
-    test('when no entries already exist', () async {
-      fail('Not yet implemented');
-      //   final repository = TimeEntryRepositoryMock();
-      //   final action = StopTimerAction(repository);
-      //
-      //   final result = await action();
-      //
-      //   result.fold(
-      //     (l) {
-      //       fail('Creating a timer should not fail.');
-      //     },
-      //     (r) {
-      //       expect(r.id, equals(TimeEntryId('1')));
-      //     },
-      //   );
+    test(
+        'when no entries found for the given time entry id returns NotFoundFailure',
+        () async {
+      final repository = TimeEntryRepositoryMock();
+
+      final givenExistingStartTime = StartTime(dateTime: DateTime.now());
+      final givenExistingEndTime = EndTime.endOfTime();
+      final givenExistingEntryModel = TimeEntryModel(
+        startTime: givenExistingStartTime,
+        endTime: givenExistingEndTime,
+      );
+
+      final givenExistingTimeEntry =
+          await repository.add(givenExistingEntryModel);
+
+      if (givenExistingTimeEntry.isLeft()) {
+        fail(
+          'Test setup failure. Could not add time entry to '
+          'repository. TimeEntry: $givenExistingEntryModel',
+        );
+      }
+
+      final action = StopTimerAction(repository);
+      final result = await action(TimeEntryId('does-not-exist'));
+
+      result.fold(
+        (l) {
+          expect(l, isA<Failure>());
+          expect(l, isA<NotFoundFailure>());
+        },
+        (r) {
+          fail('Updating a timer where no matching id exists should fail.');
+        },
+      );
     });
 
-    test('when existing timer is not running throw', () async {
+    test('when existing timer is not running fails', () async {
       final expectedFailure = InvalidStateFailure(
         AdditionalInfo('Cannot stop a timer that is already stopped.'),
       );
@@ -99,14 +112,8 @@ void main() {
         );
       }
 
-      print('initial entry created:');
-      repository.showPersistedEntries();
-
       final action = StopTimerAction(repository);
       final result = await action(givenExistingTimeEntry.right()!.id);
-
-      print('stop time action completed:');
-      repository.showPersistedEntries();
 
       result.fold(
         (l) {
@@ -116,52 +123,9 @@ void main() {
           expect('$f', equals('$expectedFailure'));
         },
         (r) {
-          fail('Updating a timer should not fail.');
+          fail('Stopping a timer that is not running should fail.');
         },
       );
-    });
-
-    test('when stop time is less than start it throws', () async {
-      fail('Not yet implemented');
-      // final expectedFailure = InvalidStateFailure(
-      //   AdditionalInfo('Time entry overlaps with an existing time entry.'),
-      // );
-      //
-      // // initialize repo with entry that the result will overlap
-      // final repository = TimeEntryRepositoryMock();
-      // await StopTimerAction(repository).call();
-      // final result = await StopTimerAction(repository).call();
-      //
-      // result.fold(
-      //   (l) {
-      //     expect(l, isA<Failure>());
-      //     expect(l, isA<InvalidStateFailure>());
-      //     InvalidStateFailure f = l as InvalidStateFailure;
-      //     expect('$f', equals('$expectedFailure'));
-      //   },
-      //   (r) {
-      //     fail('Overlapping time entry did not throw.');
-      //   },
-      // );
-    });
-
-    test('when timer repo call fails it throws', () async {
-      // initialize repo that will fail on call to getTimeBoxedEntries
-      fail('Not yet implemented');
-      // final repository = TimeEntryRepositoryMock();
-      // repository.fail(method: 'getTimeBoxedEntries');
-      //
-      // final result = await StopTimerAction(repository).call();
-      //
-      // result.fold(
-      //   (l) {
-      //     expect(l, isA<Failure>());
-      //     expect(l, isA<ServerFailure>());
-      //   },
-      //   (r) {
-      //     fail('Failing repository call did not throw.');
-      //   },
-      // );
     });
   });
 }
