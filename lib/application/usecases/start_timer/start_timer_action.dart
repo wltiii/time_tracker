@@ -8,7 +8,6 @@ import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 
 class StartTimerAction {
   StartTimerAction(this._repository);
@@ -19,12 +18,10 @@ class StartTimerAction {
     final startTime = StartTime();
     final endOfTime = EndTime.endOfTime();
 
-    final timeBoxedEntries = await _repository.getTimeBoxedEntries(
-      timeEntryRange: TimeEntryRange.fromTimeEntryModel(
-        timeEntryModel: TimeEntryModel(
-          startTime: startTime,
-          endTime: endOfTime,
-        ),
+    final timeBoxedEntries = await _repository.getTimeBoxedEntriesForModel(
+      timeEntryModel: TimeEntryModel(
+        startTime: startTime,
+        endTime: endOfTime,
       ),
     );
 
