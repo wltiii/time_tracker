@@ -3,13 +3,9 @@ import 'package:time_tracker/domain/core/extensions/either.dart';
 import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
-import 'package:time_tracker/domain/services/time_entry_validation_service.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
-import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 
 class StopTimerAction {
   StopTimerAction(this._repository);
@@ -17,36 +13,32 @@ class StopTimerAction {
   final TimeEntryRepository _repository;
 
   Future<Either<Failure, TimeEntry>> call(TimeEntryId timeEntryId) async {
-    final startTime = StartTime();
-    final endOfTime = EndTime.endOfTime();
+    final eitherExistingEntry = await _repository.get(timeEntryId);
+    if (eitherExistingEntry.isLeft()) {
+      return Either.left(eitherExistingEntry.left()!);
+    }
 
-    final timeBoxedEntries = await _repository.getTimeBoxedEntries(
-      timeEntryRange: TimeEntryRange.fromTimeEntryModel(
-        timeEntryModel: TimeEntryModel(
-          startTime: startTime,
-          endTime: endOfTime,
+    final existingEntry = eitherExistingEntry.right()!;
+
+    if (!existingEntry.end.isInfinite) {
+      return Either.left(
+        InvalidStateFailure(
+          AdditionalInfo('Cannot stop a timer that is already stopped.'),
         ),
-      ),
+      );
+    }
+
+    final newEndTime = EndTime.now();
+
+    final timeBoxedEntries = await _repository.getTimeBoxedEntriesForTimeEntry(
+      timeEntry: existingEntry,
     );
 
     if (timeBoxedEntries.isLeft()) {
       return Either.left(timeBoxedEntries.left()!);
     }
 
-    final isValid = TimeEntryValidationService().dateTimeRangeIsConsistent(
-      modelToValidate: timeBoxedEntries.right()!.timeEntryModel,
-      existingEntries: timeBoxedEntries.right()!.timeEntryList,
-    );
-
-    if (!isValid) {
-      return Either.left(
-        InvalidStateFailure(
-          AdditionalInfo('Time entry overlaps with an existing time entry.'),
-        ),
-      );
-    }
-
     // it is valid, persist
-    return await _repository.add(timeBoxedEntries.right()!.timeEntryModel);
+    return await _repository.update(existingEntry.copyWith(end: newEndTime));
   }
 }
