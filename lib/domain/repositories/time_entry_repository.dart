@@ -4,7 +4,6 @@ import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 
 abstract class TimeEntryRepository {
   Future<Either<Failure, TimeEntry>> add(TimeEntryModel model);
@@ -13,8 +12,14 @@ abstract class TimeEntryRepository {
 
   /// Returns a [TimeBoxedEntries] list where the the time entry falls
   /// within the start/end bounds, inclusive.
-  Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntries({
-    required TimeEntryRange timeEntryRange,
+  Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntriesForTimeEntry({
+    required TimeEntry timeEntry,
+  });
+
+  /// Returns a [TimeBoxedEntries] list where the the time entry falls
+  /// within the start/end bounds, inclusive.
+  Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntriesForModel({
+    required TimeEntryModel timeEntryModel,
   });
 
   // TODO(wltiii): Does the usecase require knowing it was deleted if not found?

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/domain/core/extensions/date_time_range.dart';
+import 'package:time_tracker/domain/core/extensions/either.dart';
 import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
@@ -17,6 +18,13 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
   Failure withFailure =
       ServerFailure(AdditionalInfo('intentional failure for testing.'));
 
+  void showPersistedEntries() {
+    print('Persisted Entries are:');
+    _timeEntries.forEach((key, value) {
+      print('key: $key value: $value');
+    });
+  }
+
   @override
   Future<Either<Failure, TimeEntry>> add(TimeEntryModel timeEntryModel) async {
     final timeEntry = TimeEntry(
@@ -28,13 +36,6 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
     _timeEntries[timeEntry.id.toString()] = timeEntry;
     showPersistedEntries();
     return Future.value(Right(timeEntry));
-  }
-
-  void showPersistedEntries() {
-    print('Persisted Entries are:');
-    _timeEntries.forEach((key, value) {
-      print('key: $key value: $value');
-    });
   }
 
   @override
@@ -81,27 +82,76 @@ class TimeEntryRepositoryMock implements TimeEntryRepository {
   }
 
   @override
-  Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntries({
+  Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntriesForTimeEntry({
+    required TimeEntry timeEntry,
+  }) async {
+    if (failMethod == 'getTimeBoxedEntries') return Either.left(withFailure);
+
+    final timeBoxedEntries = await _getTimeEntriesInRange(
+      timeEntryRange: timeEntry.timeEntryRange,
+    );
+
+    if (timeBoxedEntries.isLeft()) {
+      return Either.left(timeBoxedEntries.left()!);
+    }
+
+    List<TimeEntry> entries = timeBoxedEntries
+        .right()!
+        .map((entry) => entry)
+        .where((id) => id != timeEntry.id)
+        .toList();
+
+    return Either.right(
+      TimeBoxedEntries(
+        start: timeEntry.timeEntryRange.startTime,
+        end: timeEntry.timeEntryRange.endTime,
+        timeEntryList: entries,
+      ),
+    );
+  }
+
+  Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntriesForModel({
+    required TimeEntryModel timeEntryModel,
+  }) async {
+    if (failMethod == 'getTimeBoxedEntriesForModel')
+      return Either.left(withFailure);
+
+    final timeBoxedEntries = await _getTimeEntriesInRange(
+      timeEntryRange: timeEntryModel.timeEntryRange,
+    );
+
+    if (timeBoxedEntries.isLeft()) {
+      return Either.left(timeBoxedEntries.left()!);
+    }
+
+    return Either.right(
+      TimeBoxedEntries(
+        start: timeEntryModel.timeEntryRange.startTime,
+        end: timeEntryModel.timeEntryRange.endTime,
+        timeEntryList: timeBoxedEntries.right()!,
+      ),
+    );
+  }
+
+  Future<Either<Failure, List<TimeEntry>>> _getTimeEntriesInRange({
     required TimeEntryRange timeEntryRange,
   }) async {
     if (failMethod == 'getTimeBoxedEntries') return Either.left(withFailure);
 
-    final timeboxedEntries = <TimeEntry>[];
+    final entriesInRange = <TimeEntry>[];
+
+    //TODO(wltiii): This logic needs to be some sort of getter when implemented
     final entries = _timeEntries.values;
 
     for (final entry in entries) {
+      //TODO(wltiii): should isOverlapping exist on the entity && model?
+      //TODO(wltiii): that way id check can be implemented more logically
       if (timeEntryRange.isOverlapping(entry.timeEntryRange)) {
-        timeboxedEntries.add(entry);
+        entriesInRange.add(entry);
       }
     }
 
-    final timeEntryList = TimeBoxedEntries(
-      start: timeEntryRange.startTime,
-      end: timeEntryRange.endTime,
-      timeEntryList: timeboxedEntries,
-    );
-
-    return Either.right(timeEntryList);
+    return Either.right(entriesInRange);
   }
 
   void fail({required String method, Failure? withFailure}) {
