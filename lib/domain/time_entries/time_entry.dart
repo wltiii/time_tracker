@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:time_tracker/domain/core/type_defs.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
@@ -13,6 +14,7 @@ import 'package:time_tracker/domain/time_entries/value_serializers/time_entry_id
 part 'time_entry.g.dart';
 
 @JsonSerializable()
+@immutable
 class TimeEntry extends Equatable {
   //TODO(wltiii): do i want to take a model, all parameters to create a model, or both? Be sure to look at all usages before making a decision!
   TimeEntry({
@@ -38,8 +40,6 @@ class TimeEntry extends Equatable {
   final TimeEntryId _id;
   final TimeEntryModel _model;
 
-  bool overlapsWith(other) => _model.overlapsWith(other);
-
   @TimeEntryIdSerializer()
   TimeEntryId get id => _id;
   @StartTimeSerializer()
@@ -48,6 +48,21 @@ class TimeEntry extends Equatable {
   EndTime get end => _model.endTime;
   TimeEntryRange get timeEntryRange => _model.timeEntryRange;
   bool get isRunning => end.isInfinite;
+
+  bool overlapsWith(other) => _model.overlapsWith(other);
+
+  TimeEntry copyWith({
+    //TODO(wltiii): i shouldn't need a copywith taking an id
+    // TimeEntryId id,
+    StartTime? start,
+    EndTime? end,
+  }) {
+    return TimeEntry(
+      id: id,
+      start: start == null ? this.start.dateTime : start.dateTime,
+      end: end == null ? this.end.dateTime : end.dateTime,
+    );
+  }
 
   @override
   List<Object> get props => [id, start, end];
