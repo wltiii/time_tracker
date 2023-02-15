@@ -4,7 +4,7 @@ import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
-import '../../../infrastructure/repositories/time_entry_repository_mock.dart';
+import '../../../../lib/infrastructure/repositories/time_entry_repository_mock.dart';
 
 void main() {
   group('StartTimerAction', () {

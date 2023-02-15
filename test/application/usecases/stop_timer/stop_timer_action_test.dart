@@ -10,7 +10,7 @@ import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
-import '../../../infrastructure/repositories/time_entry_repository_mock.dart';
+import '../../../../lib/infrastructure/repositories/time_entry_repository_mock.dart';
 
 void main() {
   group('StopTimerAction', () {
