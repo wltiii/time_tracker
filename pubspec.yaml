@@ -41,6 +41,8 @@ dependencies:
   unrepresentable_state:
     git: https://github.com/wltiii/unrepresentable_state
   fpdart: ^0.4.0
+  firebase_core: ^0.4.2+2
+  firebase_storage: ^3.1.6
 
 dev_dependencies:
   flutter_test:
