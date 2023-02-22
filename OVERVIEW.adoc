@@ -20,6 +20,8 @@ Each layer should be highly cohesive and loosely coupled to the other layers.
 This allows for better maintainability, testability, and extensibility of the application.
 Additionally, the domain layer should be the central focus of the design, with the other layers serving to support and implement the core domain logic.
 
+_TODO(wltiii): the following conflicts with other notes. what is correct?_
+
 In this organization, the presentation layer depends on the application layer, the application layer depends on the domain layer, and the domain layer depends on the infrastructure layer.
 This allows for clear separation of concerns and better maintainability of the application.
 

@@ -5,7 +5,7 @@
 This layer contains the business logic of the application, such as application services and use cases. It is responsible for orchestrating the flow of data between the _presentation_ layer and the _domain_ layer.
 
 The application layer handles the technical concerns of the application, such as database access, logging, and communication with external systems. _*QUESTION* is this
-statement in conflict with the responsibilities of the DOMAIN layer?_
+statement in conflict with the responsibilities of the DOMAIN layer? See OVERVIEW.adoc_
 
 The business logic of is implemented via:
 
@@ -14,14 +14,17 @@ The business logic of is implemented via:
 . Use Cases that describe a specific way in which a user might interact with an application or system. This can include things like providing input, accessing a specific feature, or achieving a particular result. In code, a use case might be represented as a function or method that can be called to perform the actions described in the use case.
 
 == Usecase Interactions
-In short, the use case calls the repository and the Entity.
+In short, the use case calls the repository and the Entity (Aggregate).
 
-The Entity is responsible for its own behavior and state.
-The Repository is responsible for storing and retrieving entities from a persistent storage.
+. The Entity is responsible for its own behavior and state.
+
+. The Repository is responsible for storing and retrieving entities from a persistent storage.
+
 The use case, acts as an interface between the application and the Entity and Repository.
 It orchestrates the flow of data and coordinates the interactions between the Entity and Repository.
 
 _Typically_:
+
 . The Usecase calls the repository to retrieve entities.
 . The Usecase then passes the entities to the Entity to perform actions on the entities' state.
 . The Entity then returns any updated state back to the use case.

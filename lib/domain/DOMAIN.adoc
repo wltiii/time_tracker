@@ -1,6 +1,6 @@
 = Driven Design Principles Domain Layer
 
-== Explanation
+== Explanation of Domain Layer
 
 This layer encapsulates the business rules and logic of the application.
 It contains all the classes that represent the core domain concepts and entities, such as value objects, entities, and domain services.
@@ -28,7 +28,7 @@ An aggregate root is:
 
 . An object that acts as a gateway to a cluster of related objects, known as an aggregate.
 . A group of domain objects that are considered as a single unit for the purpose of data changes.
-. The only object within the aggregate that can be directly accessed.
+. _The only object within the aggregate that can be directly accessed._
 . The enforcer of the invariants of the aggregate.
 
 For example, in a shopping cart application, the Cart class would be the aggregate root, as it is the object that contains the collection of Product objects and manages their state. It also enforces the business rules that govern the cart, such as the maximum number of items that can be added to the cart and the total cost of the cart. The Cart class is the only class that can be accessed directly and any changes to the Product objects inside the cart should be made through the Cart class.
