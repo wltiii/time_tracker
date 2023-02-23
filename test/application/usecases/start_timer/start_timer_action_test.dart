@@ -3,13 +3,12 @@ import 'package:time_tracker/application/usecases/start_timer/start_timer_action
 import 'package:time_tracker/domain/error/additional_info.dart';
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
-
-import '../../../../lib/infrastructure/repositories/time_entry_repository_mock.dart';
+import 'package:time_tracker/infrastructure/repositories/time_entry_repository_impl.dart';
 
 void main() {
   group('StartTimerAction', () {
     test('timer started when no entries already exist', () async {
-      final repository = TimeEntryRepositoryMock();
+      final repository = TimeEntryRepositoryImpl();
       final action = StartTimerAction(repository);
 
       final result = await action();
@@ -30,7 +29,7 @@ void main() {
       );
 
       // initialize repo with entry that the result will overlap
-      final repository = TimeEntryRepositoryMock();
+      final repository = TimeEntryRepositoryImpl();
       await StartTimerAction(repository).call();
       final result = await StartTimerAction(repository).call();
 
@@ -49,7 +48,7 @@ void main() {
 
     test('when timer repo call fails it throws', () async {
       // initialize repo that will fail on call to getTimeBoxedEntries
-      final repository = TimeEntryRepositoryMock();
+      final repository = TimeEntryRepositoryImpl();
       repository.fail(method: 'getTimeBoxedEntries');
 
       final result = await StartTimerAction(repository).call();

@@ -11,5 +11,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  //TODO(wltiii): this was a sample Manoj gave me that could possibly point to how to setup Firestore emulator
+  // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+
   runApp(TimeTrackerApp());
 }

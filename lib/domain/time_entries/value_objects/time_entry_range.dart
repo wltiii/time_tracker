@@ -5,7 +5,7 @@ import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 
 @immutable
 class TimeEntryRange extends DateTimeRange {
-  TimeEntryRange._({
+  TimeEntryRange({
     required this.startTime,
     required this.endTime,
   }) : super(
@@ -16,7 +16,7 @@ class TimeEntryRange extends DateTimeRange {
   /// Creates from [TimeEntryModel] which enforces state/end time invariants
   TimeEntryRange.fromTimeEntryModel({
     required TimeEntryModel timeEntryModel,
-  }) : this._(
+  }) : this(
           startTime: timeEntryModel.startTime,
           endTime: timeEntryModel.endTime,
         );

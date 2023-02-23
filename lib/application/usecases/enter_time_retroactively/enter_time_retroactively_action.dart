@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:time_tracker/application/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/error/failures.dart';
-import 'package:time_tracker/domain/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 
 class EnterTimeRetroactivelyAction {

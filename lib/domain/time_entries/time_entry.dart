@@ -28,8 +28,8 @@ class TimeEntry extends Equatable {
         );
 
   const TimeEntry.fromModel({
-    required id,
-    required model,
+    required TimeEntryId id,
+    required TimeEntryModel model,
   })  : _id = id,
         _model = model;
 

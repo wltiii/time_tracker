@@ -1,10 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
 import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
-import 'package:time_tracker/infrastructure/repositories/time_entry_repository_mock.dart';
 
-final repo = TimeEntryRepositoryMock();
+import '../infrastructure/repositories/time_entry_repository_impl.dart';
+
+/// TODO(wltiii): refactor the following so as not to get the following errors
+/// TODO(wltiii): The instance member db cannot be accessed in an intializer
+/// TODO(wltiii): The instance member repo cannot be accessed in an intializer
+/// TODO(wltiii): talk with Manoj - perhaps DI for both db and repo?
+final db = FirebaseFirestore.instance;
+final repo = TimeEntryRepositoryImpl(db);
 
 class TimeTrackerApp extends StatelessWidget {
   final _startTimerAction = StartTimerAction(repo);
@@ -68,7 +75,8 @@ class TimeTrackerApp extends StatelessWidget {
                         startTime.value = startedTimer.start.dateTime;
                         runningTimerId = startedTimer.id;
                         startTimeController.text =
-                            _formatDateTime(startedTimer.start.dateTime);
+                            startedTimer.start.dateTime.toString();
+                        // _formatDateTime(startedTimer.start.dateTime);
                       },
                     );
                   },
@@ -89,7 +97,9 @@ class TimeTrackerApp extends StatelessWidget {
                           //TODO(wltiii): use EndTime rather than dateTime???
                           stopTime.value = stoppedTimer.end.dateTime;
                           stopTimeController.text =
-                              _formatDateTime(stoppedTimer.end.dateTime);
+                              stoppedTimer.end.dateTime.toString();
+                          stopTimeController.text = stoppedTimer.end.toString();
+                          // _formatDateTime(stoppedTimer.end.dateTime);
                           elapsedTimeController.text = _getTimeDifference(
                             stoppedTimer.start.dateTime,
                             stoppedTimer.end.dateTime,
@@ -209,7 +219,7 @@ class TimeTrackerApp extends StatelessWidget {
     }
   }
 
-  String _formatDateTime(DateTime dateTime) {
-    return dateTime.toString() ?? '';
-  }
+  // String _formatDateTime(DateTime dateTime) {
+  //   return dateTime.toString() ?? '';
+  // }
 }
