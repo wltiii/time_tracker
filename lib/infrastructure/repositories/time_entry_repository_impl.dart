@@ -64,8 +64,7 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
               throw ServerException(ExceptionMessage(e.toString())));
 
       if (doc.exists) {
-        doc.data()!.addAll({'id': doc.id});
-        return Right(TimeEntry.fromJson(doc.data()!));
+        return Right(TimeEntry.fromJson(doc.data()!..addAll({'id': doc.id})));
       } else {
         return Left(NotFoundFailure());
       }

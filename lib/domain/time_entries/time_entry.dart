@@ -23,8 +23,8 @@ class TimeEntry extends Equatable {
     required DateTime end,
   })  : _id = id,
         _model = TimeEntryModel(
-          startTime: StartTime(dateTime: start),
-          endTime: EndTime(dateTime: end),
+          start: StartTime(dateTime: start),
+          end: EndTime(dateTime: end),
         );
 
   const TimeEntry.fromModel({
@@ -43,9 +43,9 @@ class TimeEntry extends Equatable {
   @TimeEntryIdSerializer()
   TimeEntryId get id => _id;
   @StartTimeSerializer()
-  StartTime get start => _model.startTime;
+  StartTime get start => _model.start;
   @EndTimeSerializer()
-  EndTime get end => _model.endTime;
+  EndTime get end => _model.end;
   TimeEntryRange get timeEntryRange => _model.timeEntryRange;
   bool get isRunning => end.isInfinite;
 

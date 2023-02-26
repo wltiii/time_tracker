@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
@@ -12,19 +13,20 @@ void main() {
       final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
       final startTime = StartTime(dateTime: startDateTime);
       final endTime = EndTime.endOfTime();
-      final givenModel = TimeEntryModel(startTime: startTime, endTime: endTime);
+      final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
       final result = TimeEntry(
         id: TimeEntryId('abc123'),
         start: startDateTime,
-        end: DateTime.utc(275760, 09, 13),
+        // end: DateTime.utc(275760, 09, 13),
+        end: DateTimeHelper.firestoreMaxDate(),
       );
 
       expect(result, isA<TimeEntry>());
       expect(result.id, equals(TimeEntryId('abc123')));
       final resultModel = TimeEntryModel(
-        startTime: result.start,
-        endTime: result.end,
+        start: result.start,
+        end: result.end,
       );
       expect(result.isRunning, isTrue);
 
@@ -36,7 +38,7 @@ void main() {
       final startTime = StartTime(dateTime: startDateTime);
       final endDateTime = DateTime.now();
       final endTime = EndTime(dateTime: endDateTime);
-      final givenModel = TimeEntryModel(startTime: startTime, endTime: endTime);
+      final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
       final result = TimeEntry(
         id: TimeEntryId('abc123'),
@@ -47,8 +49,8 @@ void main() {
       expect(result, isA<TimeEntry>());
       expect(result.id, equals(TimeEntryId('abc123')));
       final resultModel = TimeEntryModel(
-        startTime: result.start,
-        endTime: result.end,
+        start: result.start,
+        end: result.end,
       );
       expect(result.isRunning, isFalse);
 
@@ -61,7 +63,7 @@ void main() {
       final startTime = StartTime(dateTime: startDateTime);
       final endDateTime = DateTime.now();
       final endTime = EndTime(dateTime: endDateTime);
-      final givenModel = TimeEntryModel(startTime: startTime, endTime: endTime);
+      final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
       final result = TimeEntry.fromModel(
         id: TimeEntryId('abc123'),
@@ -71,8 +73,8 @@ void main() {
       expect(result, isA<TimeEntry>());
       expect(result.id, equals(TimeEntryId('abc123')));
       final resultModel = TimeEntryModel(
-        startTime: result.start,
-        endTime: result.end,
+        start: result.start,
+        end: result.end,
       );
       expect(result.isRunning, isFalse);
 
@@ -94,8 +96,8 @@ void main() {
 
       final otherTimeRange = TimeEntryRange.fromTimeEntryModel(
         timeEntryModel: TimeEntryModel(
-          startTime: givenOtherStartTime,
-          endTime: givenOtherEndTime,
+          start: givenOtherStartTime,
+          end: givenOtherEndTime,
         ),
       );
 
@@ -121,8 +123,8 @@ void main() {
 
       final otherTimeRange = TimeEntryRange.fromTimeEntryModel(
         timeEntryModel: TimeEntryModel(
-          startTime: givenOtherStartTime,
-          endTime: givenOtherEndTime,
+          start: givenOtherStartTime,
+          end: givenOtherEndTime,
         ),
       );
 

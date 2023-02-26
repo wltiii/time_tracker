@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
@@ -31,9 +32,18 @@ void main() {
       var result = EndTime.endOfTime();
 
       expect(result, isA<EndTime>());
-      expect(result.dateTime, DateTimeHelper.endOfTime());
+      expect(result, isA<EndTime>());
+      expect(
+        result.endTimestamp,
+        Timestamp.fromDate(
+          DateTime.parse(
+            '9999-12-31T23:59:59Z',
+          ),
+        ),
+      );
+      expect(result.dateTime, DateTimeHelper.firestoreMaxDate());
       expect(result.iso8601String,
-          equals(DateTimeHelper.endOfTime().toIso8601String()));
+          equals(DateTimeHelper.firestoreMaxDate().toIso8601String()));
       expect(result.isInfinite, isTrue);
     });
 

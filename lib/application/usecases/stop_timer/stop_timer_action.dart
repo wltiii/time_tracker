@@ -30,10 +30,33 @@ class StopTimerAction implements StopTimerUseCaseAction {
       );
     }
 
-    final newEndTime = EndTime.now();
+    // final newEndTime = EndTime.now();
+    final stoppedEntry = existingEntry.copyWith(end: EndTime.now());
 
-    //TODO(wltiii): Discuss with Manoj - technically if the time was started, there should be no overlapping entries, but it would provide safety. Do it with the new end time.
+    //TODO(wltiii): Discuss with Manoj - technically if the time is running,
+    //TODO(wltiii): there should be no overlapping entries, but it would
+    //TODO(wltiii): be technically possible if there is another implementation
+    //TODO(wltiii): that does not enforce this invariant. Testing for
+    //TODO(wltiii): overlapping entries would provide safety. Do it with the
+    //TODO(wltiii): new end time. So, the question is, is this necessary?
+    //TODO(wltiii): Probably not on a timer stop.
+    // final isOverlapping = await _repository.overlapsWithEntries(
+    //   timeEntryRange: stoppedEntry.timeEntryRange,
+    // );
+    //
+    // if (isOverlapping.isLeft()) {
+    //   return Left(isOverlapping.left()!);
+    // }
+    //
+    // if (!isOverlapping.right()!) {
+    //   return Either.left(
+    //     InvalidStateFailure(
+    //       AdditionalInfo('Stopping timer overlaps an existing time entry.'),
+    //     ),
+    //   );
+    // }
+
     // it is valid, persist
-    return await _repository.update(existingEntry.copyWith(end: newEndTime));
+    return await _repository.update(stoppedEntry);
   }
 }

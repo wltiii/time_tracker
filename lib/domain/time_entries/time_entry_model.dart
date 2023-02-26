@@ -20,20 +20,21 @@ part 'time_entry_model.g.dart';
 @JsonSerializable()
 class TimeEntryModel extends Equatable {
   TimeEntryModel({
-    required this.startTime,
-    required this.endTime,
+    required this.start,
+    required this.end,
   }) {
-    if (!(endTime.isAfter(startTime) || endTime.isInfinite)) {
+    if (!(end.isAfter(start) || end.isInfinite)) {
       throw ValueException(
           ExceptionMessage('End time must be after start time.'));
     }
   }
 
+  //TODO(wltiii): I don't think this is valid anymore. It is only used in a test. Chase it down.
   TimeEntryModel.validatedRunningEntry({
     required TimeBoxedEntries timeBoxedEntries,
   }) : this(
-          startTime: timeBoxedEntries.start,
-          endTime: timeBoxedEntries.end,
+          start: timeBoxedEntries.start,
+          end: timeBoxedEntries.end,
         );
 
   factory TimeEntryModel.fromJson(Json json) => _$TimeEntryModelFromJson(json);
@@ -41,9 +42,9 @@ class TimeEntryModel extends Equatable {
   Json toJson() => _$TimeEntryModelToJson(this);
 
   @StartTimeSerializer()
-  final StartTime startTime;
+  final StartTime start;
   @EndTimeSerializer()
-  final EndTime endTime;
+  final EndTime end;
 
   bool overlapsWith(TimeEntryRange other) =>
       timeEntryRange.isOverlapping(other);
@@ -53,5 +54,5 @@ class TimeEntryModel extends Equatable {
       );
 
   @override
-  List<Object> get props => [startTime, endTime];
+  List<Object> get props => [start, end];
 }

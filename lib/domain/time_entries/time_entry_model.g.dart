@@ -8,13 +8,12 @@ part of 'time_entry_model.dart';
 
 TimeEntryModel _$TimeEntryModelFromJson(Map<String, dynamic> json) =>
     TimeEntryModel(
-      startTime:
-          const StartTimeSerializer().fromJson(json['startTime'] as String),
-      endTime: const EndTimeSerializer().fromJson(json['endTime'] as String),
+      start: const StartTimeSerializer().fromJson(json['start'] as String),
+      end: const EndTimeSerializer().fromJson(json['end'] as String),
     );
 
 Map<String, dynamic> _$TimeEntryModelToJson(TimeEntryModel instance) =>
     <String, dynamic>{
-      'startTime': const StartTimeSerializer().toJson(instance.startTime),
-      'endTime': const EndTimeSerializer().toJson(instance.endTime),
+      'start': const StartTimeSerializer().toJson(instance.start),
+      'end': const EndTimeSerializer().toJson(instance.end),
     };

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
@@ -17,9 +18,8 @@ class EndTime extends Equatable {
     required DateTime dateTime,
   }) {
     final currentDateTime = DateTime.now();
-    // final sevenDaysPastTense = currentDateTime.subtract(const Duration(days: 7));
 
-    if (dateTime == DateTimeHelper.endOfTime()) {
+    if (dateTime == DateTimeHelper.firestoreMaxDate()) {
       _value = dateTime;
       return;
     }
@@ -29,6 +29,12 @@ class EndTime extends Equatable {
           ExceptionMessage('End time cannot be after the current time.'));
     }
 
+    if (dateTime.isAfter(DateTimeHelper.firestoreMaxDate())) {
+      throw ValueException(ExceptionMessage(
+          //TODO(wltiii): this message is wrong
+          'End time cannot be after the 9999-12-31T23:59:59.999999999.'));
+    }
+
     _value = dateTime;
   }
 
@@ -36,7 +42,9 @@ class EndTime extends Equatable {
   EndTime.now() : this(dateTime: DateTime.now());
 
   /// Creates an instance equal to the end of time
-  EndTime.endOfTime() : this(dateTime: DateTimeHelper.endOfTime());
+  // EndTime.endOfTime() : this(dateTime: DateTimeHelper.endOfTime());
+  /// Creates an instance equal to the maximum allowed Firestore timestamp
+  EndTime.endOfTime() : this(dateTime: DateTimeHelper.firestoreMaxDate());
 
   /// Creates an instance from an Iso8601 string.
   ///
@@ -49,7 +57,10 @@ class EndTime extends Equatable {
   bool isAfter(StartTime startTime) => dateTime.isAfter(startTime.dateTime);
   DateTime get dateTime => _value;
   String get iso8601String => _value.toIso8601String();
-  bool get isInfinite => _value == DateTimeHelper.endOfTime();
+  Timestamp get endTimestamp => Timestamp.fromDate(dateTime);
+  bool get isInfinite =>
+      _value == DateTimeHelper.firestoreMaxDate() ||
+      _value.isAfter(DateTimeHelper.firestoreMaxDate());
 
   @override
   String toString() => _value.toString();

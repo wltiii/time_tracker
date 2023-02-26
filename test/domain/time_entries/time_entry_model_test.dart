@@ -20,12 +20,11 @@ void main() {
 
       final givenEndTime = EndTime(dateTime: DateTime.now());
 
-      var result =
-          TimeEntryModel(startTime: givenStartTime, endTime: givenEndTime);
+      var result = TimeEntryModel(start: givenStartTime, end: givenEndTime);
 
       expect(result, isA<TimeEntryModel>());
-      expect(result.startTime, equals(givenStartTime));
-      expect(result.endTime, equals(givenEndTime));
+      expect(result.start, equals(givenStartTime));
+      expect(result.end, equals(givenEndTime));
       expect(
         result.timeEntryRange.startTime,
         equals(givenStartTime),
@@ -45,7 +44,7 @@ void main() {
       );
 
       expect(
-        () => TimeEntryModel(startTime: startTime, endTime: endTime),
+        () => TimeEntryModel(start: startTime, end: endTime),
         throwsA(
           predicate(
             (e) =>
@@ -69,8 +68,8 @@ void main() {
       );
 
       expect(result, isA<TimeEntryModel>());
-      expect(result.startTime, equals(givenStartTime));
-      expect(result.endTime, equals(EndTime.endOfTime()));
+      expect(result.start, equals(givenStartTime));
+      expect(result.end, equals(EndTime.endOfTime()));
     });
   });
 
@@ -78,13 +77,13 @@ void main() {
     test('overlaps', () {
       final givenPersistedTimeRange = TimeEntryRange.fromTimeEntryModel(
         timeEntryModel: TimeEntryModel(
-          startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 21)),
-          endTime: EndTime.endOfTime(),
+          start: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 21)),
+          end: EndTime.endOfTime(),
         ),
       );
       final givenOverlappingModel = TimeEntryModel(
-        startTime: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 22)),
-        endTime: EndTime.endOfTime(),
+        start: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 22)),
+        end: EndTime.endOfTime(),
       );
 
       expect(
@@ -103,13 +102,13 @@ void main() {
       final givenOtherEndTime = EndTime(dateTime: nowLessTwoHours);
 
       final givenTimeEntryModel = TimeEntryModel(
-        startTime: givenStartTime,
-        endTime: givenEndTime,
+        start: givenStartTime,
+        end: givenEndTime,
       );
       final otherTimeRange = TimeEntryRange.fromTimeEntryModel(
         timeEntryModel: TimeEntryModel(
-          startTime: givenOtherStartTime,
-          endTime: givenOtherEndTime,
+          start: givenOtherStartTime,
+          end: givenOtherEndTime,
         ),
       );
 
@@ -135,8 +134,8 @@ void main() {
       );
       final endTime = EndTime(dateTime: DateTime.now());
 
-      final expected = TimeEntryModel(startTime: startTime, endTime: endTime);
-      final result = TimeEntryModel(startTime: startTime, endTime: endTime);
+      final expected = TimeEntryModel(start: startTime, end: endTime);
+      final result = TimeEntryModel(start: startTime, end: endTime);
 
       expect(result, equals(expected));
     });
@@ -167,15 +166,13 @@ void main() {
       );
 
       expect(
-        TimeEntryModel(startTime: startTime, endTime: endTime),
-        isNot(equals(
-            TimeEntryModel(startTime: anotherStartTime, endTime: endTime))),
+        TimeEntryModel(start: startTime, end: endTime),
+        isNot(equals(TimeEntryModel(start: anotherStartTime, end: endTime))),
       );
 
       expect(
-        TimeEntryModel(startTime: startTime, endTime: endTime),
-        isNot(equals(
-            TimeEntryModel(startTime: startTime, endTime: anotherEndTime))),
+        TimeEntryModel(start: startTime, end: endTime),
+        isNot(equals(TimeEntryModel(start: startTime, end: anotherEndTime))),
       );
     });
   });
@@ -198,13 +195,13 @@ void main() {
           EndTime(dateTime: DateTime.parse('2023-01-24T17:01:36.140342'));
 
       final expectedTimeEntry = TimeEntryModel(
-        startTime: startTime,
-        endTime: endTime,
+        start: startTime,
+        end: endTime,
       );
 
       final givenJson = {
-        'startTime': '2023-01-24T08:02:52.360342',
-        'endTime': '2023-01-24T17:01:36.140342',
+        'start': '2023-01-24T08:02:52.360342',
+        'end': '2023-01-24T17:01:36.140342',
       };
 
       expect(
@@ -222,13 +219,13 @@ void main() {
       );
 
       final givenTimeEntry = TimeEntryModel(
-        startTime: startTime,
-        endTime: endTime,
+        start: startTime,
+        end: endTime,
       );
 
       final expectedJson = {
-        'startTime': '2023-01-24T08:02:52.360342',
-        'endTime': '2023-01-24T17:01:36.140342'
+        'start': '2023-01-24T08:02:52.360342',
+        'end': '2023-01-24T17:01:36.140342'
       };
       expect(givenTimeEntry.toJson(), equals(expectedJson));
     });

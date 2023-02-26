@@ -18,7 +18,8 @@ void main() {
     test('to', () {
       final givenEndTime = EndTime.endOfTime();
 
-      String expectedTimeEntry = '+275760-09-13T00:00:00.000Z';
+      // String expectedTimeEntry = '+275760-09-13T00:00:00.000Z';
+      String expectedTimeEntry = '9999-12-31T23:59:59.000Z';
 
       expect(
         const EndTimeSerializer().toJson(givenEndTime),

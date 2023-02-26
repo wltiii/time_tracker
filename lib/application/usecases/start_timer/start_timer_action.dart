@@ -20,6 +20,9 @@ class StartTimerAction implements StartTimerUseCaseAction {
     final startTime = StartTime();
     final endOfTime = EndTime.endOfTime();
 
+    //TODO(wltiii): validating overlap with new is a different
+    //TODO(wltiii): usecase than validating an updated entry
+    //TODO(wltiii): (i.e. stopping a running entry)
     final overlapsWithEntries = await _repository.overlapsWithEntries(
       timeEntryRange: TimeEntryRange(
         startTime: startTime,
@@ -42,8 +45,8 @@ class StartTimerAction implements StartTimerUseCaseAction {
     // it is valid, persist
     return await _repository.add(
       TimeEntryModel(
-        startTime: startTime,
-        endTime: endOfTime,
+        start: startTime,
+        end: endOfTime,
       ),
     );
   }

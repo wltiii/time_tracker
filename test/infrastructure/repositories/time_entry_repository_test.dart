@@ -1,3 +1,4 @@
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:time_tracker/domain/core/extensions/either.dart';
 import 'package:time_tracker/domain/error/failures.dart';
@@ -5,16 +6,19 @@ import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
-
-import '../../../lib/infrastructure/repositories/time_entry_repository_mock.dart';
+import 'package:time_tracker/infrastructure/repositories/time_entry_repository_impl.dart';
 
 void main() {
   group('add', () {
     test('returns Either(Right(TimeEntry))', () async {
-      final repository = TimeEntryRepositoryMock();
+      final firestore = FakeFirebaseFirestore();
+
+      final repository = TimeEntryRepositoryImpl(firestore);
+      var givenStartTime = StartTime(dateTime: DateTime.now());
+      var givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
-        startTime: StartTime(dateTime: DateTime.now()),
-        endTime: EndTime.endOfTime(),
+        start: givenStartTime,
+        end: givenEndTime,
       );
 
       final result = await repository.add(givenModel);
@@ -24,7 +28,10 @@ void main() {
           fail('Add should not return left');
         },
         (r) {
-          expect(r.id, equals(TimeEntryId('1')));
+          expect(r.start, equals(givenStartTime));
+          expect(r.end, equals(givenEndTime));
+          //TODO(wltiii): rid myself of id.id
+          expect(r.id.id, isNotEmpty);
         },
       );
     });
@@ -32,10 +39,12 @@ void main() {
 
   group('delete', () {
     test('returns Either(Right(TimeEntry))', () async {
-      final repository = TimeEntryRepositoryMock();
+      final firestore = FakeFirebaseFirestore();
+
+      final repository = TimeEntryRepositoryImpl(firestore);
       final givenModel = TimeEntryModel(
-        startTime: StartTime(dateTime: DateTime.now()),
-        endTime: EndTime.endOfTime(),
+        start: StartTime(dateTime: DateTime.now()),
+        end: EndTime.endOfTime(),
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
@@ -59,12 +68,14 @@ void main() {
 
   group('get', () {
     test('returns Either(Right(TimeEntry))', () async {
-      final repository = TimeEntryRepositoryMock();
+      final firestore = FakeFirebaseFirestore();
+
+      final repository = TimeEntryRepositoryImpl(firestore);
       final givenStartTime = StartTime(dateTime: DateTime.now());
       final givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
-        startTime: givenStartTime,
-        endTime: givenEndTime,
+        start: givenStartTime,
+        end: givenEndTime,
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
@@ -84,16 +95,18 @@ void main() {
 
       final timeEntry = result.right()!;
       expect(timeEntry.id, isNotNull);
-      expect(timeEntry.id, equals(TimeEntryId('1')));
+      // expect(timeEntry.id, equals(TimeEntryId('1')));
       expect(timeEntry.start, equals(givenStartTime));
       expect(timeEntry.end, equals(givenEndTime));
     });
 
     test('returns Either(Left(Failure))', () async {
-      final repository = TimeEntryRepositoryMock();
+      final firestore = FakeFirebaseFirestore();
+
+      final repository = TimeEntryRepositoryImpl(firestore);
       final givenModel = TimeEntryModel(
-        startTime: StartTime(dateTime: DateTime.now()),
-        endTime: EndTime.endOfTime(),
+        start: StartTime(dateTime: DateTime.now()),
+        end: EndTime.endOfTime(),
       );
 
       final givenAddedTimeEntry = await repository.add(givenModel);
