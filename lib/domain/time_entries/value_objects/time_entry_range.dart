@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
@@ -17,8 +18,8 @@ class TimeEntryRange extends DateTimeRange {
   TimeEntryRange.fromTimeEntryModel({
     required TimeEntryModel timeEntryModel,
   }) : this(
-          startTime: timeEntryModel.startTime,
-          endTime: timeEntryModel.endTime,
+          startTime: timeEntryModel.start,
+          endTime: timeEntryModel.end,
         );
 
   /// The start of the range of dates.
@@ -29,4 +30,7 @@ class TimeEntryRange extends DateTimeRange {
   /// The end of the range of dates.
   // EndTime get endTime => EndTime(dateTime: super.start);
   final EndTime endTime;
+
+  Timestamp get startTimestamp => Timestamp.fromDate(startTime.dateTime);
+  Timestamp get endTimestamp => Timestamp.fromDate(endTime.dateTime);
 }
