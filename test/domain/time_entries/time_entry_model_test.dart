@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
@@ -54,22 +52,6 @@ void main() {
           ),
         ),
       );
-    });
-
-    test('from validatedRunningEntry constructor', () {
-      final givenStartTime = StartTime();
-      final timeBoxedEntries = TimeBoxedEntries(
-        start: givenStartTime,
-        end: EndTime.endOfTime(),
-        timeEntryList: <TimeEntry>[],
-      );
-      final result = TimeEntryModel.validatedRunningEntry(
-        timeBoxedEntries: timeBoxedEntries,
-      );
-
-      expect(result, isA<TimeEntryModel>());
-      expect(result.start, equals(givenStartTime));
-      expect(result.end, equals(EndTime.endOfTime()));
     });
   });
 

@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:time_tracker/domain/core/extensions/date_time_range.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
-import 'package:time_tracker/domain/time_entries/value_objects/time_boxed_entries.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_range.dart';
 import 'package:time_tracker/domain/time_entries/value_serializers/end_time_serializer.dart';
 import 'package:time_tracker/domain/time_entries/value_serializers/start_time_serializer.dart';
@@ -28,14 +27,6 @@ class TimeEntryModel extends Equatable {
           ExceptionMessage('End time must be after start time.'));
     }
   }
-
-  //TODO(wltiii): I don't think this is valid anymore. It is only used in a test. Chase it down.
-  TimeEntryModel.validatedRunningEntry({
-    required TimeBoxedEntries timeBoxedEntries,
-  }) : this(
-          start: timeBoxedEntries.start,
-          end: timeBoxedEntries.end,
-        );
 
   factory TimeEntryModel.fromJson(Json json) => _$TimeEntryModelFromJson(json);
 
