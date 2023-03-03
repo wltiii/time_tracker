@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
 import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
 import '../infrastructure/repositories/time_entry_repository_impl.dart';
 
-/// TODO(wltiii): refactor the following so as not to get the following errors
-/// TODO(wltiii): The instance member db cannot be accessed in an intializer
-/// TODO(wltiii): The instance member repo cannot be accessed in an intializer
-/// TODO(wltiii): talk with Manoj - perhaps DI for both db and repo?
-final db = FirebaseFirestore.instance;
+final FirebaseFirestore db = FirebaseFirestore.instance;
 final repo = TimeEntryRepositoryImpl(db);
+final logger = Logger(
+  printer: PrettyPrinter(printTime: true),
+);
 
 class TimeTrackerApp extends StatelessWidget {
   final _startTimerAction = StartTimerAction(repo);
@@ -47,29 +47,19 @@ class TimeTrackerApp extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // icon: Icons.play,
-                // icon: Icons.stop,
-                // icon: Icons.restart_alt,
-                // if (timeEntryId == null) {
-                //   showStartButton();
-                // }
-                // else {
-                //   showStopButton();
-                // }
-
-                // startButton(
-                //   ValueNotifier<DateTime?> startTime,
-                //   TextEditingController startTimeController,
-                //   TimeEntryId? runningTimerId,
-                // );
-
-                ElevatedButton(
-                  child: const Text('Start'),
+                OutlinedButton.icon(
+                  icon: const Icon(
+                    Icons.play_arrow,
+                    color: Colors.green,
+                  ),
+                  label: const Text('Start timer'),
                   onPressed: () async {
                     final result = await _startTimerAction();
                     result.fold(
                       //TODO(wltiii): handle failure
-                      (failure) => {},
+                      (failure) => {
+                        logger.e(failure.message),
+                      },
                       (startedTimer) {
                         //TODO(wltiii): use StartTime rather than dateTime???
                         startTime.value = startedTimer.start.dateTime;
@@ -81,10 +71,14 @@ class TimeTrackerApp extends StatelessWidget {
                     );
                   },
                 ),
-
                 const SizedBox(width: 20),
-                ElevatedButton(
-                  child: const Text('Stop'),
+                OutlinedButton.icon(
+                  // ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.stop_circle,
+                    color: Colors.red,
+                  ),
+                  label: const Text('Stop timer'),
                   onPressed: () async {
                     // TODO(wltiii): There should be one button and it switches state as appropriate obviating the need for this check
                     if (runningTimerId != null) {
@@ -117,12 +111,6 @@ class TimeTrackerApp extends StatelessWidget {
                   stopTimeController,
                   elapsedTimeController,
                 ),
-                // const SizedBox(width: 20),
-                // // TODO(wltiii): use ElevatedButton.icon() and have this be the only button
-                // ElevatedButton(
-                //   child: const Text('Start It'),
-                //   onPressed: () {},
-                // ),
               ],
             ),
           ],
@@ -136,7 +124,6 @@ class TimeTrackerApp extends StatelessWidget {
       TextEditingController stopTimeController,
       TextEditingController elapsedTimeController) {
     return Row(
-      // mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -165,39 +152,18 @@ class TimeTrackerApp extends StatelessWidget {
     );
   }
 
-  // Widget startButton(
-  //   TimeEntry startedTimer,
-  //   ValueNotifier<DateTime?> startTime,
-  //   TextEditingController startTimeController,
-  //   TimeEntryId? runningTimerId,
-  // ) {
-  //   return ElevatedButton(
-  //     child: const Text('Start'),
-  //     onPressed: () async {
-  //       final result = await _startTimerAction();
-  //       result.fold(
-  //         //TODO(wltiii): handle failure
-  //         (failure) => {},
-  //         (startedTimer) {
-  //           //TODO(wltiii): use StartTime rather than dateTime???
-  //           startTime.value = startedTimer.start.dateTime;
-  //           runningTimerId = startedTimer.id;
-  //           startTimeController.text =
-  //               _formatDateTime(startedTimer.start.dateTime);
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
   Widget resetButton(
       ValueNotifier<DateTime?> startTime,
       ValueNotifier<DateTime?> stopTime,
       TextEditingController startTimeController,
       TextEditingController stopTimeController,
       TextEditingController elapsedTimeController) {
-    return ElevatedButton(
-      child: const Text('Reset'),
+    return OutlinedButton.icon(
+      icon: const Icon(
+        Icons.restart_alt,
+        color: Colors.blue,
+      ),
+      label: const Text('Reset'),
       onPressed: () {
         startTime.value = null;
         stopTime.value = null;
