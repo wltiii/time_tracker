@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
 import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
+import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 
 import '../infrastructure/repositories/time_entry_repository_impl.dart';
@@ -65,7 +67,7 @@ class TimeTrackerApp extends StatelessWidget {
                         startTime.value = startedTimer.start.dateTime;
                         runningTimerId = startedTimer.id;
                         startTimeController.text =
-                            startedTimer.start.dateTime.toString();
+                            startedTimer.start.toString();
                       },
                     );
                   },
@@ -89,12 +91,11 @@ class TimeTrackerApp extends StatelessWidget {
                           runningTimerId = null;
                           //TODO(wltiii): use EndTime rather than dateTime???
                           stopTime.value = stoppedTimer.end.dateTime;
-                          stopTimeController.text =
-                              stoppedTimer.end.dateTime.toString();
+                          stopTimeController.text = stoppedTimer.end.toString();
                           stopTimeController.text = stoppedTimer.end.toString();
                           elapsedTimeController.text = _getTimeDifference(
-                            stoppedTimer.start.dateTime,
-                            stoppedTimer.end.dateTime,
+                            stoppedTimer.start,
+                            stoppedTimer.end,
                           );
                         },
                       );
@@ -172,7 +173,7 @@ class TimeTrackerApp extends StatelessWidget {
     );
   }
 
-  String _getTimeDifference(DateTime startDateTime, DateTime? endDateTime) {
+  String _getTimeDifference(StartTime startDateTime, EndTime? endDateTime) {
     if (endDateTime != null) {
       Duration difference = endDateTime.difference(startDateTime);
       return '${(difference.inHours).floor().toString().padLeft(2, '0')}:'
