@@ -92,59 +92,6 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
     }
   }
 
-  //TODO(wltiii): remove commented code
-  // @override
-  // Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntriesForTimeEntry({
-  //   required TimeEntry timeEntry,
-  // }) async {
-  //   final timeBoxedEntries = await _getTimeEntriesInRange(
-  //     timeEntryRange: timeEntry.timeEntryRange,
-  //   );
-  //
-  //   if (timeBoxedEntries.isLeft()) {
-  //     return Either.left(timeBoxedEntries.left()!);
-  //   }
-  //
-  //   List<TimeEntry> entries = timeBoxedEntries
-  //       .right()!
-  //       .map((entry) => entry)
-  //       .where((entry) => entry.id != timeEntry.id)
-  //       .toList();
-  //
-  //   return Either.right(
-  //     TimeBoxedEntries(
-  //       start: timeEntry.timeEntryRange.startTime,
-  //       end: timeEntry.timeEntryRange.endTime,
-  //       timeEntryList: entries,
-  //     ),
-  //   );
-  // }
-
-  // Future<Either<Failure, TimeBoxedEntries>> getTimeBoxedEntriesForModel({
-  //   required TimeEntryModel timeEntryModel,
-  // }) async {
-  //   final timeBoxedEntries = await _getTimeEntriesInRange(
-  //     timeEntryRange: timeEntryModel.timeEntryRange,
-  //   );
-  //
-  //   final hasEntries = await _hasTimeEntriesInRange(
-  //     field: 'start',
-  //     timeEntryRange: timeEntryModel.timeEntryRange,
-  //   );
-  //
-  //   if (timeBoxedEntries.isLeft()) {
-  //     return Either.left(timeBoxedEntries.left()!);
-  //   }
-  //
-  //   return Either.right(
-  //     TimeBoxedEntries(
-  //       start: timeEntryModel.timeEntryRange.startTime,
-  //       end: timeEntryModel.timeEntryRange.endTime,
-  //       timeEntryList: timeBoxedEntries.right()!,
-  //     ),
-  //   );
-  // }
-
   @override
   Future<Either<Failure, bool>> overlapsWithEntries({
     required TimeEntryRange timeEntryRange,
