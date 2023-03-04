@@ -55,6 +55,11 @@ class EndTime extends Equatable {
   late final DateTime _value;
 
   bool isAfter(StartTime startTime) => dateTime.isAfter(startTime.dateTime);
+
+  /// difference(StartTime startTime)
+  /// calculates the duration from the given start time
+  Duration difference(StartTime startTime) =>
+      dateTime.difference(startTime.dateTime);
   DateTime get dateTime => _value;
   String get iso8601String => _value.toIso8601String();
   Timestamp get endTimestamp => Timestamp.fromDate(dateTime);
