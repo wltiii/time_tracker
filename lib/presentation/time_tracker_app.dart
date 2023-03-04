@@ -66,7 +66,6 @@ class TimeTrackerApp extends StatelessWidget {
                         runningTimerId = startedTimer.id;
                         startTimeController.text =
                             startedTimer.start.dateTime.toString();
-                        // _formatDateTime(startedTimer.start.dateTime);
                       },
                     );
                   },
@@ -93,7 +92,6 @@ class TimeTrackerApp extends StatelessWidget {
                           stopTimeController.text =
                               stoppedTimer.end.dateTime.toString();
                           stopTimeController.text = stoppedTimer.end.toString();
-                          // _formatDateTime(stoppedTimer.end.dateTime);
                           elapsedTimeController.text = _getTimeDifference(
                             stoppedTimer.start.dateTime,
                             stoppedTimer.end.dateTime,
@@ -184,8 +182,4 @@ class TimeTrackerApp extends StatelessWidget {
       return '';
     }
   }
-
-  // String _formatDateTime(DateTime dateTime) {
-  //   return dateTime.toString() ?? '';
-  // }
 }
