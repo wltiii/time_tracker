@@ -27,8 +27,8 @@ class TimeTrackerApp extends StatelessWidget {
     final stopTimeController = TextEditingController();
     final elapsedTimeController = TextEditingController();
     // TODO(wltiii): Does this have to be nullable? Possibly the Either?
-    final ValueNotifier<DateTime?> startTime = ValueNotifier(null);
-    final ValueNotifier<DateTime?> stopTime = ValueNotifier(null);
+    final ValueNotifier<StartTime?> startTime = ValueNotifier(null);
+    final ValueNotifier<EndTime?> stopTime = ValueNotifier(null);
     TimeEntryId? runningTimerId;
 
     return MaterialApp(
@@ -63,8 +63,7 @@ class TimeTrackerApp extends StatelessWidget {
                         logger.e(failure.message),
                       },
                       (startedTimer) {
-                        //TODO(wltiii): use StartTime rather than dateTime???
-                        startTime.value = startedTimer.start.dateTime;
+                        startTime.value = startedTimer.start;
                         runningTimerId = startedTimer.id;
                         startTimeController.text =
                             startedTimer.start.toString();
@@ -89,8 +88,7 @@ class TimeTrackerApp extends StatelessWidget {
                         (failure) => {},
                         (stoppedTimer) {
                           runningTimerId = null;
-                          //TODO(wltiii): use EndTime rather than dateTime???
-                          stopTime.value = stoppedTimer.end.dateTime;
+                          stopTime.value = stoppedTimer.end;
                           stopTimeController.text = stoppedTimer.end.toString();
                           stopTimeController.text = stoppedTimer.end.toString();
                           elapsedTimeController.text = _getTimeDifference(
@@ -152,8 +150,8 @@ class TimeTrackerApp extends StatelessWidget {
   }
 
   Widget resetButton(
-      ValueNotifier<DateTime?> startTime,
-      ValueNotifier<DateTime?> stopTime,
+      ValueNotifier<StartTime?> startTime,
+      ValueNotifier<EndTime?> stopTime,
       TextEditingController startTimeController,
       TextEditingController stopTimeController,
       TextEditingController elapsedTimeController) {
