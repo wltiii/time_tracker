@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
 import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.dart';
@@ -26,9 +27,10 @@ class TimeTrackerApp extends StatelessWidget {
     final startTimeController = TextEditingController();
     final stopTimeController = TextEditingController();
     final elapsedTimeController = TextEditingController();
-    // TODO(wltiii): Does this have to be nullable? Possibly the Either?
-    final ValueNotifier<StartTime?> startTime = ValueNotifier(null);
-    final ValueNotifier<EndTime?> stopTime = ValueNotifier(null);
+    final ValueNotifier<Option<StartTime>> startTime =
+        ValueNotifier(const Option.none());
+    final ValueNotifier<Option<EndTime>> stopTime =
+        ValueNotifier(const Option.none());
     TimeEntryId? runningTimerId;
 
     return MaterialApp(
@@ -63,7 +65,8 @@ class TimeTrackerApp extends StatelessWidget {
                         logger.e(failure.message),
                       },
                       (startedTimer) {
-                        startTime.value = startedTimer.start;
+                        startTime.value = Option.of(startedTimer.start);
+                        //TODO(wltiii): stop an existing running timer, if any. or, better yet, only allow stopping if running.
                         runningTimerId = startedTimer.id;
                         startTimeController.text =
                             startedTimer.start.toString();
@@ -88,7 +91,7 @@ class TimeTrackerApp extends StatelessWidget {
                         (failure) => {},
                         (stoppedTimer) {
                           runningTimerId = null;
-                          stopTime.value = stoppedTimer.end;
+                          stopTime.value = Option.of(stoppedTimer.end);
                           stopTimeController.text = stoppedTimer.end.toString();
                           stopTimeController.text = stoppedTimer.end.toString();
                           elapsedTimeController.text = _getTimeDifference(
@@ -150,8 +153,8 @@ class TimeTrackerApp extends StatelessWidget {
   }
 
   Widget resetButton(
-      ValueNotifier<StartTime?> startTime,
-      ValueNotifier<EndTime?> stopTime,
+      ValueNotifier<Option<StartTime>> startTime,
+      ValueNotifier<Option<EndTime>> stopTime,
       TextEditingController startTimeController,
       TextEditingController stopTimeController,
       TextEditingController elapsedTimeController) {
@@ -161,9 +164,10 @@ class TimeTrackerApp extends StatelessWidget {
         color: Colors.blue,
       ),
       label: const Text('Reset'),
+      //TODO(wltiii): figure out what to do with a running timer. Or once stopped, move to this to list and clearing running timer entry.
       onPressed: () {
-        startTime.value = null;
-        stopTime.value = null;
+        startTime.value = const Option.none();
+        stopTime.value = const Option.none();
         startTimeController.clear();
         stopTimeController.clear();
         elapsedTimeController.clear();
