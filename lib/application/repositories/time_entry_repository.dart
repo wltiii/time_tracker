@@ -10,14 +10,15 @@ abstract class TimeEntryRepository {
 
   Future<Either<Failure, TimeEntry>> add(TimeEntryModel model);
 
+  // TODO(wltiii): Does the usecase require knowing it was deleted if not found?
+  Future<Either<Failure, bool>> delete(TimeEntry entity);
+
   Future<Either<Failure, TimeEntry>> get(TimeEntryId timeEntryId);
+  Either<Failure, Stream<List<TimeEntry>>> getList();
 
   Future<Either<Failure, bool>> overlapsWithEntries({
     required TimeEntryRange timeEntryRange,
   });
-
-  // TODO(wltiii): Does the usecase require knowing it was deleted if not found?
-  Future<Either<Failure, bool>> delete(TimeEntry entity);
 
   Future<Either<Failure, TimeEntry>> update(TimeEntry entity);
 }

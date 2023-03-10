@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
@@ -68,6 +69,31 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
       } else {
         return Left(NotFoundFailure());
       }
+    } on ServerException catch (e) {
+      logger.e('ServerException -> ${e.message}');
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Either<Failure, Stream<List<TimeEntry>>> getList() {
+    try {
+      late Stream<List<TimeEntry>> stream;
+      final query =
+          firestore.collection(TimeEntryRepository.collection).limit(100);
+      final snapshots = query.snapshots();
+
+      stream = snapshots.map((QuerySnapshot snapshot) {
+        return snapshot.docs.map((QueryDocumentSnapshot documentSnapshot) {
+          return TimeEntry.fromJson(
+            (documentSnapshot.data()! as Map<String, dynamic>)
+              ..addAll({'id': documentSnapshot.id}),
+          );
+        }).toList();
+        // entries.sort((a, b) => b.createdOn!.compareTo(a.createdOn!));
+      });
+      debugPrint('=======getList Stream Initialized');
+      return Right(stream);
     } on ServerException catch (e) {
       logger.e('ServerException -> ${e.message}');
       return Left(ServerFailure());

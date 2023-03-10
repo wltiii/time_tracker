@@ -99,6 +99,39 @@ void main() {
       expect(timeEntry.end, equals(givenEndTime));
     });
 
+    test('returns Either(Right(Stream<List<TimeEntry>>))', () async {
+      final firestore = FakeFirebaseFirestore();
+
+      final repository = TimeEntryRepositoryImpl(firestore);
+      final givenStartTime = StartTime(dateTime: DateTime.now());
+      final givenEndTime = EndTime.endOfTime();
+      final givenModel = TimeEntryModel(
+        start: givenStartTime,
+        end: givenEndTime,
+      );
+
+      final givenAddedTimeEntry = await repository.add(givenModel);
+
+      if (givenAddedTimeEntry.isLeft()) {
+        fail(
+          'Test setup failure. Could not add time entry to '
+          'repository. TimeEntry: $givenModel',
+        );
+      }
+
+      final result = repository.getList();
+
+      if (result.isLeft()) {
+        fail('Get should not return left');
+      }
+
+      // final timeEntry = result.right()!;
+      // expect(timeEntry.id, isNotNull);
+      // // expect(timeEntry.id, equals(TimeEntryId('1')));
+      // expect(timeEntry.start, equals(givenStartTime));
+      // expect(timeEntry.end, equals(givenEndTime));
+    });
+
     test('returns NotFoundFailure', () async {
       final firestore = FakeFirebaseFirestore();
 
