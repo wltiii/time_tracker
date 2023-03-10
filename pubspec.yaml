@@ -35,19 +35,20 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  cloud_firestore: ^4.4.2
   cupertino_icons: ^1.0.5
   equatable: ^2.0.5
-  json_annotation: ^4.7.0
-  unrepresentable_state:
-    git: https://github.com/wltiii/unrepresentable_state
-  fpdart: ^0.4.0
-  firebase_core: ^2.6.1
-  firebase_storage: ^11.0.13
-  cloud_firestore: ^4.4.2
-  logger: ^1.1.0
   fake_cloud_firestore: ^2.4.0
   firebase_auth_mocks: ^0.10.3
+  firebase_core: ^2.6.1
+  firebase_storage: ^11.0.13
+  flutter_riverpod: ^2.3.1
+  fpdart: ^0.4.0
+  json_annotation: ^4.7.0
+  logger: ^1.1.0
   mock_exceptions: ^0.8.2
+  unrepresentable_state:
+    git: https://github.com/wltiii/unrepresentable_state
 
 dev_dependencies:
   flutter_test:
