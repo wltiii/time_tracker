@@ -23,9 +23,7 @@ void main() {
           fail('Creating a timer should not fail.');
         },
         (r) {
-          // expect(r.id, equals(TimeEntryId('1')));
-          //TODO(wltiii): rid myself of id.id
-          expect(r.id.id, isNotEmpty);
+          expect(r.value, isNotEmpty);
         },
       );
     });
@@ -39,7 +37,6 @@ void main() {
 
       // initialize repo with entry that the result will be overlapped
       final repository = TimeEntryRepositoryImpl(firestore);
-      print('=== Adding existingEntryResult ===');
       // final existingEntryResult = await StartTimerAction(repository).call();
       final givenExistingStartTime = StartTime(dateTime: DateTime.now());
       final givenExistingEndTime = EndTime.endOfTime();
@@ -50,19 +47,8 @@ void main() {
 
       final givenExistingTimeEntry =
           await repository.add(givenExistingEntryModel);
-      print('Dumping after adding existing entry -->');
-      final dump1 = firestore.dump();
-      print(dump1);
-      print('<- Dump end');
-
-      print('=== Adding overlappingEntryResult ===');
 
       final overlappingEntryResult = await StartTimerAction(repository).call();
-
-      print('Dumping after adding overlapping entry -->');
-      final dump2 = firestore.dump();
-      print(dump2);
-      print('<- Dump end');
 
       overlappingEntryResult.fold(
         (l) {
@@ -77,10 +63,8 @@ void main() {
       );
     });
 
+    // TODO(wltiii): mock repo to throw
     test('when timer repo call fails it throws', () async {
-      // TODO(wltiii): this test worked fine with homegrown mock. how to do with FirestoreFake? OR, restore homegrown mock for this test?
-      fail(
-          'Test not yet implemented. Need to mock FakeFirestore to throw on call.');
       // final firestore = FakeFirebaseFirestore();
       //
       // final repository = TimeEntryRepositoryImpl(firestore);

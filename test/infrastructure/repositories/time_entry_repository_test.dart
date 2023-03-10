@@ -30,8 +30,7 @@ void main() {
         (r) {
           expect(r.start, equals(givenStartTime));
           expect(r.end, equals(givenEndTime));
-          //TODO(wltiii): rid myself of id.id
-          expect(r.id.id, isNotEmpty);
+          expect(r.value, isNotEmpty);
         },
       );
     });
@@ -100,7 +99,7 @@ void main() {
       expect(timeEntry.end, equals(givenEndTime));
     });
 
-    test('returns Either(Left(Failure))', () async {
+    test('returns NotFoundFailure', () async {
       final firestore = FakeFirebaseFirestore();
 
       final repository = TimeEntryRepositoryImpl(firestore);
@@ -129,5 +128,34 @@ void main() {
         },
       );
     });
+
+    // test('returns ServerFailure', () async {
+    //   final firestore = FakeFirebaseFirestore();
+    //   final repository = TimeEntryRepositoryImpl(firestore);
+    //   final timeEntryId = TimeEntryId('x');
+    //
+    //   final auth = MockFirebaseAuth();
+    //   final doc = firestore
+    //       .collection(TimeEntryRepository.collection)
+    //       .doc(timeEntryId.id);
+    //
+    //   // whenCalling(Invocation.method(#get, timeEntryId.id as Iterable<Object?>?))
+    //   whenCalling(Invocation.method(#get, null))
+    //       // .on(timeEntryId.id)
+    //       // .on(doc)
+    //       .on(auth)
+    //       .thenThrow(FirebaseException(plugin: 'firestore'));
+    //
+    //   final result = await repository.get(timeEntryId);
+    //
+    //   result.fold(
+    //     (l) {
+    //       expect(l, isA<ServerFailure>());
+    //     },
+    //     (r) {
+    //       fail('A ServerFailure should be returned.');
+    //     },
+    //   );
+    // });
   });
 }

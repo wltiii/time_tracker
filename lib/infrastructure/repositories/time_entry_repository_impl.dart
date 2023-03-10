@@ -41,7 +41,7 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
     try {
       await firestore
           .collection(TimeEntryRepository.collection)
-          .doc(timeEntry.id.id)
+          .doc(timeEntry.value)
           .delete()
           .catchError((Object e, StackTrace stackTrace) =>
               throw ServerException(ExceptionMessage(e.toString())));
@@ -79,7 +79,7 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
     try {
       await firestore
           .collection(TimeEntryRepository.collection)
-          .doc(entity.id.id)
+          .doc(entity.value)
           .set(entity.toJson())
           .catchError((Object e, StackTrace stackTrace) =>
               throw ServerException(ExceptionMessage(e.toString())));

@@ -48,6 +48,7 @@ class TimeEntry extends Equatable {
   EndTime get end => _model.end;
   TimeEntryRange get timeEntryRange => _model.timeEntryRange;
   bool get isRunning => end.isInfinite;
+  String get value => _id.id;
 
   bool overlapsWith(other) => _model.overlapsWith(other);
 
