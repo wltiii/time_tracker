@@ -1,0 +1,20 @@
+= time_tracker
+
+Time Tracker is a POC for tracking time.
+It is a sample of an application developed using Domain Driven Design (DDD) application architecture.
+
+== Getting Started
+
+. Download the project.
+. Run `pub get`
+. Install Firebase CLI if not already installed - See: https://firebase.google.com/docs/cli#install-cli-mac-linux
+.. Using npm (there are alternatives): `npm install -g firebase-tools`
+.. Login to Firebase: `firebase login`
+.. Test installation by listing projects: `firebase projects:list`
+. Install FlutterFire Cli: `dart pub global activate flutterfire_cli`
+. Initalize the project
+. Install Firebase Local Emulator Suite: `firebase init emulators`
+.. Command `firebase init` provides the ability to configure features
+.. See: `https://firebase.google.com/docs/emulator-suite/install_and_configure`
+. Start emulators: `firebase emulators:start`
+.. *NOTE:* At the time of this writing emulators cannot be configured for Windows nor Linux.
