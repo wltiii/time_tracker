@@ -1,6 +1,7 @@
 = time_tracker
 
 Time Tracker is a POC for tracking time.
+It is a sample of an application developed using Domain Driven Design (DDD) application architecture.
 
 == Getting Started
 
@@ -16,4 +17,4 @@ Time Tracker is a POC for tracking time.
 .. Command `firebase init` provides the ability to configure features
 .. See: `https://firebase.google.com/docs/emulator-suite/install_and_configure`
 . Start emulators: `firebase emulators:start`
-.. Note that at the time of this writing emulators cannot be configured for Windows nor Linux.
+.. *NOTE:* At the time of this writing emulators cannot be configured for Windows nor Linux.
