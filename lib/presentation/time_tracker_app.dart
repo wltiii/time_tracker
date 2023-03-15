@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
 import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.dart';
@@ -17,6 +18,7 @@ final repo = TimeEntryRepositoryImpl(db);
 final logger = Logger(
   printer: PrettyPrinter(printTime: true),
 );
+final dateFormatter = DateFormat('MM/dd/yyyy HH:MM:ss');
 
 class TimeTrackerApp extends ConsumerWidget {
   final _startTimerAction = StartTimerAction(repo);
@@ -43,7 +45,7 @@ class TimeTrackerApp extends ConsumerWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Difference between DateTime'),
+          title: const Text('Time Entries'),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +56,25 @@ class TimeTrackerApp extends ConsumerWidget {
                   ),
                   error: (error, stacktrace) => Text('Error: $error'),
                   data: (timeEntries) {
-                    return Text('Length of time entries ${timeEntries.length}');
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: timeEntries.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(dateFormatter.format(
+                                      timeEntries[index].start.dateTime)),
+                                  Text(dateFormatter
+                                      .format(timeEntries[index].end.dateTime)),
+                                ],
+                              ),
+                            );
+                          }),
+                    );
                   },
                 ),
             const SizedBox(height: 20),
@@ -72,7 +92,7 @@ class TimeTrackerApp extends ConsumerWidget {
                     Icons.play_arrow,
                     color: Colors.green,
                   ),
-                  label: const Text('Start timer'),
+                  label: const Text('Start'),
                   onPressed: () async {
                     final result = await _startTimerAction();
                     result.fold(
@@ -97,7 +117,7 @@ class TimeTrackerApp extends ConsumerWidget {
                     Icons.stop_circle,
                     color: Colors.red,
                   ),
-                  label: const Text('Stop timer'),
+                  label: const Text('Stop'),
                   onPressed: () async {
                     // TODO(wltiii): There should be one button and it switches state as appropriate obviating the need for this check
                     if (runningTimerId != null) {
@@ -129,6 +149,7 @@ class TimeTrackerApp extends ConsumerWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 50),
           ],
         ),
       ),
@@ -148,7 +169,7 @@ class TimeTrackerApp extends ConsumerWidget {
         const SizedBox(width: 20),
         _showTimeResult(stopTimeController, 'Stop Time'),
         const SizedBox(width: 20),
-        _showTimeResult(elapsedTimeController, 'Elapsed Time'),
+        _showTimeResult(elapsedTimeController, 'Elapsed'),
         const SizedBox(width: 20),
       ],
     );
