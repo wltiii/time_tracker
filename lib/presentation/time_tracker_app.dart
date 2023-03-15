@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
@@ -7,6 +8,7 @@ import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.d
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
+import 'package:time_tracker/infrastructure/providers/provider_of_time_entry_list.dart';
 
 import '../infrastructure/repositories/time_entry_repository_impl.dart';
 
@@ -16,14 +18,19 @@ final logger = Logger(
   printer: PrettyPrinter(printTime: true),
 );
 
-class TimeTrackerApp extends StatelessWidget {
+class TimeTrackerApp extends ConsumerWidget {
   final _startTimerAction = StartTimerAction(repo);
   final _stopTimerAction = StopTimerAction(repo);
 
   TimeTrackerApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.watch(providerOfTimeEntryList);
+
     final startTimeController = TextEditingController();
     final stopTimeController = TextEditingController();
     final elapsedTimeController = TextEditingController();
@@ -41,6 +48,15 @@ class TimeTrackerApp extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            ref.watch(providerOfTimeEntryList).when(
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (error, stacktrace) => Text('Error: $error'),
+                  data: (timeEntries) {
+                    return Text('Length of time entries ${timeEntries.length}');
+                  },
+                ),
             const SizedBox(height: 20),
             timeResultsRow(
               startTimeController,
