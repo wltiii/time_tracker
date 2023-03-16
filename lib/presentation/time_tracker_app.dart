@@ -60,6 +60,13 @@ class TimeTrackerApp extends ConsumerWidget {
                       child: ListView.builder(
                           itemCount: timeEntries.length,
                           itemBuilder: (context, index) {
+                            debugPrint(
+                                '=== when.data: length is index is ${timeEntries.length}');
+                            debugPrint('=== when.data: $index');
+                            debugPrint(
+                                '=== when.data: id is ${timeEntries[index].id}');
+                            //TODO(wltiii): we only need this value when a timer is running. We could swap the button from start to stop based upon whether or not this value is null.
+                            runningTimerId = timeEntries[index].id;
                             return Padding(
                               padding: const EdgeInsets.all(20),
                               child: Row(
@@ -94,16 +101,20 @@ class TimeTrackerApp extends ConsumerWidget {
                   ),
                   label: const Text('Start'),
                   onPressed: () async {
+                    debugPrint('=== Start button pressed.');
                     final result = await _startTimerAction();
+                    debugPrint('=== returned from startTimerAction().');
                     result.fold(
                       //TODO(wltiii): handle failure
                       (failure) => {
                         logger.e(failure.message),
                       },
                       (startedTimer) {
+                        debugPrint('=== Timer started.');
                         startTime.value = Option.of(startedTimer.start);
                         //TODO(wltiii): stop an existing running timer, if any. or, better yet, only allow stopping if running.
                         runningTimerId = startedTimer.id;
+                        debugPrint('=== Started timer is $runningTimerId');
                         startTimeController.text =
                             startedTimer.start.toString();
                       },
@@ -120,11 +131,15 @@ class TimeTrackerApp extends ConsumerWidget {
                   label: const Text('Stop'),
                   onPressed: () async {
                     // TODO(wltiii): There should be one button and it switches state as appropriate obviating the need for this check
+                    debugPrint(
+                        '=== Stop button pressed. runningTimerId=$runningTimerId');
                     if (runningTimerId != null) {
                       final result = await _stopTimerAction(runningTimerId!);
                       result.fold(
                         //TODO(wltiii): handle failure
-                        (failure) => {},
+                        (failure) => {
+                          logger.e(failure.message),
+                        },
                         (stoppedTimer) {
                           runningTimerId = null;
                           stopTime.value = Option.of(stoppedTimer.end);

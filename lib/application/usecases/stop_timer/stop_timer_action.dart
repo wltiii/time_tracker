@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/core/extensions/either.dart';
@@ -15,6 +16,7 @@ class StopTimerAction implements StopTimerUseCaseAction {
 
   @override
   Future<Either<Failure, TimeEntry>> call(TimeEntryId timeEntryId) async {
+    debugPrint('=== StopTimerAction.call($timeEntryId)');
     final eitherExistingEntry = await _repository.get(timeEntryId);
     if (eitherExistingEntry.isLeft()) {
       return Left(eitherExistingEntry.left()!);
