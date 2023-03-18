@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
@@ -18,6 +17,7 @@ final repo = TimeEntryRepositoryImpl(db);
 final logger = Logger(
   printer: PrettyPrinter(printTime: true),
 );
+// TODO(wltiii) should this be an extension to datetime?
 final dateFormatter = DateFormat('MM/dd/yyyy HH:MM:ss');
 
 class TimeTrackerApp extends ConsumerWidget {
@@ -33,13 +33,6 @@ class TimeTrackerApp extends ConsumerWidget {
   ) {
     ref.watch(providerOfTimeEntryList);
 
-    final startTimeController = TextEditingController();
-    final stopTimeController = TextEditingController();
-    final elapsedTimeController = TextEditingController();
-    final ValueNotifier<Option<StartTime>> startTime =
-        ValueNotifier(const Option.none());
-    final ValueNotifier<Option<EndTime>> stopTime =
-        ValueNotifier(const Option.none());
     TimeEntryId? runningTimerId;
 
     return MaterialApp(
@@ -51,49 +44,59 @@ class TimeTrackerApp extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ref.watch(providerOfTimeEntryList).when(
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  loading: () {
+                    runningTimerId = null;
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
                   error: (error, stacktrace) => Text('Error: $error'),
                   data: (timeEntries) {
+                    debugPrint(
+                      '=== when.data: runningTimerId=$runningTimerId',
+                    );
                     return Expanded(
                       child: ListView.builder(
-                          itemCount: timeEntries.length,
-                          itemBuilder: (context, index) {
-                            debugPrint(
-                                '=== when.data: length is index is ${timeEntries.length}');
-                            debugPrint('=== when.data: $index');
-                            debugPrint(
-                                '=== when.data: id is ${timeEntries[index].id}');
-                            //TODO(wltiii): we only need this value when a timer is running. We could swap the button from start to stop based upon whether or not this value is null.
-                            runningTimerId = timeEntries[index].id;
-                            return Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(dateFormatter.format(
+                        itemCount: timeEntries.length,
+                        itemBuilder: (context, index) {
+                          // //TODO(wltiii): we only need this value when a timer is running. We could swap the button from start to stop based upon whether or not this value is null.
+                          runningTimerId =
+                              (index == 0 && timeEntries[0].end.isInfinite)
+                                  ? timeEntries[0].id
+                                  : runningTimerId;
+
+                          return Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: timeResultsRow(
+                              TextEditingController(
+                                  text: dateFormatter.format(
                                       timeEntries[index].start.dateTime)),
-                                  Text(dateFormatter
-                                      .format(timeEntries[index].end.dateTime)),
-                                ],
-                              ),
-                            );
-                          }),
+                              timeEntries[index].end.isInfinite
+                                  ? TextEditingController(text: '')
+                                  : TextEditingController(
+                                      text: dateFormatter.format(
+                                          timeEntries[index].end.dateTime)),
+                              timeEntries[index].end.isInfinite
+                                  ? TextEditingController(text: '')
+                                  : TextEditingController(
+                                      text: _getTimeDifference(
+                                        timeEntries[index].start,
+                                        timeEntries[index].end,
+                                      ),
+                                    ),
+                            ),
+                          );
+                        },
+                      ),
                     );
                   },
                 ),
             const SizedBox(height: 20),
-            timeResultsRow(
-              startTimeController,
-              stopTimeController,
-              elapsedTimeController,
-            ),
-            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // TODO(wltiii): use method in order to separate concern
+                // startButton(),
                 OutlinedButton.icon(
                   icon: const Icon(
                     Icons.play_arrow,
@@ -101,29 +104,16 @@ class TimeTrackerApp extends ConsumerWidget {
                   ),
                   label: const Text('Start'),
                   onPressed: () async {
-                    debugPrint('=== Start button pressed.');
-                    final result = await _startTimerAction();
-                    debugPrint('=== returned from startTimerAction().');
-                    result.fold(
-                      //TODO(wltiii): handle failure
-                      (failure) => {
-                        logger.e(failure.message),
-                      },
-                      (startedTimer) {
-                        debugPrint('=== Timer started.');
-                        startTime.value = Option.of(startedTimer.start);
-                        //TODO(wltiii): stop an existing running timer, if any. or, better yet, only allow stopping if running.
-                        runningTimerId = startedTimer.id;
-                        debugPrint('=== Started timer is $runningTimerId');
-                        startTimeController.text =
-                            startedTimer.start.toString();
-                      },
-                    );
+                    debugPrint(
+                        '=== Start button pressed. runningTimerId=$runningTimerId');
+                    await _startTimerAction();
                   },
                 ),
                 const SizedBox(width: 20),
+
+                // TODO(wltiii): use method in order to separate concern
+                // await stopButton(runningTimerId),
                 OutlinedButton.icon(
-                  // ElevatedButton.icon(
                   icon: const Icon(
                     Icons.stop_circle,
                     color: Colors.red,
@@ -134,33 +124,11 @@ class TimeTrackerApp extends ConsumerWidget {
                     debugPrint(
                         '=== Stop button pressed. runningTimerId=$runningTimerId');
                     if (runningTimerId != null) {
-                      final result = await _stopTimerAction(runningTimerId!);
-                      result.fold(
-                        //TODO(wltiii): handle failure
-                        (failure) => {
-                          logger.e(failure.message),
-                        },
-                        (stoppedTimer) {
-                          runningTimerId = null;
-                          stopTime.value = Option.of(stoppedTimer.end);
-                          stopTimeController.text = stoppedTimer.end.toString();
-                          stopTimeController.text = stoppedTimer.end.toString();
-                          elapsedTimeController.text = _getTimeDifference(
-                            stoppedTimer.start,
-                            stoppedTimer.end,
-                          );
-                        },
-                      );
+                      // TODO(wltiii): verify the logic above will set this to null. I want to swap buttons based on this value.
+                      // runningTimerId = null;
+                      await _stopTimerAction(runningTimerId!);
                     }
                   },
-                ),
-                const SizedBox(width: 20),
-                resetButton(
-                  startTime,
-                  stopTime,
-                  startTimeController,
-                  stopTimeController,
-                  elapsedTimeController,
                 ),
               ],
             ),
@@ -168,6 +136,75 @@ class TimeTrackerApp extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<Widget> startButton() async {
+    return OutlinedButton.icon(
+      icon: const Icon(
+        Icons.play_arrow,
+        color: Colors.green,
+      ),
+      label: const Text('Start'),
+      onPressed: () async {
+        // debugPrint(
+        //     '=== Start button pressed. runningTimerId=$runningTimerId');
+        await _startTimerAction();
+        // final result = await _startTimerAction();
+        debugPrint('=== DO I EVER GET HERE??? after _startTimerAction ===');
+        // result.fold(
+        //   //TODO(wltiii): handle failure
+        //   (failure) => {
+        //     logger.e(failure.message),
+        //   },
+        //   (startedTimer) {
+        //     debugPrint('=== Timer started.');
+        //     startTime.value = Option.of(startedTimer.start);
+        //     //TODO(wltiii): stop an existing running timer, if any. or, better yet, only allow stopping if running.
+        //     runningTimerId = startedTimer.id;
+        //     debugPrint('=== Started timer is $runningTimerId');
+        //     startTimeController.text =
+        //         startedTimer.start.toString();
+        //   },
+        // );
+      },
+    );
+  }
+
+  Future<Widget> stopButton(TimeEntryId? runningTimerId) async {
+    return OutlinedButton.icon(
+      icon: const Icon(
+        Icons.stop_circle,
+        color: Colors.red,
+      ),
+      label: const Text('Stop'),
+      onPressed: () async {
+        // TODO(wltiii): There should be one button and it switches state as appropriate obviating the need for this check
+        debugPrint('=== Stop button pressed. runningTimerId=$runningTimerId');
+        if (runningTimerId != null) {
+          // runningTimerId = null;
+          await _stopTimerAction(runningTimerId!);
+          // final result = await _stopTimerAction(runningTimerId!);
+          debugPrint('=== DO I EVER GET HERE after _stopTimerAction ??? ===');
+
+          //   result.fold(
+          //     //TODO(wltiii): handle failure
+          //     (failure) => {
+          //       logger.e(failure.message),
+          //     },
+          //     (stoppedTimer) {
+          //       runningTimerId = null;
+          //       stopTime.value = Option.of(stoppedTimer.end);
+          //       stopTimeController.text = stoppedTimer.end.toString();
+          //       stopTimeController.text = stoppedTimer.end.toString();
+          //       elapsedTimeController.text = _getTimeDifference(
+          //         stoppedTimer.start,
+          //         stoppedTimer.end,
+          //       );
+          //     },
+          //   );
+        }
+      },
     );
   }
 
@@ -190,6 +227,7 @@ class TimeTrackerApp extends ConsumerWidget {
     );
   }
 
+  //TODO(wltiii): do we really need hint text with the current changes? Row headers seem better.
   Widget _showTimeResult(TextEditingController? controller, String hintText) {
     return Expanded(
       child: TextFormField(
@@ -204,37 +242,11 @@ class TimeTrackerApp extends ConsumerWidget {
     );
   }
 
-  Widget resetButton(
-      ValueNotifier<Option<StartTime>> startTime,
-      ValueNotifier<Option<EndTime>> stopTime,
-      TextEditingController startTimeController,
-      TextEditingController stopTimeController,
-      TextEditingController elapsedTimeController) {
-    return OutlinedButton.icon(
-      icon: const Icon(
-        Icons.restart_alt,
-        color: Colors.blue,
-      ),
-      label: const Text('Reset'),
-      //TODO(wltiii): figure out what to do with a running timer. Or once stopped, move to this to list and clearing running timer entry.
-      onPressed: () {
-        startTime.value = const Option.none();
-        stopTime.value = const Option.none();
-        startTimeController.clear();
-        stopTimeController.clear();
-        elapsedTimeController.clear();
-      },
-    );
-  }
-
-  String _getTimeDifference(StartTime startDateTime, EndTime? endDateTime) {
-    if (endDateTime != null) {
-      Duration difference = endDateTime.difference(startDateTime);
-      return '${(difference.inHours).floor().toString().padLeft(2, '0')}:'
-          '${(difference.inMinutes % 60).floor().toString().padLeft(2, '0')}:'
-          '${(difference.inSeconds % 60).floor().toString().padLeft(2, '0')}';
-    } else {
-      return '';
-    }
+  //TODO(wltiii): it would be nice to have a running timer (streaming the diff), not adding it to the streamed list until stopped
+  String _getTimeDifference(StartTime startDateTime, EndTime endDateTime) {
+    Duration difference = endDateTime.difference(startDateTime);
+    return '${(difference.inHours).floor().toString().padLeft(2, '0')}:'
+        '${(difference.inMinutes % 60).floor().toString().padLeft(2, '0')}:'
+        '${(difference.inSeconds % 60).floor().toString().padLeft(2, '0')}';
   }
 }
