@@ -79,8 +79,10 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
   Either<Failure, Stream<List<TimeEntry>>> getList() {
     try {
       late Stream<List<TimeEntry>> stream;
-      final query =
-          firestore.collection(TimeEntryRepository.collection).limit(100);
+      final query = firestore
+          .collection(TimeEntryRepository.collection)
+          .orderBy('end', descending: true)
+          .limit(100);
       final snapshots = query.snapshots();
 
       stream = snapshots.map((QuerySnapshot snapshot) {
