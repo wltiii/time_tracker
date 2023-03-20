@@ -301,10 +301,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_auth_mocks
-      sha256: c4398019066d1bd0e91a0ba6067272a3a60c7ff8b211aa9c2139b273abe98914
+      sha256: f3b7ff266416facb7dec96be76d06ad3aedd4f9fe0d2ffaba11cb3f5e48ecc12
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.3"
+    version: "0.11.0"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
@@ -412,10 +412,10 @@ packages:
     dependency: "direct main"
     description:
       name: fpdart
-      sha256: "21053522d5a97347737525c84e8839340a0af3c0ef592f98fac37380fdd6a57b"
+      sha256: "40dfb6f837ed1a24bc379083b564c196e6d771d713c9641cc30402a1fb989926"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.1"
+    version: "0.5.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -839,5 +839,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.19.0 <4.0.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.0.0"

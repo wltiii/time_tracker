@@ -92,11 +92,11 @@ class TimeTrackerApp extends ConsumerWidget {
                   },
                 ),
             const SizedBox(height: 20),
+
+            // Action Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // TODO(wltiii): use method in order to separate concern
-                // startButton(),
                 OutlinedButton.icon(
                   icon: const Icon(
                     Icons.play_arrow,
@@ -110,9 +110,6 @@ class TimeTrackerApp extends ConsumerWidget {
                   },
                 ),
                 const SizedBox(width: 20),
-
-                // TODO(wltiii): use method in order to separate concern
-                // await stopButton(runningTimerId),
                 OutlinedButton.icon(
                   icon: const Icon(
                     Icons.stop_circle,
@@ -136,75 +133,6 @@ class TimeTrackerApp extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Future<Widget> startButton() async {
-    return OutlinedButton.icon(
-      icon: const Icon(
-        Icons.play_arrow,
-        color: Colors.green,
-      ),
-      label: const Text('Start'),
-      onPressed: () async {
-        // debugPrint(
-        //     '=== Start button pressed. runningTimerId=$runningTimerId');
-        await _startTimerAction();
-        // final result = await _startTimerAction();
-        debugPrint('=== DO I EVER GET HERE??? after _startTimerAction ===');
-        // result.fold(
-        //   //TODO(wltiii): handle failure
-        //   (failure) => {
-        //     logger.e(failure.message),
-        //   },
-        //   (startedTimer) {
-        //     debugPrint('=== Timer started.');
-        //     startTime.value = Option.of(startedTimer.start);
-        //     //TODO(wltiii): stop an existing running timer, if any. or, better yet, only allow stopping if running.
-        //     runningTimerId = startedTimer.id;
-        //     debugPrint('=== Started timer is $runningTimerId');
-        //     startTimeController.text =
-        //         startedTimer.start.toString();
-        //   },
-        // );
-      },
-    );
-  }
-
-  Future<Widget> stopButton(TimeEntryId? runningTimerId) async {
-    return OutlinedButton.icon(
-      icon: const Icon(
-        Icons.stop_circle,
-        color: Colors.red,
-      ),
-      label: const Text('Stop'),
-      onPressed: () async {
-        // TODO(wltiii): There should be one button and it switches state as appropriate obviating the need for this check
-        debugPrint('=== Stop button pressed. runningTimerId=$runningTimerId');
-        if (runningTimerId != null) {
-          // runningTimerId = null;
-          await _stopTimerAction(runningTimerId!);
-          // final result = await _stopTimerAction(runningTimerId!);
-          debugPrint('=== DO I EVER GET HERE after _stopTimerAction ??? ===');
-
-          //   result.fold(
-          //     //TODO(wltiii): handle failure
-          //     (failure) => {
-          //       logger.e(failure.message),
-          //     },
-          //     (stoppedTimer) {
-          //       runningTimerId = null;
-          //       stopTime.value = Option.of(stoppedTimer.end);
-          //       stopTimeController.text = stoppedTimer.end.toString();
-          //       stopTimeController.text = stoppedTimer.end.toString();
-          //       elapsedTimeController.text = _getTimeDifference(
-          //         stoppedTimer.start,
-          //         stoppedTimer.end,
-          //       );
-          //     },
-          //   );
-        }
-      },
     );
   }
 
