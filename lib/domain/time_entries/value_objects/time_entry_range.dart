@@ -6,6 +6,7 @@ import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 
 @immutable
 class TimeEntryRange extends DateTimeRange {
+  //TODO(wltiii): this allows an invalid state to be constructed. Verify that end is after start
   TimeEntryRange({
     required this.startTime,
     required this.endTime,
@@ -23,12 +24,9 @@ class TimeEntryRange extends DateTimeRange {
         );
 
   /// The start of the range of dates.
-  // final StartTime startTime;
-  // StartTime get startTime => StartTime(dateTime: super.start);
   final StartTime startTime;
 
   /// The end of the range of dates.
-  // EndTime get endTime => EndTime(dateTime: super.start);
   final EndTime endTime;
 
   Timestamp get startTimestamp => Timestamp.fromDate(startTime.dateTime);

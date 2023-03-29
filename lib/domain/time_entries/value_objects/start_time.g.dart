@@ -6,12 +6,7 @@ part of 'start_time.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-StartTime _$StartTimeFromJson(Map<String, dynamic> json) => StartTime(
-      dateTime: json['dateTime'] == null
-          ? null
-          : DateTime.parse(json['dateTime'] as String),
-    );
+StartTime _$StartTimeFromJson(Map<String, dynamic> json) => StartTime();
 
-Map<String, dynamic> _$StartTimeToJson(StartTime instance) => <String, dynamic>{
-      'dateTime': instance.dateTime.toIso8601String(),
-    };
+Map<String, dynamic> _$StartTimeToJson(StartTime instance) =>
+    <String, dynamic>{};

@@ -89,7 +89,7 @@ void main() {
 
   group('function', () {
     test('isAfter returns true', () {
-      var givenStartTime = StartTime(dateTime: DateTime.now());
+      var givenStartTime = StartTime(startTime: DateTime.now());
       var result = EndTime.now();
 
       expect(result.isAfter(givenStartTime), isTrue);
@@ -97,7 +97,7 @@ void main() {
 
     test('isAfter returns false', () {
       var result = EndTime.now();
-      var givenStartTime = StartTime(dateTime: DateTime.now());
+      var givenStartTime = StartTime(startTime: DateTime.now());
 
       expect(result.isAfter(givenStartTime), isFalse);
     });

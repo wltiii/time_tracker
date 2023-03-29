@@ -82,7 +82,7 @@ void main() {
       final repository = TimeEntryRepositoryImpl(firestore);
 
       final givenStoppedTimeEntryStartTime = StartTime(
-        dateTime: DateTime.now().subtract(
+        startTime: DateTime.now().subtract(
           const Duration(days: 7),
         ),
       );

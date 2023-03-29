@@ -11,7 +11,7 @@ void main() {
   group('construction', () {
     test('running time entry', () {
       final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
-      final startTime = StartTime(dateTime: startDateTime);
+      final startTime = StartTime(startTime: startDateTime);
       final endTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
@@ -35,15 +35,15 @@ void main() {
 
     test('completed time entry', () {
       final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
-      final startTime = StartTime(dateTime: startDateTime);
-      final endDateTime = DateTime.now();
-      final endTime = EndTime(dateTime: endDateTime);
+      final startTime = StartTime(startTime: startDateTime);
+      final dateTime = DateTime.now();
+      final endTime = EndTime(dateTime: dateTime);
       final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
       final result = TimeEntry(
         id: TimeEntryId('abc123'),
         start: startDateTime,
-        end: endDateTime,
+        end: dateTime,
       );
 
       expect(result, isA<TimeEntry>());
@@ -60,9 +60,9 @@ void main() {
 
     test('from model', () {
       final startDateTime = DateTime.now().subtract(const Duration(hours: 1));
-      final startTime = StartTime(dateTime: startDateTime);
-      final endDateTime = DateTime.now();
-      final endTime = EndTime(dateTime: endDateTime);
+      final startTime = StartTime(startTime: startDateTime);
+      final dateTime = DateTime.now();
+      final endTime = EndTime(dateTime: dateTime);
       final givenModel = TimeEntryModel(start: startTime, end: endTime);
 
       final result = TimeEntry.fromModel(
@@ -89,8 +89,8 @@ void main() {
       final nowLessTwoHours = now.subtract(const Duration(hours: 2));
       final nowLessThreeHours = now.subtract(const Duration(hours: 3));
 
-      final givenStartTime = StartTime(dateTime: nowLessTwoHours);
-      final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
+      final givenStartTime = StartTime(startTime: nowLessTwoHours);
+      final givenOtherStartTime = StartTime(startTime: nowLessThreeHours);
       final givenEndTime = EndTime(dateTime: now);
       final givenOtherEndTime = EndTime(dateTime: nowLessOneHour);
 
@@ -116,9 +116,9 @@ void main() {
       final nowLessTwoHours = now.subtract(const Duration(hours: 2));
       final nowLessThreeHours = now.subtract(const Duration(hours: 3));
 
-      final givenStartTime = StartTime(dateTime: nowLessOneHour);
+      final givenStartTime = StartTime(startTime: nowLessOneHour);
       final givenEndTime = EndTime(dateTime: now);
-      final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
+      final givenOtherStartTime = StartTime(startTime: nowLessThreeHours);
       final givenOtherEndTime = EndTime(dateTime: nowLessTwoHours);
 
       final otherTimeRange = TimeEntryRange.fromTimeEntryModel(
@@ -144,7 +144,7 @@ void main() {
           DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
       final givenEndTimeString = DateTime.now().toIso8601String();
       final startTime =
-          StartTime(dateTime: DateTime.parse(givenStartTimeString));
+          StartTime(startTime: DateTime.parse(givenStartTimeString));
       final endTime = EndTime(dateTime: DateTime.parse(givenEndTimeString));
 
       final expectedTimeEntry = TimeEntry(
@@ -169,7 +169,7 @@ void main() {
           DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
       final givenEndTimeString = DateTime.now().toIso8601String();
       final startTime =
-          StartTime(dateTime: DateTime.parse(givenStartTimeString));
+          StartTime(startTime: DateTime.parse(givenStartTimeString));
       final endTime = EndTime(dateTime: DateTime.parse(givenEndTimeString));
 
       final givenTimeEntry = TimeEntry(

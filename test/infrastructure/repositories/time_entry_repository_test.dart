@@ -14,7 +14,7 @@ void main() {
       final firestore = FakeFirebaseFirestore();
 
       final repository = TimeEntryRepositoryImpl(firestore);
-      var givenStartTime = StartTime(dateTime: DateTime.now());
+      var givenStartTime = StartTime(startTime: DateTime.now());
       var givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
         start: givenStartTime,
@@ -42,7 +42,7 @@ void main() {
 
       final repository = TimeEntryRepositoryImpl(firestore);
       final givenModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime.now()),
+        start: StartTime(startTime: DateTime.now()),
         end: EndTime.endOfTime(),
       );
 
@@ -70,7 +70,7 @@ void main() {
       final firestore = FakeFirebaseFirestore();
 
       final repository = TimeEntryRepositoryImpl(firestore);
-      final givenStartTime = StartTime(dateTime: DateTime.now());
+      final givenStartTime = StartTime(startTime: DateTime.now());
       final givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
         start: givenStartTime,
@@ -103,7 +103,7 @@ void main() {
       final firestore = FakeFirebaseFirestore();
 
       final repository = TimeEntryRepositoryImpl(firestore);
-      final givenStartTime = StartTime(dateTime: DateTime.now());
+      final givenStartTime = StartTime(startTime: DateTime.now());
       final givenEndTime = EndTime.endOfTime();
       final givenModel = TimeEntryModel(
         start: givenStartTime,
@@ -137,7 +137,7 @@ void main() {
 
       final repository = TimeEntryRepositoryImpl(firestore);
       final givenModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime.now()),
+        start: StartTime(startTime: DateTime.now()),
         end: EndTime.endOfTime(),
       );
 

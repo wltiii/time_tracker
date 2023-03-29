@@ -23,7 +23,7 @@ class TimeEntry extends Equatable {
     required DateTime end,
   })  : _id = id,
         _model = TimeEntryModel(
-          start: StartTime(dateTime: start),
+          start: StartTime(startTime: start),
           end: EndTime(dateTime: end),
         );
 

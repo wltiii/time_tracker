@@ -9,7 +9,7 @@ void main() {
   group('construction', () {
     test('from default', () {
       final givenStartTime = StartTime(
-        dateTime: DateTime.now().subtract(
+        startTime: DateTime.now().subtract(
           const Duration(
             hours: 1,
           ),
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('does not construct when end is not greater than start', () {
-      final startTime = StartTime(dateTime: DateTime.now());
+      final startTime = StartTime(startTime: DateTime.now());
       final endTime = EndTime(
         dateTime: DateTime.now().subtract(
           const Duration(hours: 1),
@@ -59,12 +59,12 @@ void main() {
     test('overlaps', () {
       final givenPersistedTimeRange = TimeEntryRange.fromTimeEntryModel(
         timeEntryModel: TimeEntryModel(
-          start: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 21)),
+          start: StartTime(startTime: DateTime(2023, 02, 10, 16, 50, 21)),
           end: EndTime.endOfTime(),
         ),
       );
       final givenOverlappingModel = TimeEntryModel(
-        start: StartTime(dateTime: DateTime(2023, 02, 10, 16, 50, 22)),
+        start: StartTime(startTime: DateTime(2023, 02, 10, 16, 50, 22)),
         end: EndTime.endOfTime(),
       );
 
@@ -78,9 +78,9 @@ void main() {
       final nowLessTwoHours = now.subtract(const Duration(hours: 2));
       final nowLessThreeHours = now.subtract(const Duration(hours: 3));
 
-      final givenStartTime = StartTime(dateTime: nowLessOneHour);
+      final givenStartTime = StartTime(startTime: nowLessOneHour);
       final givenEndTime = EndTime(dateTime: now);
-      final givenOtherStartTime = StartTime(dateTime: nowLessThreeHours);
+      final givenOtherStartTime = StartTime(startTime: nowLessThreeHours);
       final givenOtherEndTime = EndTime(dateTime: nowLessTwoHours);
 
       final givenTimeEntryModel = TimeEntryModel(
@@ -108,7 +108,7 @@ void main() {
   group('equality', () {
     test('same values are equal', () {
       final startTime = StartTime(
-        dateTime: DateTime.now().subtract(
+        startTime: DateTime.now().subtract(
           const Duration(
             hours: 1,
           ),
@@ -124,7 +124,7 @@ void main() {
 
     test('different values are not equal', () {
       final startTime = StartTime(
-        dateTime: DateTime.now().subtract(
+        startTime: DateTime.now().subtract(
           const Duration(
             hours: 1,
           ),
@@ -133,7 +133,7 @@ void main() {
       final endTime = EndTime(dateTime: DateTime.now());
 
       final anotherStartTime = StartTime(
-        dateTime: DateTime.now().subtract(
+        startTime: DateTime.now().subtract(
           const Duration(
             hours: 1,
           ),
@@ -172,7 +172,7 @@ void main() {
   group('json', () {
     test('from', () {
       final startTime =
-          StartTime(dateTime: DateTime.parse('2023-01-24T08:02:52.360342'));
+          StartTime(startTime: DateTime.parse('2023-01-24T08:02:52.360342'));
       final endTime =
           EndTime(dateTime: DateTime.parse('2023-01-24T17:01:36.140342'));
 
@@ -194,7 +194,7 @@ void main() {
 
     test('to', () {
       final startTime = StartTime(
-        dateTime: DateTime.parse('2023-01-24T08:02:52.360342'),
+        startTime: DateTime.parse('2023-01-24T08:02:52.360342'),
       );
       final endTime = EndTime(
         dateTime: DateTime.parse('2023-01-24T17:01:36.140342'),

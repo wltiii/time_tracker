@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:time_tracker/domain/core/helpers/date_time_helper.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
@@ -13,6 +14,7 @@ part 'end_time.g.dart';
 /// Throws [ValueException] when the dateTime passed is more than seven days
 /// in the past or if it is greater than the current time.
 @JsonSerializable()
+@immutable
 class EndTime extends Equatable {
   EndTime({
     required DateTime dateTime,

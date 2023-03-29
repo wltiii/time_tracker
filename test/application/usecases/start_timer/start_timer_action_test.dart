@@ -38,7 +38,7 @@ void main() {
       // initialize repo with entry that the result will be overlapped
       final repository = TimeEntryRepositoryImpl(firestore);
       // final existingEntryResult = await StartTimerAction(repository).call();
-      final givenExistingStartTime = StartTime(dateTime: DateTime.now());
+      final givenExistingStartTime = StartTime(startTime: DateTime.now());
       final givenExistingEndTime = EndTime.endOfTime();
       final givenExistingEntryModel = TimeEntryModel(
         start: givenExistingStartTime,

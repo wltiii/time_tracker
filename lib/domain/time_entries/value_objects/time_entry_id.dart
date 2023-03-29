@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 part 'time_entry_id.g.dart';
 
 @JsonSerializable()
+@immutable
 class TimeEntryId extends Id {
   TimeEntryId(String value) : super(value);
 

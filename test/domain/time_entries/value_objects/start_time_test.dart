@@ -18,7 +18,7 @@ void main() {
     test('from valid datetime arg', () {
       var startTime = DateTime.now().subtract(const Duration(hours: 1));
 
-      var result = StartTime(dateTime: startTime);
+      var result = StartTime(startTime: startTime);
 
       expect(result.dateTime, equals(startTime));
     });
@@ -37,7 +37,7 @@ void main() {
       var futureDate = DateTime.now().add(const Duration(days: 365));
 
       expect(
-        () => StartTime(dateTime: futureDate),
+        () => StartTime(startTime: futureDate),
         throwsA(
           predicate(
             (e) =>
