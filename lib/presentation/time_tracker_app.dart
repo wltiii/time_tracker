@@ -19,12 +19,10 @@ final logger = Logger(
 );
 // TODO(wltiii) should this be an extension to datetime?
 final dateFormatter = DateFormat('MM/dd/yyyy HH:MM:ss');
+final providerOfRunningTimerId = StateProvider<TimeEntryId?>((ref) => null);
 
 class TimeTrackerApp extends ConsumerWidget {
-  final _startTimerAction = StartTimerAction(repo);
-  final _stopTimerAction = StopTimerAction(repo);
-
-  TimeTrackerApp({super.key});
+  const TimeTrackerApp({super.key});
 
   @override
   Widget build(
@@ -53,18 +51,18 @@ class TimeTrackerApp extends ConsumerWidget {
                   error: (error, stacktrace) => Text('Error: $error'),
                   data: (timeEntries) {
                     debugPrint(
-                      '=== when.data: runningTimerId=$runningTimerId',
+                      '=== when.data: runningTimerId',
                     );
+                    if (timeEntries.isNotEmpty) {
+                      debugPrint(
+                        '=== when.data: ${timeEntries[0]}',
+                      );
+                      runningTimerId = timeEntries[0].id;
+                    }
                     return Expanded(
                       child: ListView.builder(
                         itemCount: timeEntries.length,
                         itemBuilder: (context, index) {
-                          // //TODO(wltiii): we only need this value when a timer is running. We could swap the button from start to stop based upon whether or not this value is null.
-                          runningTimerId =
-                              (index == 0 && timeEntries[0].end.isInfinite)
-                                  ? timeEntries[0].id
-                                  : runningTimerId;
-
                           return Padding(
                             padding: const EdgeInsets.all(20),
                             child: timeResultsRow(
@@ -96,37 +94,8 @@ class TimeTrackerApp extends ConsumerWidget {
             // Action Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton.icon(
-                  icon: const Icon(
-                    Icons.play_arrow,
-                    color: Colors.green,
-                  ),
-                  label: const Text('Start'),
-                  onPressed: () async {
-                    debugPrint(
-                        '=== Start button pressed. runningTimerId=$runningTimerId');
-                    await _startTimerAction();
-                  },
-                ),
-                const SizedBox(width: 20),
-                OutlinedButton.icon(
-                  icon: const Icon(
-                    Icons.stop_circle,
-                    color: Colors.red,
-                  ),
-                  label: const Text('Stop'),
-                  onPressed: () async {
-                    // TODO(wltiii): There should be one button and it switches state as appropriate obviating the need for this check
-                    debugPrint(
-                        '=== Stop button pressed. runningTimerId=$runningTimerId');
-                    if (runningTimerId != null) {
-                      // TODO(wltiii): verify the logic above will set this to null. I want to swap buttons based on this value.
-                      // runningTimerId = null;
-                      await _stopTimerAction(runningTimerId!);
-                    }
-                  },
-                ),
+              children: const [
+                StartStopButton(),
               ],
             ),
             const SizedBox(height: 50),
@@ -176,5 +145,38 @@ class TimeTrackerApp extends ConsumerWidget {
     return '${(difference.inHours).floor().toString().padLeft(2, '0')}:'
         '${(difference.inMinutes % 60).floor().toString().padLeft(2, '0')}:'
         '${(difference.inSeconds % 60).floor().toString().padLeft(2, '0')}';
+  }
+}
+
+class StartStopButton extends ConsumerWidget {
+  const StartStopButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final runningTimerId = ref.watch(providerOfRunningTimerId);
+    debugPrint('=== Start button pressed. runningTimerId=$runningTimerId');
+    return OutlinedButton.icon(
+      icon: const Icon(
+        Icons.play_arrow,
+        color: Colors.green,
+      ),
+      label: runningTimerId == null ? const Text('Start') : const Text('Stop'),
+      onPressed: () async {
+        final _startTimerAction = StartTimerAction(repo);
+        if (runningTimerId == null) {
+          final result = await _startTimerAction();
+          result.fold((l) => l, (r) {
+            ref.read(providerOfRunningTimerId.notifier).state = r.id;
+          });
+        } else {
+          final result = await StopTimerAction(repo)(runningTimerId);
+          result.fold((l) => l, (r) {
+            ref.read(providerOfRunningTimerId.notifier).state = null;
+          });
+        }
+      },
+    );
   }
 }

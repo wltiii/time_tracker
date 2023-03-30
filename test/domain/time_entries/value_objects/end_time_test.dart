@@ -87,7 +87,7 @@ void main() {
     });
   });
 
-  group('function', () {
+  group('functions', () {
     test('isAfter returns true', () {
       var givenStartTime = StartTime(startTime: DateTime.now());
       var result = EndTime.now();
@@ -100,6 +100,16 @@ void main() {
       var givenStartTime = StartTime(startTime: DateTime.now());
 
       expect(result.isAfter(givenStartTime), isFalse);
+    });
+
+    test('difference returns duration difference', () {
+      const duration = Duration(seconds: 1);
+      final now = DateTime.now();
+      final givenEndTime = EndTime(dateTime: now);
+      final givenStartTime = StartTime(startTime: now.subtract(duration));
+      final result = givenEndTime.difference(givenStartTime);
+
+      expect(result, equals(duration));
     });
   });
 

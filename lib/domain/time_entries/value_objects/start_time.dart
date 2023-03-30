@@ -14,7 +14,6 @@ class StartTime extends Equatable {
     DateTime? startTime,
   }) {
     final currentDateTime = DateTime.now();
-    // final sevenDaysPastTense = currentDateTime.subtract(const Duration(days: 7));
     final start = startTime ?? currentDateTime;
 
     if (start.isAfter(currentDateTime)) {

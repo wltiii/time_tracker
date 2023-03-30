@@ -33,8 +33,7 @@ class EndTime extends Equatable {
 
     if (dateTime.isAfter(DateTimeHelper.firestoreMaxDate())) {
       throw ValueException(ExceptionMessage(
-          //TODO(wltiii): this message is wrong
-          'End time cannot be after the 9999-12-31T23:59:59.999999999.'));
+          'End time cannot be after the 12-31-9999 23:59:59.999999999.'));
     }
 
     _value = dateTime;
