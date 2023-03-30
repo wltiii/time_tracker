@@ -156,27 +156,58 @@ class StartStopButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final runningTimerId = ref.watch(providerOfRunningTimerId);
-    debugPrint('=== Start button pressed. runningTimerId=$runningTimerId');
+    debugPrint('=== Button pressed. runningTimerId=$runningTimerId');
+
     return OutlinedButton.icon(
-      icon: const Icon(
-        Icons.play_arrow,
-        color: Colors.green,
-      ),
+      icon: runningTimerId == null ? const StartIcon() : const StopIcon(),
       label: runningTimerId == null ? const Text('Start') : const Text('Stop'),
       onPressed: () async {
-        final _startTimerAction = StartTimerAction(repo);
+        //TODO(wltiii): use injection for repo...
+        final startTimerAction = StartTimerAction(repo);
         if (runningTimerId == null) {
-          final result = await _startTimerAction();
+          //TODO(wltiii): inject or inline instantiation as doing with stop???
+          final result = await startTimerAction();
+          //TODO(wltiii): handle left condition
           result.fold((l) => l, (r) {
             ref.read(providerOfRunningTimerId.notifier).state = r.id;
           });
         } else {
+          //TODO(wltiii): inject or separate instantiation as doing with start???
           final result = await StopTimerAction(repo)(runningTimerId);
+          //TODO(wltiii): handle left condition
           result.fold((l) => l, (r) {
             ref.read(providerOfRunningTimerId.notifier).state = null;
           });
         }
       },
+    );
+  }
+}
+
+class StartIcon extends StatelessWidget {
+  const StartIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.play_arrow,
+      color: Colors.green,
+    );
+  }
+}
+
+class StopIcon extends StatelessWidget {
+  const StopIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.stop_circle,
+      color: Colors.red,
     );
   }
 }
