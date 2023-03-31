@@ -5,12 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
 import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.dart';
+import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
 import 'package:time_tracker/infrastructure/providers/provider_of_time_entry_list.dart';
-
-import '../infrastructure/repositories/time_entry_repository_impl.dart';
+import 'package:time_tracker/infrastructure/repositories/time_entry_repository_impl.dart';
 
 final FirebaseFirestore db = FirebaseFirestore.instance;
 final repo = TimeEntryRepositoryImpl(db);
@@ -51,7 +51,7 @@ class TimeTrackerApp extends ConsumerWidget {
                   error: (error, stacktrace) => Text('Error: $error'),
                   data: (timeEntries) {
                     debugPrint(
-                      '=== when.data: runningTimerId',
+                      '=== when.data: runningTimerId=$runningTimerId',
                     );
                     if (timeEntries.isNotEmpty) {
                       debugPrint(
@@ -59,33 +59,8 @@ class TimeTrackerApp extends ConsumerWidget {
                       );
                       runningTimerId = timeEntries[0].id;
                     }
-                    return Expanded(
-                      child: ListView.builder(
-                        itemCount: timeEntries.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: timeResultsRow(
-                              TextEditingController(
-                                  text: dateFormatter.format(
-                                      timeEntries[index].start.dateTime)),
-                              timeEntries[index].end.isInfinite
-                                  ? TextEditingController(text: '')
-                                  : TextEditingController(
-                                      text: dateFormatter.format(
-                                          timeEntries[index].end.dateTime)),
-                              timeEntries[index].end.isInfinite
-                                  ? TextEditingController(text: '')
-                                  : TextEditingController(
-                                      text: _getTimeDifference(
-                                        timeEntries[index].start,
-                                        timeEntries[index].end,
-                                      ),
-                                    ),
-                            ),
-                          );
-                        },
-                      ),
+                    return TimeEntryList(
+                      timeEntries: timeEntries,
                     );
                   },
                 ),
@@ -104,11 +79,71 @@ class TimeTrackerApp extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget timeResultsRow(
-      TextEditingController startTimeController,
-      TextEditingController stopTimeController,
-      TextEditingController elapsedTimeController) {
+class TimeEntryList extends StatelessWidget {
+  const TimeEntryList({
+    required this.timeEntries,
+    super.key,
+  });
+
+  final List<TimeEntry> timeEntries;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: timeEntries.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: DateTimeRow(
+              startTimeController: TextEditingController(
+                  text:
+                      dateFormatter.format(timeEntries[index].start.dateTime)),
+              stopTimeController: timeEntries[index].end.isInfinite
+                  ? TextEditingController(text: '')
+                  : TextEditingController(
+                      text: dateFormatter
+                          .format(timeEntries[index].end.dateTime)),
+              elapsedTimeController: timeEntries[index].end.isInfinite
+                  ? TextEditingController(text: '')
+                  : TextEditingController(
+                      text: _getTimeDifference(
+                        timeEntries[index].start,
+                        timeEntries[index].end,
+                      ),
+                    ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  //TODO(wltiii): it would be nice to have a running timer (streaming the diff), not adding it to the streamed list until stopped
+  String _getTimeDifference(StartTime startDateTime, EndTime endDateTime) {
+    Duration difference = endDateTime.difference(startDateTime);
+    return '${(difference.inHours).floor().toString().padLeft(2, '0')}:'
+        '${(difference.inMinutes % 60).floor().toString().padLeft(2, '0')}:'
+        '${(difference.inSeconds % 60).floor().toString().padLeft(2, '0')}';
+  }
+}
+
+class DateTimeRow extends StatelessWidget {
+  const DateTimeRow({
+    required this.startTimeController,
+    required this.stopTimeController,
+    required this.elapsedTimeController,
+    super.key,
+  });
+
+  final TextEditingController startTimeController;
+  final TextEditingController stopTimeController;
+  final TextEditingController elapsedTimeController;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,6 +159,7 @@ class TimeTrackerApp extends ConsumerWidget {
     );
   }
 
+  //TODO(wltiii): convert this a class
   //TODO(wltiii): do we really need hint text with the current changes? Row headers seem better.
   Widget _showTimeResult(TextEditingController? controller, String hintText) {
     return Expanded(
@@ -137,14 +173,6 @@ class TimeTrackerApp extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  //TODO(wltiii): it would be nice to have a running timer (streaming the diff), not adding it to the streamed list until stopped
-  String _getTimeDifference(StartTime startDateTime, EndTime endDateTime) {
-    Duration difference = endDateTime.difference(startDateTime);
-    return '${(difference.inHours).floor().toString().padLeft(2, '0')}:'
-        '${(difference.inMinutes % 60).floor().toString().padLeft(2, '0')}:'
-        '${(difference.inSeconds % 60).floor().toString().padLeft(2, '0')}';
   }
 }
 
