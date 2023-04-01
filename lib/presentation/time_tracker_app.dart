@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/usecases/start_timer/start_timer_action.dart';
 import 'package:time_tracker/application/usecases/stop_timer/stop_timer_action.dart';
-import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/end_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/start_time.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';
@@ -41,29 +40,7 @@ class TimeTrackerApp extends ConsumerWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ref.watch(providerOfTimeEntryList).when(
-                  loading: () {
-                    runningTimerId = null;
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                  error: (error, stacktrace) => Text('Error: $error'),
-                  data: (timeEntries) {
-                    debugPrint(
-                      '=== when.data: runningTimerId=$runningTimerId',
-                    );
-                    if (timeEntries.isNotEmpty) {
-                      debugPrint(
-                        '=== when.data: ${timeEntries[0]}',
-                      );
-                      runningTimerId = timeEntries[0].id;
-                    }
-                    return TimeEntryList(
-                      timeEntries: timeEntries,
-                    );
-                  },
-                ),
+            const TimeEntryList(),
             const SizedBox(height: 20),
 
             // Action Buttons
@@ -81,44 +58,51 @@ class TimeTrackerApp extends ConsumerWidget {
   }
 }
 
-class TimeEntryList extends StatelessWidget {
+class TimeEntryList extends ConsumerWidget {
   const TimeEntryList({
-    required this.timeEntries,
     super.key,
   });
 
-  final List<TimeEntry> timeEntries;
-
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: timeEntries.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: DateTimeRow(
-              startTimeController: TextEditingController(
-                  text:
-                      dateFormatter.format(timeEntries[index].start.dateTime)),
-              stopTimeController: timeEntries[index].end.isInfinite
-                  ? TextEditingController(text: '')
-                  : TextEditingController(
-                      text: dateFormatter
-                          .format(timeEntries[index].end.dateTime)),
-              elapsedTimeController: timeEntries[index].end.isInfinite
-                  ? TextEditingController(text: '')
-                  : TextEditingController(
-                      text: _getTimeDifference(
-                        timeEntries[index].start,
-                        timeEntries[index].end,
-                      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(providerOfTimeEntryList).when(
+          loading: () {
+             return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+          error: (error, stacktrace) => Text('Error: $error'),
+          data: (timeEntries) {
+            return Expanded(
+              child: ListView.builder(
+                itemCount: timeEntries.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: DateTimeRow(
+                      startTimeController: TextEditingController(
+                          text: dateFormatter
+                              .format(timeEntries[index].start.dateTime)),
+                      stopTimeController: timeEntries[index].end.isInfinite
+                          ? TextEditingController(text: '')
+                          : TextEditingController(
+                              text: dateFormatter
+                                  .format(timeEntries[index].end.dateTime)),
+                      elapsedTimeController: timeEntries[index].end.isInfinite
+                          ? TextEditingController(text: '')
+                          : TextEditingController(
+                              text: _getTimeDifference(
+                                timeEntries[index].start,
+                                timeEntries[index].end,
+                              ),
+                            ),
                     ),
-            ),
-          );
-        },
-      ),
-    );
+                  );
+                },
+              ),
+            );
+          },
+        );
   }
 
   //TODO(wltiii): it would be nice to have a running timer (streaming the diff), not adding it to the streamed list until stopped
@@ -184,7 +168,6 @@ class StartStopButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final runningTimerId = ref.watch(providerOfRunningTimerId);
-    debugPrint('=== Button pressed. runningTimerId=$runningTimerId');
 
     return OutlinedButton.icon(
       icon: runningTimerId == null ? const StartIcon() : const StopIcon(),
