@@ -38,7 +38,6 @@ class StartTime extends Equatable {
   @override
   String toString() => _value.toString();
 
-  //TODO(wltiii): it was necessary to extend Equatable when implementing TimeEntry serialization by hand. Will likely be needed when serialization is done by serializable. Validate.
   @override
   List<Object> get props => [_value];
 }

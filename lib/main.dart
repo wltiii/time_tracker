@@ -21,7 +21,7 @@ void main() async {
   _configureFirestore();
   // }
 
-  runApp(ProviderScope(child: TimeTrackerApp()));
+  runApp(const ProviderScope(child: TimeTrackerApp()));
 }
 
 void _configureFirestore() {
@@ -77,7 +77,6 @@ String _defaultHost() {
       }
     default:
       {
-        // TODO(wltiii): this condition should never happen so it should fail gracefully
         return 'localhost';
       }
   }

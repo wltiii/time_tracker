@@ -16,7 +16,6 @@ part 'time_entry.g.dart';
 @JsonSerializable()
 @immutable
 class TimeEntry extends Equatable {
-  //TODO(wltiii): do i want to take a model, all parameters to create a model, or both? Be sure to look at all usages before making a decision!
   TimeEntry({
     required TimeEntryId id,
     required DateTime start,
@@ -53,8 +52,6 @@ class TimeEntry extends Equatable {
   bool overlapsWith(other) => _model.overlapsWith(other);
 
   TimeEntry copyWith({
-    //TODO(wltiii): i shouldn't need a copywith taking an id
-    // TimeEntryId id,
     StartTime? start,
     EndTime? end,
   }) {
