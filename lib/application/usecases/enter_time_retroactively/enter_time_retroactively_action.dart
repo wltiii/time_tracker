@@ -3,6 +3,7 @@ import 'package:time_tracker/application/repositories/time_entry_repository.dart
 import 'package:time_tracker/domain/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 
+/// TODO(wltiii): Not Yet Implemented
 class EnterTimeRetroactivelyAction {
   EnterTimeRetroactivelyAction(this._repository);
 

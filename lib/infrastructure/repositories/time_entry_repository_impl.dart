@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:logger/logger.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
@@ -92,9 +91,7 @@ class TimeEntryRepositoryImpl implements TimeEntryRepository {
               ..addAll({'id': documentSnapshot.id}),
           );
         }).toList();
-        // entries.sort((a, b) => b.createdOn!.compareTo(a.createdOn!));
       });
-      debugPrint('=======getList Stream Initialized');
       return Right(stream);
     } on ServerException catch (e) {
       logger.e('ServerException -> ${e.message}');

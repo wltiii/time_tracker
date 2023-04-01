@@ -17,6 +17,7 @@ import 'package:unrepresentable_state/unrepresentable_state.dart';
 /// The [ExceptionMessage] and [AdditionalInfo] are concatenated to for
 /// a [String] message that is exposed through a getter as
 /// wells as toString method.
+//TODO(wltiii): possibly implement in package unrepresentable_state.dart
 abstract class Failure {
   Failure(ExceptionMessage defaultMessage, AdditionalInfo? additionalInfo) {
     _message = additionalInfo == null

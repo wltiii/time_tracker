@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/core/extensions/either.dart';
@@ -18,7 +17,6 @@ class StartTimerAction implements StartTimerUseCaseAction {
 
   @override
   Future<Either<Failure, TimeEntry>> call() async {
-    debugPrint('=== StartTimerAction.call()');
     final startTime = StartTime();
     final endOfTime = EndTime.endOfTime();
 

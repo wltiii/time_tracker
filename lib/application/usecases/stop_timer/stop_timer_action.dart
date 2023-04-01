@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/core/extensions/either.dart';
@@ -16,7 +15,6 @@ class StopTimerAction implements StopTimerUseCaseAction {
 
   @override
   Future<Either<Failure, TimeEntry>> call(TimeEntryId timeEntryId) async {
-    debugPrint('=== StopTimerAction.call($timeEntryId)');
     final eitherExistingEntry = await _repository.get(timeEntryId);
     if (eitherExistingEntry.isLeft()) {
       return Left(eitherExistingEntry.left()!);
@@ -32,12 +30,11 @@ class StopTimerAction implements StopTimerUseCaseAction {
       );
     }
 
-    // final newEndTime = EndTime.now();
     final stoppedEntry = existingEntry.copyWith(end: EndTime.now());
 
-    //TODO(wltiii): Discuss with Manoj - technically if the time is running,
+    //TODO(wltiii): Technically if the time is running,
     //TODO(wltiii): there should be no overlapping entries, but it would
-    //TODO(wltiii): be technically possible if there is another implementation
+    //TODO(wltiii): be possible if there is another implementation
     //TODO(wltiii): that does not enforce this invariant. Testing for
     //TODO(wltiii): overlapping entries would provide safety. Do it with the
     //TODO(wltiii): new end time. So, the question is, is this necessary?
