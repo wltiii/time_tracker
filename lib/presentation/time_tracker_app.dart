@@ -30,8 +30,6 @@ class TimeTrackerApp extends ConsumerWidget {
   ) {
     ref.watch(providerOfTimeEntryList);
 
-    TimeEntryId? runningTimerId;
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -67,7 +65,7 @@ class TimeEntryList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(providerOfTimeEntryList).when(
           loading: () {
-             return const Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },
