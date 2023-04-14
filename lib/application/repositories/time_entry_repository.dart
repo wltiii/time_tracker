@@ -1,5 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:time_tracker/domain/error/failures.dart';
+import 'package:time_tracker/domain/core/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/value_objects/time_entry_id.dart';

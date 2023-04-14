@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:time_tracker/application/repositories/time_entry_repository.dart';
 import 'package:time_tracker/domain/core/extensions/either.dart';
-import 'package:time_tracker/domain/error/additional_info.dart';
-import 'package:time_tracker/domain/error/failures.dart';
+import 'package:time_tracker/domain/core/error/additional_info.dart';
+import 'package:time_tracker/domain/core/error/failures.dart';
 import 'package:time_tracker/domain/time_entries/time_entry.dart';
 import 'package:time_tracker/domain/time_entries/time_entry_model.dart';
 import 'package:time_tracker/domain/time_entries/usecases/start_timer_action.dart';

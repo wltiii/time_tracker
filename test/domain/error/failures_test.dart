@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:time_tracker/domain/error/additional_info.dart';
-import 'package:time_tracker/domain/error/failures.dart';
+import 'package:time_tracker/domain/core/error/additional_info.dart';
+import 'package:time_tracker/domain/core/error/failures.dart';
 import 'package:unrepresentable_state/unrepresentable_state.dart';
 
 class FailureTester extends Failure {

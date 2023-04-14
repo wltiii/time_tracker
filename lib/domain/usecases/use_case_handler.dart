@@ -1,5 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:time_tracker/domain/error/failures.dart';
+import 'package:time_tracker/domain/core/error/failures.dart';
 import 'package:time_tracker/domain/usecases/use_case_command.dart';
 
 //TODO(wltiii): does this provide any value?
