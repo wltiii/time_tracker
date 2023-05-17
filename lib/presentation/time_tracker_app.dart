@@ -44,8 +44,21 @@ class TimeTrackerApp extends ConsumerWidget {
             // Action Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                StartStopButton(),
+              children: [
+                const StartStopButton(
+                    key: Key('ActionButtons.startstop.button')),
+                const SizedBox(width: 5),
+                OutlinedButton.icon(
+                  key: const Key('ActionButtons.add.button'),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.blueAccent,
+                  ),
+                  label: const Text('Add'),
+                  onPressed: () => {
+                    print("Add button pressed!"),
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 50),
@@ -76,7 +89,8 @@ class TimeEntryList extends ConsumerWidget {
                 itemCount: timeEntries.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.all(20),
+                    // padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
                     child: DateTimeRow(
                       startTimeController: TextEditingController(
                           text: dateFormatter
@@ -130,18 +144,39 @@ class DateTimeRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const SizedBox(width: 20),
+        const SizedBox(width: 10),
         _showTimeResult(startTimeController, 'Start Time'),
-        const SizedBox(width: 20),
+        const SizedBox(width: 0),
         _showTimeResult(stopTimeController, 'Stop Time'),
-        const SizedBox(width: 20),
+        const SizedBox(width: 0),
         _showTimeResult(elapsedTimeController, 'Elapsed'),
-        const SizedBox(width: 20),
+        const SizedBox(width: 5),
+        IconButton(
+          key: const Key('DateTimeRow.edit.button'),
+          icon: const Icon(Icons.edit),
+          tooltip: 'Change times',
+          onPressed: () => {
+            print("Edit button pressed!"),
+          },
+        ),
+        IconButton(
+          key: const Key('DateTimeRow.delete.button'),
+          icon: const Icon(Icons.delete),
+          color: Colors.red[900],
+          // highlightColor: Colors.pink[50],
+          // splashColor: Colors.redAccent[50],
+          // splashRadius: 10,
+          tooltip: 'Delete times',
+          onPressed: () => {
+            print("Delete button pressed!"),
+          },
+        ),
+        const SizedBox(width: 10),
       ],
     );
   }
 
-  //TODO(wltiii): convert this a class
+  //TODO(wltiii): convert this to a class
   //TODO(wltiii): do we really need hint text with the current changes? Row headers seem better.
   Widget _showTimeResult(TextEditingController? controller, String hintText) {
     return Expanded(
